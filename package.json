@@ -11,10 +11,12 @@
 		"react-scripts": "3.4.3"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"start:front": "react-scripts start",
+		"start:back": "go run src/backend/main.go",
+		"build:front": "react-scripts build",
+		"build:back": "go build -o build/main src/backend/main.go",
+		"build": "react-scripts build && go build -o build src/backend/main.go",
+		"serve": "./build/main"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
