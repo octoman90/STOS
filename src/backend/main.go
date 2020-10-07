@@ -42,13 +42,15 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/api/health", api.Health)
+	router.HandleFunc("/api/signUp", api.SignUp)
+	router.HandleFunc("/api/logIn", api.LogIn)
 	router.PathPrefix("/").Handler(spaHandler{staticPath: "build", indexPath: "index.html"})
 
 	srv := &http.Server{
-		Handler: router,
-		Addr:    "127.0.0.1:8000",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Handler: 		router,
+		Addr: 			"127.0.0.1:8000",
+		WriteTimeout: 	15 * time.Second,
+		ReadTimeout:  	15 * time.Second,
 	}
 
 	log.Fatal(srv.ListenAndServe())
