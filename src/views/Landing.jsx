@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import '../stylesheets/Landing.scss'
 
-
 export default function Landing() {
 	const [formMode, setFormMode] = useState(0)
 	const [formData, setFormData] = useState({
@@ -71,7 +70,7 @@ export default function Landing() {
 	}
 
 	return (
-		<div id="landing-root">
+		<div id="landing-root" className="layout">
 			<div>
 				STOS Team Organization System is an open-sourse tool
 				<br />

@@ -1,8 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Landing from './views/Landing.js'
-import Dashboard from './views/Dashboard.js'
-import './stylesheets/Dashboard.scss'
+import Landing from './views/Landing.jsx'
+import Dashboard from './views/Dashboard.jsx'
 
 function App() {
 	return (

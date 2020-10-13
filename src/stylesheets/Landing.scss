@@ -1,12 +1,12 @@
 #landing-root {
 	padding: 0 10vw;
-	height: 100vh;
 	background: rgb(93, 162, 199);
 	background: linear-gradient(180deg, rgb(93, 162, 199) 0%, rgb(180, 218, 240) 100%);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	color: white;
+	flex-direction: row;
 
 	form {
 		background: white;
