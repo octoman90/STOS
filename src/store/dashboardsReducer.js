@@ -1,10 +1,10 @@
 let defaultState = {  // Temporary
 	'dashboard0': {
 		tasks: {
-			'task0': { id: 'task0', title: 'Task with id 0' },
-			'task1': { id: 'task1', title: 'Task with id 1' },
-			'task2': { id: 'task2', title: 'Task with id 2' },
-			'task3': { id: 'task3', title: 'Task with id 3' },
+			'task0': { id: 'task0', title: 'Task with id 0', modules: [{type: 'description', content: 'Hello world'}, {type: 'tagList', content: ['red', 'important']}] },
+			'task1': { id: 'task1', title: 'Task with id 1', modules: [] },
+			'task2': { id: 'task2', title: 'Task with id 2', modules: [{type: 'tagList', content: ['blue']}] },
+			'task3': { id: 'task3', title: 'Task with id 3', modules: [{type: 'description', content: 'Hello'}, {type: 'description', content: 'world'}] },
 		},
 
 		lists: {

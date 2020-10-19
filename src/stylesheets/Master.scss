@@ -40,3 +40,15 @@ header {
 		background: linear-gradient(180deg, rgb(93, 162, 199) 0%, rgb(180, 218, 240) 100%);
 	}
 }
+
+.labeled-red {
+	background-color: rgba(255, 0, 0, 0.5);
+}
+
+.labeled-green {
+	background-color: rgba(0, 255, 0, 0.5);
+}
+
+.labeled-blue {
+	background-color: rgba(0, 0, 255, 0.5);
+}
