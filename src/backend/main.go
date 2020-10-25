@@ -44,6 +44,7 @@ func main() {
 	router.HandleFunc("/api/health", api.Health)
 	router.HandleFunc("/api/signUp", api.SignUp)
 	router.HandleFunc("/api/logIn", api.LogIn)
+	router.HandleFunc("/api/checkSession", api.CheckSession)
 	router.PathPrefix("/").Handler(spaHandler{staticPath: "build", indexPath: "index.html"})
 
 	srv := &http.Server{

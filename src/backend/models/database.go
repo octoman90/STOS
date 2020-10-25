@@ -1,10 +1,16 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"context"
 	"log"
+	
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+var (
+	userCollection = db().Collection("users")
+	miscCollection = db().Collection("misc")
 )
 
 func db() *mongo.Database {

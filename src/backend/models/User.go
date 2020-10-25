@@ -1,9 +1,10 @@
 package models
 
-import(
+import (
+	"context"
+	
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"context"
 )
 
 type User struct {
@@ -11,8 +12,6 @@ type User struct {
 	Name 		string 				`bson:"name" json:"name"`
 	Password 	string 				`bson:"password" json:"password"`
 }
-
-var userCollection = db().Collection("users")
 
 func (this User) Create() error {
 	document, err := bson.Marshal(this)

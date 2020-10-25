@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import '../stylesheets/Landing.scss'
 
 export default function Landing() {
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
 	const [formMode, setFormMode] = useState(0)
 	const [formData, setFormData] = useState({
 		username: '',
@@ -48,7 +53,15 @@ export default function Landing() {
 				}
 			})
 			.then(data => {
-				console.log('success', data)
+				if (data.ok) {
+					dispatch({
+						type: 'setLoggedIn',
+						value: true,
+						username: data.username
+					})
+
+					navigate('/home')
+				}
 			})
 			.catch(err => {
 				console.log('error', err.message)
