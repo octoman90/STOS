@@ -10,6 +10,8 @@ import (
 )
 
 func LogIn(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	type In struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -26,32 +28,39 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&in); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
 
 	if !formatValidators.Username(&in.Username) || !formatValidators.Password(&in.Password) {
 		http.Error(w, "Illegal username or password format", http.StatusBadRequest)
 	}
 
-	_, err := models.User{
-		Name: 		in.Username,
-		Password: 	in.Password,
+	user, err := models.User{
+		Name: in.Username,
 	}.Read()
 
-	w.Header().Set("Content-Type", "application/json")
+	if err != nil { // User doesn't exist
+		json.NewEncoder(w).Encode(Out{
+			Ok: false,
+			Message: "Username or password is invalid",
+		})
 
-	if err == nil {
+		return
+	}
+
+	hashedPassword, _ := security.HashPassword(in.Password, user.Salt)
+
+	if hashedPassword != user.HashedPassword { // Password is incorect
+		json.NewEncoder(w).Encode(Out{
+			Ok: false,
+			Message: "Username or password is invalid",
+		})
+	} else {
 		token, _ := security.CreateToken(in.Username)
 		setCookie(w, "token", token)
 
 		json.NewEncoder(w).Encode(Out{
 			Ok: true,
 			Username: in.Username,
-		})
-	} else {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false,
-			Message: "Username or password is invalid",
 		})
 	}
 }

@@ -10,6 +10,8 @@ import (
 )
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	type In struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -38,14 +40,17 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			Ok: false, 
 			Message: "User with this username already exists",
 		})
+
+		return
 	}
 
-	err = models.User{
-		Name: 		in.Username,
-		Password: 	in.Password,
-	}.Create()
+	hashedPassword, salt := security.HashPassword(in.Password)
 
-	w.Header().Set("Content-Type", "application/json")
+	err = models.User{
+		Name: 			in.Username,
+		HashedPassword: hashedPassword,
+		Salt: 			salt,
+	}.Create()
 
 	if err == nil {
 		token, _ := security.CreateToken(in.Username)

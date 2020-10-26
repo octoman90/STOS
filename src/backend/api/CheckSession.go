@@ -30,10 +30,11 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 			Ok: false,
 			Message: "Session is invalid",
 		})
+	} else {
+		json.NewEncoder(w).Encode(Out{
+			Ok: true,
+			Username: username,
+		})
 	}
 
-	json.NewEncoder(w).Encode(Out{
-		Ok: true,
-		Username: username,
-	})
 }

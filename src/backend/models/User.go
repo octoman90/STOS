@@ -8,9 +8,10 @@ import (
 )
 
 type User struct {
-	ID 			primitive.ObjectID 	`bson:"_id" json:"id,omitempty"` 
-	Name 		string 				`bson:"name" json:"name"`
-	Password 	string 				`bson:"password" json:"password"`
+	ID 				primitive.ObjectID 	`bson:"_id,omitempty" json:"id,omitempty"` 
+	Name 			string 				`bson:"name,omitempty" json:"name"`
+	HashedPassword 	string 				`bson:"hashedPassword,omitempty" json:"hashedPassword"`
+	Salt 			string 				`bson:"salt,omitempty" json:"salt"`
 }
 
 func (this User) Create() error {

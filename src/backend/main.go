@@ -41,7 +41,6 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/api/health", api.Health)
 	router.HandleFunc("/api/signUp", api.SignUp)
 	router.HandleFunc("/api/logIn", api.LogIn)
 	router.HandleFunc("/api/checkSession", api.CheckSession)
