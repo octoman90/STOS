@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -10,9 +11,17 @@ const Container = styled.div`
 ` 
 
 export default function DashboardBanner({ meta }) {
+	const dispatch = useDispatch()
+
+	function createDashboardHandler() {
+		if (!meta.id) {
+			dispatch({ type: 'createDashboard' })
+		}
+	}
+
 	return (
-		<Container>
-			{ meta.title }
+		<Container onClick={ createDashboardHandler }>
+			{ meta.title || "Create new" }
 		</Container>
 	)
 }

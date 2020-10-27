@@ -1,6 +1,7 @@
 let defaultState = {  // Temporary
 	'dashboard0': {
 		title: 'Dashboard #0',
+		id: 'dashboard0',
 
 		tasks: {
 			'task0': { id: 'task0', title: 'Task with id 0', modules: [{type: 'description', content: 'Hello world'}, {type: 'tagList', content: ['red', 'important']}] },
@@ -19,6 +20,7 @@ let defaultState = {  // Temporary
 
 	'dashboard1': {
 		title: 'Dashboard #1',
+		id: 'dashboard1',
 
 		tasks: {
 			'task4': { id: 'task4', title: 'Task with id 4', modules: [] },
@@ -34,10 +36,21 @@ let defaultState = {  // Temporary
 }
 
 export default function dashboardsReducer(state = defaultState, action) {
+	const newState = JSON.parse(JSON.stringify(state))
+
 	switch(action.type) {
+		case 'createDashboard':
+			let newId = `newDashboard${+new Date()}`
+
+			newState[newId] = {
+				title: 'New Dashboard',
+				id: newId
+			}
+			
+			return newState
+
 		case 'moveTask':
-			const { dashboardId, taskId, source, destination } = action
-			const newState = JSON.parse(JSON.stringify(state))
+			let { dashboardId, taskId, source, destination } = action
 			
 			newState[dashboardId].lists[source.listId].taskIds.splice(source.index, 1)
 			newState[dashboardId].lists[destination.listId].taskIds.splice(destination.index, 0, taskId)

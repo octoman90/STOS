@@ -27,6 +27,8 @@ export default function Home() {
 						return <DashboardBanner key={ dashboardId } meta={ dashboards[dashboardId] } />
 					})
 				}
+
+				<DashboardBanner meta={ {} } />
 			</HomeRoot>
 		</div>
 	)
