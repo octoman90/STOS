@@ -1,5 +1,7 @@
 let defaultState = {  // Temporary
 	'dashboard0': {
+		title: 'Dashboard #0',
+
 		tasks: {
 			'task0': { id: 'task0', title: 'Task with id 0', modules: [{type: 'description', content: 'Hello world'}, {type: 'tagList', content: ['red', 'important']}] },
 			'task1': { id: 'task1', title: 'Task with id 1', modules: [] },
@@ -13,6 +15,21 @@ let defaultState = {  // Temporary
 		},
 
 		listIds: ['list0', 'list1']
+	},
+
+	'dashboard1': {
+		title: 'Dashboard #1',
+
+		tasks: {
+			'task4': { id: 'task4', title: 'Task with id 4', modules: [] },
+			'task5': { id: 'task5', title: 'Task with id 5', modules: [] },
+		},
+
+		lists: {
+			'list2': { id: 'list2', title: 'List with id 2', taskIds: ['task4', 'task5'] },
+		},
+
+		listIds: ['list2']
 	}
 }
 
