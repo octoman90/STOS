@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 
@@ -17,6 +17,10 @@ const Container = styled.div`
 	padding: 0.5em;
 	display: flex;
 	flex-direction: column;
+
+	${props => props.createTaskButton && css`
+		color: #777;
+	`}
 `
 
 export default function Task({ meta, index, dashboardId, listId }) {
@@ -50,7 +54,7 @@ export default function Task({ meta, index, dashboardId, listId }) {
 		)
 	} else {
 		return (
-			<Container className="task create-task" onClick={ createTaskClickHandler }>
+			<Container createTaskButton className="task create-task-button" onClick={ createTaskClickHandler }>
 				Add Task
 			</Container>
 		)

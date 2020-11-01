@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled.div`
 	background: #f8f8f8;
@@ -10,6 +10,10 @@ const Container = styled.div`
 	padding: 0.5em;
 	box-sizing: border-box;
 	cursor: pointer;
+
+	${props => props.createDashboardButton && css`
+		color: #777;
+	`}
 ` 
 
 export default function DashboardBanner({ meta }) {
@@ -23,8 +27,8 @@ export default function DashboardBanner({ meta }) {
 	}
 
 	return (
-		<Container onClick={ clickHandler }>
-			{ meta.title || "Create new" }
+		<Container createDashboardButton={ meta.id === undefined } onClick={ clickHandler }>
+			{ meta.title || "Add Dashboard" }
 		</Container>
 	)
 }

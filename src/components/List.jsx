@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Droppable } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 
@@ -11,6 +11,10 @@ const Container = styled.div`
 	margin: 0.5em;
 	width: 20em;
 	cursor: pointer;
+
+	${props => props.createListButton && css`
+		color: #777;
+	`}
 `
 
 const ListHeader = styled.div`
@@ -46,7 +50,7 @@ export default function List({ meta, tasks, dashboardId }) {
 		)
 	} else {
 		return (
-			<Container className="list create-list" onClick={ createListClickHandler }>
+			<Container createListButton className="list create-list-button" onClick={ createListClickHandler }>
 				<ListHeader className="list-header">Add list</ListHeader>
 			</Container>
 		)
