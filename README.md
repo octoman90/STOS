@@ -13,7 +13,7 @@ You will also see any lint errors in the console.
 ### `yarn start:back`
 
 Runs the app in the backend development mode.<br />
-Open [http://localhost:3000](http://localhost:8000) to view it in the browser.
+Open [http://localhost:8000](http://localhost:8000) to view it in the browser.
 
 ### `yarn build:front`
 
