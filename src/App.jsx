@@ -11,7 +11,7 @@ function App() {
 				<Routes>
 					<Route exact path="/"><Landing /></Route>
 					<Route exact path="/home"><Home /></Route>
-					<Route exact path="/dashboard"><Dashboard /></Route>
+					<Route exact path="/dashboard:dashboardId"><Dashboard /></Route>
 				</Routes>
 			</BrowserRouter>
 		</div>

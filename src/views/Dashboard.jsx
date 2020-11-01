@@ -1,12 +1,13 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import Header from '../components/Header.jsx'
 import List from '../components/List.jsx'
 
 export default function Dashboard() {
-	const dashboardId = 'dashboard0' // Temporary
+	const { dashboardId } = useParams()
 	const dashboard = useSelector(state => state.dashboards[dashboardId])
 	const dispatch = useDispatch()
 

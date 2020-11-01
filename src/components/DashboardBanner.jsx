@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -8,19 +9,21 @@ const Container = styled.div`
 	width: 13em;
 	padding: 0.5em;
 	box-sizing: border-box;
+	cursor: pointer;
 ` 
 
 export default function DashboardBanner({ meta }) {
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	function createDashboardHandler() {
-		if (!meta.id) {
-			dispatch({ type: 'createDashboard' })
-		}
+	function clickHandler() {
+		meta.id
+			? navigate(`/dashboard${meta.id}`)
+			: dispatch({ type: 'createDashboard' })
 	}
 
 	return (
-		<Container onClick={ createDashboardHandler }>
+		<Container onClick={ clickHandler }>
 			{ meta.title || "Create new" }
 		</Container>
 	)
