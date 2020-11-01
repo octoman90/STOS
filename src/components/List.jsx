@@ -40,6 +40,8 @@ export default function List({ meta, tasks, dashboardId }) {
 						</div>
 					)}
 				</Droppable>
+
+				<Task dashboardId={ dashboardId } listId={ meta.id } />
 			</Container>
 		)
 	} else {

@@ -39,7 +39,7 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 'listIds' in dashboard &&
 						dashboard.listIds.map(listId => {
-							return <List key={ listId } meta={ dashboard.lists[listId] } tasks={ dashboard.tasks } />
+							return <List key={ listId } meta={ dashboard.lists[listId] } tasks={ dashboard.tasks } dashboardId={ dashboardId } />
 						})
 					}
 				</DragDropContext>

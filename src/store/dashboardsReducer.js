@@ -55,7 +55,19 @@ export default function dashboardsReducer(state = defaultState, action) {
 		newState[dashboardId].listIds.push(newListId)
 		newState[dashboardId].lists[newListId] = {
 			id: newListId,
-			title: 'New List'
+			title: 'New List',
+			taskIds: []
+		}
+	} else if (action.type === 'createTask') {
+		let { dashboardId, listId } = action
+		console.log(dashboardId, listId)
+		let newTaskId = `newTask${+new Date()}`
+
+		newState[dashboardId].lists[listId].taskIds.push(newTaskId)
+		newState[dashboardId].tasks[newTaskId] = {
+			id: newTaskId,
+			title: 'New Task',
+			modules: []
 		}
 	} else if (action.type === 'moveTask') {
 		let { dashboardId, taskId, source, destination } = action

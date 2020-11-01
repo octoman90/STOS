@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
+import { useDispatch } from 'react-redux'
 
 import Description from './taskModules/Description.jsx'
 import TagList from './taskModules/TagList.jsx'
@@ -18,26 +19,40 @@ const Container = styled.div`
 	flex-direction: column;
 `
 
-export default function Task({ meta, index }) {
-	return (
-		<Draggable draggableId={ meta.id } index={ index }>
-			{ provided => (
-				<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef }>
-					{ meta.title }
-					{
-						meta.modules.map((module, index) => {
-							return React.createElement(
-								modules[module.type], 
-								{
-									key: index, 
-									meta: module, 
-									full: false
-								}
-							)
-						})
-					}
-				</Container>
-			)}
-		</Draggable>
-	)
+export default function Task({ meta, index, dashboardId, listId }) {
+	const dispatch = useDispatch()
+
+	function createTaskClickHandler() {
+		dispatch({ type: 'createTask', dashboardId, listId })
+	}
+
+	if (meta) {
+		return (
+			<Draggable draggableId={ meta.id } index={ index }>
+				{ provided => (
+					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef }>
+						{ meta.title }
+						{
+							meta.modules.map((module, index) => {
+								return React.createElement(
+									modules[module.type], 
+									{
+										key: index, 
+										meta: module, 
+										full: false
+									}
+								)
+							})
+						}
+					</Container>
+				)}
+			</Draggable>
+		)
+	} else {
+		return (
+			<Container className="task create-task" onClick={ createTaskClickHandler }>
+				Add Task
+			</Container>
+		)
+	}
 }
