@@ -38,27 +38,31 @@ let defaultState = {  // Temporary
 export default function dashboardsReducer(state = defaultState, action) {
 	const newState = JSON.parse(JSON.stringify(state))
 
-	switch(action.type) {
-		case 'createDashboard':
-			let newId = `newDashboard${+new Date()}`
+	if (action.type === 'createDashboard') {
+		let newDashboardId = `newDashboard${+new Date()}`
 
-			newState[newId] = {
-				title: 'New Dashboard',
-				id: newId
-			}
+		newState[newDashboardId] = {
+			id: newDashboardId,
+			title: 'New Dashboard',
+			tasks: {},
+			lists: {},
+			listIds: []
+		}
+	} else if (action.type === 'createList') {
+		let { dashboardId } = action
+		let newListId = `newList${+new Date()}`
+
+		newState[dashboardId].listIds.push(newListId)
+		newState[dashboardId].lists[newListId] = {
+			id: newListId,
+			title: 'New List'
+		}
+	} else if (action.type === 'moveTask') {
+		let { dashboardId, taskId, source, destination } = action
 			
-			return newState
-
-		case 'moveTask':
-			let { dashboardId, taskId, source, destination } = action
-			
-			newState[dashboardId].lists[source.listId].taskIds.splice(source.index, 1)
-			newState[dashboardId].lists[destination.listId].taskIds.splice(destination.index, 0, taskId)
-			
-			return newState
-
-		default:
-			return state
-
+		newState[dashboardId].lists[source.listId].taskIds.splice(source.index, 1)
+		newState[dashboardId].lists[destination.listId].taskIds.splice(destination.index, 0, taskId)
 	}
+
+	return newState
 }

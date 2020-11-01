@@ -43,6 +43,8 @@ export default function Dashboard() {
 						})
 					}
 				</DragDropContext>
+
+				<List dashboardId={ dashboardId } />
 			</div>
 		</div>
 	)
