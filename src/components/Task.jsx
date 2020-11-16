@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
+import { dispatch as busDispatch } from 'use-bus'
 
 import Description from './taskModules/Description.jsx'
 import TagList from './taskModules/TagList.jsx'
@@ -27,6 +28,10 @@ export default function Task({ taskId, index, dashboardId, listId }) {
 	const task = useSelector(state => state.tasks[taskId])
 	const dispatch = useDispatch()
 
+	function taskClickHandler() {
+		busDispatch({ type: 'showTaskModal', taskId })
+	}
+
 	function createTaskClickHandler() {
 		dispatch({ type: 'createTask', dashboardId, listId, newTaskId: `newTask${+new Date()}` })
 	}
@@ -35,7 +40,7 @@ export default function Task({ taskId, index, dashboardId, listId }) {
 		return (
 			<Draggable draggableId={ taskId } index={ index }>
 				{ provided => (
-					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef }>
+					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
 						{
 							task.modules.map((module, index) => {
