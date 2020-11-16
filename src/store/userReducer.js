@@ -1,4 +1,4 @@
-export default function dashboardsReducer(state = {}, action) {
+export default function userReducer(state = {}, action) {
 	switch(action.type) {
 		case 'setLoggedIn':
 			const newState = JSON.parse(JSON.stringify(state))
