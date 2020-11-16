@@ -23,7 +23,7 @@ export default function DashboardBanner({ meta }) {
 	function clickHandler() {
 		meta.id
 			? navigate(`/dashboard${meta.id}`)
-			: dispatch({ type: 'createDashboard' })
+			: dispatch({ type: 'createDashboard', newDashboardId: `newDashboard${+new Date()}` })
 	}
 
 	return (

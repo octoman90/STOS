@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { Droppable } from 'react-beautiful-dnd'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Task from './Task.jsx'
 
@@ -21,23 +21,24 @@ const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
 `
 
-export default function List({ meta, tasks, dashboardId }) {
+export default function List({ listId, dashboardId }) {
+	const list = useSelector(state => state.lists[listId])
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		dispatch({ type: 'createList', dashboardId })
+		dispatch({ type: 'createList', dashboardId, newListId: `newList${+new Date()}` })
 	}
 
-	if (meta) {
+	if (listId) {
 		return (
 			<Container className="list">
-				<ListHeader className="list-header">{ meta.title }</ListHeader>
-				<Droppable droppableId={ meta.id }>
+				<ListHeader className="list-header">{ list.title }</ListHeader>
+				<Droppable droppableId={ listId }>
 					{ provided => (
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>
-							{ meta.taskIds && 
-								meta.taskIds.map((taskId, index) => (
-									<Task key={ taskId } meta={ tasks[taskId] } index={ index } />
+							{ list.taskIds && 
+								list.taskIds.map((taskId, index) => (
+									<Task key={ taskId } taskId={ taskId } index={ index } />
 								))
 							}
 							{ provided.placeholder }
@@ -45,7 +46,7 @@ export default function List({ meta, tasks, dashboardId }) {
 					)}
 				</Droppable>
 
-				<Task dashboardId={ dashboardId } listId={ meta.id } />
+				<Task dashboardId={ dashboardId } listId={ listId } />
 			</Container>
 		)
 	} else {

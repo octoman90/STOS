@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Description from './taskModules/Description.jsx'
 import TagList from './taskModules/TagList.jsx'
@@ -23,21 +23,22 @@ const Container = styled.div`
 	`}
 `
 
-export default function Task({ meta, index, dashboardId, listId }) {
+export default function Task({ taskId, index, dashboardId, listId }) {
+	const task = useSelector(state => state.tasks[taskId])
 	const dispatch = useDispatch()
 
 	function createTaskClickHandler() {
-		dispatch({ type: 'createTask', dashboardId, listId })
+		dispatch({ type: 'createTask', dashboardId, listId, newTaskId: `newTask${+new Date()}` })
 	}
 
-	if (meta) {
+	if (task) {
 		return (
-			<Draggable draggableId={ meta.id } index={ index }>
+			<Draggable draggableId={ taskId } index={ index }>
 				{ provided => (
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef }>
-						{ meta.title }
+						{ task.title }
 						{
-							meta.modules.map((module, index) => {
+							task.modules.map((module, index) => {
 								return React.createElement(
 									modules[module.type], 
 									{

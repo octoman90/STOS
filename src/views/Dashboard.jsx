@@ -17,7 +17,6 @@ export default function Dashboard() {
 		if (destination && (destination.index !== source.index || destination.droppableId !== source.droppableId)) {
 			dispatch({
 				type: 'moveTask',
-				dashboardId: dashboardId,
 				taskId: result.draggableId,
 				source: {
 					listId: source.droppableId,
@@ -39,7 +38,7 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 'listIds' in dashboard &&
 						dashboard.listIds.map(listId => {
-							return <List key={ listId } meta={ dashboard.lists[listId] } tasks={ dashboard.tasks } dashboardId={ dashboardId } />
+							return <List key={ listId } listId={ listId } dashboardId={ dashboardId } />
 						})
 					}
 				</DragDropContext>
