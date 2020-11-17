@@ -10,7 +10,7 @@ import (
 type Task struct {
 	ID 		primitive.ObjectID 	`bson:"_id,omitempty" json:"id"`
 	Title 	string 				`bson:"title,omitempty" json:"title"`
-	Modules string[] 			`bson:"modules,omitempty" json:"modules"`
+	Modules []string 			`bson:"modules,omitempty" json:"modules"`
 }
 
 func (this Task) Create() error {

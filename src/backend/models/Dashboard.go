@@ -10,8 +10,8 @@ import (
 type Dashboard struct {
 	ID 		primitive.ObjectID 		`bson:"_id,omitempty" json:"id"`
 	Title 	string 					`bson:"title,omitempty" json:"title"`
-	Users 	primitive.ObjectID[] 	`bson:"users,omitempty" json:"users"`
-	Lists 	primitive.ObjectID[] 	`bson:"lists,omitempty" json:"lists"`
+	Users 	[]primitive.ObjectID 	`bson:"users,omitempty" json:"users"`
+	Lists 	[]primitive.ObjectID 	`bson:"lists,omitempty" json:"lists"`
 }
 
 func (this Dashboard) Create() error {

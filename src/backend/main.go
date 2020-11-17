@@ -16,6 +16,9 @@ func main() {
 	router.HandleFunc("/signUp", api.SignUp)
 	router.HandleFunc("/logIn", api.LogIn)
 	router.HandleFunc("/checkSession", api.CheckSession)
+	router.HandleFunc("/syncDashboard", api.SyncDashboard)
+	router.HandleFunc("/syncList", api.SyncList)
+	router.HandleFunc("/syncTask", api.SyncTask)
 
 	srv := &http.Server{
 		Handler: 		router,

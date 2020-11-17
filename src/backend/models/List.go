@@ -10,7 +10,7 @@ import (
 type List struct {
 	ID 		primitive.ObjectID 		`bson:"_id,omitempty" json:"id"`
 	Title 	string 					`bson:"title,omitempty" json:"title"`
-	Tasks 	primitive.ObjectID[] 	`bson:"lists,omitempty" json:"lists"`
+	Tasks 	[]primitive.ObjectID 	`bson:"lists,omitempty" json:"lists"`
 }
 
 func (this List) Create() error {
