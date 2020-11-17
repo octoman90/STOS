@@ -10,6 +10,9 @@ import (
 
 var (
 	userCollection = db().Collection("users")
+	dashboardCollection = db().Collection("dashboards")
+	listCollection = db().Collection("lists")
+	taskCollection = db().Collection("tasks")
 	miscCollection = db().Collection("misc")
 )
 
