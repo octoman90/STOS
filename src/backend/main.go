@@ -13,12 +13,12 @@ import (
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/signUp", api.SignUp)
-	router.HandleFunc("/logIn", api.LogIn)
-	router.HandleFunc("/checkSession", api.CheckSession)
-	router.HandleFunc("/syncDashboard", api.SyncDashboard)
-	router.HandleFunc("/syncList", api.SyncList)
-	router.HandleFunc("/syncTask", api.SyncTask)
+	router.HandleFunc("/signUp", api.SignUp).Methods("POST")
+	router.HandleFunc("/logIn", api.LogIn).Methods("POST")
+	router.HandleFunc("/checkSession", api.CheckSession).Methods("GET")
+	router.HandleFunc("/syncDashboard", api.SyncDashboard).Methods("POST", "GET")
+	router.HandleFunc("/syncList", api.SyncList).Methods("POST", "GET")
+	router.HandleFunc("/syncTask", api.SyncTask).Methods("POST", "GET")
 
 	srv := &http.Server{
 		Handler: 		router,
