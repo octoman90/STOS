@@ -22,6 +22,8 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 			Ok: false,
 			Message: "No active session",
 		})
+
+		return
 	}
 
 	username, err := security.ParseToken(cookie.Value)
