@@ -55,7 +55,7 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 			Message: "Username or password is invalid",
 		})
 	} else {
-		token, _ := security.CreateToken(in.Username)
+		token, _ := security.CreateToken(user.Name, user.ID)
 		setCookie(w, "token", token)
 
 		json.NewEncoder(w).Encode(Out{

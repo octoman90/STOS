@@ -17,11 +17,11 @@ type Dashboard struct {
 	EveryoneCanView bool 					`bson:"everyoneCanView,omitempty" json:"everyoneCanView"`
 }
 
-func (this Dashboard) Create() error {
+func (this Dashboard) Create() (primitive.ObjectID, error) {
 	document, err := bson.Marshal(this)
-	_, err = dashboardCollection.InsertOne(context.TODO(), document)
+	res, err := dashboardCollection.InsertOne(context.TODO(), document)
 
-	return err
+	return res.InsertedID.(primitive.ObjectID), err
 }
 
 func (this Dashboard) Read() (Dashboard, error) {
@@ -29,4 +29,23 @@ func (this Dashboard) Read() (Dashboard, error) {
 	err := dashboardCollection.FindOne(context.TODO(), filter).Decode(&this)
 
 	return this, err
+}
+
+func (this Dashboard) ReadMany() ([]Dashboard, error) {
+	filter, _ := bson.Marshal(this)
+	var dashboards []Dashboard
+
+	cur, err := dashboardCollection.Find(context.TODO(), filter)
+	
+	if err == nil {
+		for cur.Next(context.TODO()) {
+			var dashboard Dashboard
+
+			if err = cur.Decode(&dashboard); err == nil {
+				dashboards = append(dashboards, dashboard)
+			}
+		}
+	}
+
+	return dashboards, err
 }

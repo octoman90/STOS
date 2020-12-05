@@ -1,28 +1,35 @@
-let defaultState = {  // Temporary
-	'dashboard0': {
-		title: 'Dashboard #0',
-		id: 'dashboard0',
-		listIds: ['list0', 'list1']
-	},
-
-	'dashboard1': {
-		title: 'Dashboard #1',
-		id: 'dashboard1',
-		listIds: ['list2']
+function upsyncDashboard(data) {
+	let options = {
+		method: "POST",
+		body: JSON.stringify(data)
 	}
+
+	return fetch('/api/syncDashboard', options)
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
 }
 
-export default function dashboardsReducer(state = defaultState, action) {
+export default function dashboardsReducer(state = {}, action) {
 	const newState = JSON.parse(JSON.stringify(state))
 
-	if (action.type === 'createDashboard') {
-		let { newDashboardId } = action
-
-		newState[newDashboardId] = {
-			id: newDashboardId,
-			title: 'New Dashboard',
-			listIds: []
-		}
+	if (action.type === 'downsyncDashboards') {
+		action.dashboards.forEach(dashboard => {
+			newState[dashboard.id] = dashboard
+		})
+	} else if (action.type === 'createDashboard') {
+		upsyncDashboard({
+			title: 'New Dashboard'
+		}).then(newDashboard => {
+			newState[newDashboard.id] = newDashboard
+		})
 	} else if (action.type === 'createList') {
 		let { dashboardId, newListId } = action
 

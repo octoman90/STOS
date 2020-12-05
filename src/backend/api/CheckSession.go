@@ -26,7 +26,7 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	username, err := security.ParseToken(cookie.Value)
+	username, _, err := security.ParseToken(cookie.Value)
 	if err != nil {
 		json.NewEncoder(w).Encode(Out{
 			Ok: false,
@@ -38,5 +38,4 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 			Username: username,
 		})
 	}
-
 }

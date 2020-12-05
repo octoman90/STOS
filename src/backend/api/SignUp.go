@@ -46,14 +46,14 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	hashedPassword, salt := security.HashPassword(in.Password)
 
-	err = models.User{
+	id, err := models.User{
 		Name: 			in.Username,
 		HashedPassword: hashedPassword,
 		Salt: 			salt,
 	}.Create()
 
 	if err == nil {
-		token, _ := security.CreateToken(in.Username)
+		token, _ := security.CreateToken(in.Username, id)
 		setCookie(w, "token", token)
 
 		json.NewEncoder(w).Encode(Out{

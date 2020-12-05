@@ -14,11 +14,11 @@ type User struct {
 	Salt 			string 				`bson:"salt,omitempty" json:"salt"`
 }
 
-func (this User) Create() error {
+func (this User) Create() (primitive.ObjectID, error) {
 	document, err := bson.Marshal(this)
-	_, err = userCollection.InsertOne(context.TODO(), document)
+	res, err := userCollection.InsertOne(context.TODO(), document)
 
-	return err
+	return res.InsertedID.(primitive.ObjectID), err
 }
 
 func (this User) Read() (User, error) {
