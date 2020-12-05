@@ -1,7 +1,8 @@
 import React, { useState } 	from 'react'
 import { useDispatch } 		from 'react-redux'
 import { useNavigate } 		from 'react-router-dom'
-import { useBus, dispatch as busDispatch } from 'use-bus'
+import useBus 				from 'use-bus'
+import { dispatch as busDispatch } from 'use-bus'
 
 import Container 		from '../components/landing/Container'
 import LandingInfo 		from '../components/landing/LandingInfo'

@@ -26,7 +26,13 @@ function checkSession(dispatch) {
 
 				busDispatch({ type: 'loggedIn' })
 			} else {
-				throw new Error(data.message)
+				dispatch({
+					type: 'setLoggedIn',
+					value: false,
+					username: ''
+				})
+
+				busDispatch({ type: 'notLoggedIn' })
 			}
 		})
 		.catch(err => {

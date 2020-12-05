@@ -1,9 +1,11 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import styled from 'styled-components'
+import React 			from 'react'
+import { useSelector } 	from 'react-redux'
+import styled 			from 'styled-components'
+import { useNavigate } 	from 'react-router-dom'
+import useBus 			from 'use-bus'
 
-import Header from '../components/Header.jsx'
-import DashboardBanner from '../components/DashboardBanner.jsx'
+import Header 			from '../components/Header.jsx'
+import DashboardBanner 	from '../components/DashboardBanner.jsx'
 
 const HomeRoot = styled.div`
 	height: 100%;
@@ -16,7 +18,13 @@ const HomeRoot = styled.div`
 ` 
 
 export default function Home() {
+	const navigate = useNavigate()
 	const dashboards = useSelector(state => state.dashboards)
+
+	useBus(
+		'notLoggedIn',
+		() => navigate('/')
+	)
 
 	return (
 		<div className="layout">
