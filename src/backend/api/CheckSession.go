@@ -12,8 +12,8 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 
 	type Out struct {
 		Ok 			bool 	`json:"ok"`
-		Username 	string 	`json:"username"`
-		Message 	string 	`json:"message"`
+		Username 	string 	`json:"username,omitempty"`
+		Message 	string 	`json:"message,omitempty"`
 	}
 
 	cookie, err := r.Cookie("token")
