@@ -30,10 +30,6 @@ export default function dashboardsReducer(state = {}, action) {
 		}).then(newDashboard => {
 			newState[newDashboard.id] = newDashboard
 		})
-	} else if (action.type === 'createList') {
-		let { dashboardId, newListId } = action
-
-		newState[dashboardId].listIds.push(newListId)
 	}
 
 	return newState

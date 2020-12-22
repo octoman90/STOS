@@ -26,7 +26,7 @@ export default function List({ listId, dashboardId }) {
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		dispatch({ type: 'createList', dashboardId, newListId: `newList${+new Date()}` })
+		dispatch({ type: 'createList', dashboardId })
 	}
 
 	if (listId) {

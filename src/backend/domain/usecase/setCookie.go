@@ -1,4 +1,4 @@
-package api
+package usecase
 
 import (
 	"net/http"
@@ -11,6 +11,6 @@ func setCookie(w http.ResponseWriter, name string, value string) {
 		Value: 		value,
 		Expires: 	time.Now().AddDate(0, 0, 1),
 	}
-	
+
 	http.SetCookie(w, &cookie)
 }

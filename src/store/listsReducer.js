@@ -1,34 +1,32 @@
-let defaultState = {  // Temporary
-	'list0': {
-		id: 'list0',
-		title: 'List with id 0',
-		taskIds: ['task0', 'task1']
-	},
-	
-	'list1': {
-		id: 'list1',
-		title: 'List with id 1',
-		taskIds: ['task2', 'task3']
-	},
+function upsyncList(data) {
+	let options = {
+		method: "POST",
+		body: JSON.stringify(data)
+	}
 
-	'list2': {
-		id: 'list2',
-		title: 'List with id 2',
-		taskIds: ['task4', 'task5'] 
-	},
+	return fetch('/api/syncList', options)
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
 }
 
-export default function listsReducer(state = defaultState, action) {
+export default function listsReducer(state = {}, action) {
 	const newState = JSON.parse(JSON.stringify(state))
 
 	if (action.type === 'createList') {
-		let { newListId } = action
-
-		newState[newListId] = {
-			id: newListId,
+		upsyncList({
 			title: 'New List',
-			taskIds: []
-		}
+			dashboardID: action.dashboardId
+		}).then(newList => {
+			newState[newList.id] = newList
+		})
 	} else if (action.type === 'createTask') {
 		let { listId, newTaskId } = action
 		newState[listId].taskIds.push(newTaskId)

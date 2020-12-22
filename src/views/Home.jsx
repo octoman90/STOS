@@ -49,7 +49,7 @@ export default function Home() {
 
 	useEffect(() => {
 		downsyncDashboards(dispatch)
-	}, [])
+	}, [dispatch])
 
 	return (
 		<div className="layout">

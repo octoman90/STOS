@@ -18,7 +18,7 @@ func randomString(n int) string {
 	rand.Seed(time.Now().UnixNano())
 
 	b := make([]byte, n)
-	
+
 	// A rand.Int63() generates 63 random bits, enough for letterIdxMax characters
 	for i, cache, remain := n-1, rand.Int63(), letterIdxMax; i >= 0; {
 		if remain == 0 {

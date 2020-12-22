@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../models"
-	"../formatValidators"
-	"../security"
+	"../pkg/security"
+	"../pkg/cookies"
+	"../domain/usecase"
 )
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
@@ -23,44 +23,22 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		Message 	string 	`json:"message,omitempty"`
 	}
 
-	// Decode data
 	var in In
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&in); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	if !formatValidators.Username(&in.Username) || !formatValidators.Password(&in.Password) {
-		http.Error(w, "Illegal username or password format", http.StatusBadRequest)
+	ok, user, message := usecase.SignUp(in.Username, in.Password)
+
+	if ok {
+		token, _ := security.CreateToken(user.Name, user.ID)
+		cookies.SetCookie(w, "token", token)
 	}
 
-	_, err := models.User{ Name: in.Username }.Read()
-	if err == nil {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false, 
-			Message: "User with this username already exists",
-		})
-
-		return
-	}
-
-	hashedPassword, salt := security.HashPassword(in.Password)
-
-	id, err := models.User{
-		Name: 			in.Username,
-		HashedPassword: hashedPassword,
-		Salt: 			salt,
-	}.Create()
-
-	if err == nil {
-		token, _ := security.CreateToken(in.Username, id)
-		setCookie(w, "token", token)
-
-		json.NewEncoder(w).Encode(Out{
-			Ok: true,
-			Username: in.Username,
-		})
-	} else {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	json.NewEncoder(w).Encode(Out{
+		Ok: ok,
+		Username: user.Name,
+		Message: message,
+	})
 }

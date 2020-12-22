@@ -6,8 +6,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"../models"
-	"../security"
+	"../domain/entity"
+	"../domain/usecase"
 )
 
 func SyncDashboard(w http.ResponseWriter, r *http.Request) {
@@ -18,70 +18,58 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 		Message 	string 	`json:"message"`
 	}
 
-	cookie, err := r.Cookie("token")
-	if err != nil {
+	if cookie, err := r.Cookie("token"); err == nil {
+		if ok, _, id, message := usecase.CheckSession(cookie.Value); ok {
+			if r.Method == "POST" {
+				downsyncDashboard(w, r, id)
+			} else { // GET
+				upsyncDashboard(w, r, id)
+			}
+		} else {
+			json.NewEncoder(w).Encode(Out{
+				Ok: false,
+				Message: message,
+			})
+		}
+	} else {
 		json.NewEncoder(w).Encode(Out{
 			Ok: false,
 			Message: "No active session",
 		})
-
-		return
-	}
-
-	_, id, err := security.ParseToken(cookie.Value)
-	if err != nil {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false,
-			Message: "Session is invalid",
-		})
-
-		return
-	}
-
-	if r.Method == "POST" {
-		downsyncDashboard(w, r, id)
-	} else { // GET
-		upsyncDashboard(w, r, id)
 	}
 }
 
 func upsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
-	ids, ok := r.URL.Query()["id"]
+	dashboardIDs, ok := r.URL.Query()["id"]
 
-	if !ok || len(ids[0]) < 1 { // No dashboard specified
-		dashboards, err := models.Dashboard{
-			Owner: userID,
-		}.ReadMany()
-		
-		if err == nil {
+	if !ok || len(dashboardIDs[0]) < 1 { // No dashboard specified
+		if ok, dashboards, message := usecase.UpsyncManyDashboards(userID); ok {
 			json.NewEncoder(w).Encode(dashboards)
 		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"Ok": ok,
+				"Message": message,
+			})
 		}
 	} else {
 		var dashboardID primitive.ObjectID
-		err := dashboardID.UnmarshalJSON([]byte(ids[0]))
-
-		if err != nil {
+		if err := dashboardID.UnmarshalJSON([]byte(dashboardIDs[0])); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		dashboard, err := models.Dashboard{
-			ID: dashboardID,
-			Owner: userID,
-		}.Read()
-
-		if err == nil {
+		if ok, dashboard, message := usecase.UpsyncOneDashboard(userID, dashboardID); ok {
 			json.NewEncoder(w).Encode(dashboard)
 		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"Ok": ok,
+				"Message": message,
+			})
 		}
 	}
 }
 
 func downsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
-	// Decode data
-	var dashboard models.Dashboard
+	var dashboard entity.Dashboard
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&dashboard); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -89,12 +77,12 @@ func downsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.
 
 	dashboard.Owner = userID
 
-	id, err := dashboard.Create()
-
-	if err == nil {
-		dashboard.ID = id
+	if ok, dashboard, message := usecase.DownsyncOneDashboard(userID, dashboard); ok {
 		json.NewEncoder(w).Encode(dashboard)
 	} else {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"Ok": ok,
+			"Message": message,
+		})
 	}
 }

@@ -28,7 +28,7 @@ export default function Dashboard() {
 	const dashboard = useSelector(state => state.dashboards[dashboardId])
 	const dispatch = useDispatch()
 	const [taskModalTaskId, setTaskModalTaskId] = useState(null)
-	
+
 	useBus(
 		'showTaskModal',
 		({ taskId }) => setTaskModalTaskId(taskId),

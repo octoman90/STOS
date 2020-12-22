@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../security"
+	"../domain/usecase"
 )
 
 func CheckSession(w http.ResponseWriter, r *http.Request) {
@@ -16,26 +16,14 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 		Message 	string 	`json:"message,omitempty"`
 	}
 
-	cookie, err := r.Cookie("token")
-	if err != nil {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false,
-			Message: "No active session",
-		})
+	var out Out
 
-		return
-	}
-
-	username, _, err := security.ParseToken(cookie.Value)
-	if err != nil {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false,
-			Message: "Session is invalid",
-		})
+	if cookie, err := r.Cookie("token"); err == nil {
+		out.Ok, out.Username, _, out.Message = usecase.CheckSession(cookie.Value)
 	} else {
-		json.NewEncoder(w).Encode(Out{
-			Ok: true,
-			Username: username,
-		})
+		out.Ok = false
+		out.Message = "No active session"
 	}
+
+	json.NewEncoder(w).Encode(out)
 }
