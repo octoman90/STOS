@@ -19,11 +19,11 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if cookie, err := r.Cookie("token"); err == nil {
-		if ok, _, id, message := usecase.CheckSession(cookie.Value); ok {
+		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
 			if r.Method == "POST" {
-				downsyncDashboard(w, r, id)
+				downsyncDashboard(w, r, user.ID)
 			} else { // GET
-				upsyncDashboard(w, r, id)
+				upsyncDashboard(w, r, user.ID)
 			}
 		} else {
 			json.NewEncoder(w).Encode(Out{

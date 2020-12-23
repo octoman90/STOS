@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"../domain/entity"
 	"../domain/usecase"
 )
 
@@ -19,7 +20,10 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 	var out Out
 
 	if cookie, err := r.Cookie("token"); err == nil {
-		out.Ok, out.Username, _, out.Message = usecase.CheckSession(cookie.Value)
+		var user entity.User
+
+		out.Ok, user, out.Message = usecase.CheckSession(cookie.Value)
+		out.Username = user.Name
 	} else {
 		out.Ok = false
 		out.Message = "No active session"

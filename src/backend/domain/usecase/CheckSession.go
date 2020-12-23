@@ -1,15 +1,14 @@
 package usecase
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
-
 	"../../pkg/security"
+	"../entity"
 )
 
-func CheckSession(cookieValue string) (bool, string, primitive.ObjectID, string) {
+func CheckSession(cookieValue string) (bool, entity.User, string) {
 	if username, id, err := security.ParseToken(cookieValue); err != nil {
-		return false, username, id, "Session is invalid"
+		return false, entity.User{ ID: id, Name: username }, "Session is invalid"
 	} else {
-		return true, username, id, ""
+		return true, entity.User{}, ""
 	}
 }

@@ -14,11 +14,11 @@ func SyncList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if cookie, err := r.Cookie("token"); err == nil {
-		if ok, _, id, message := usecase.CheckSession(cookie.Value); ok {
+		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
 			if r.Method == "POST" {
-				downsyncList(w, r, id)
+				downsyncList(w, r, user.ID)
 			} else { // GET
-				// upsyncList(w, r, id)
+				// upsyncList(w, r, user.ID)
 			}
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
