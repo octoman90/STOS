@@ -28,7 +28,7 @@ function downsyncDashboards(dispatch) {
 		})
 		.then(data => {
 			dispatch({
-				type: 'downsyncDashboards',
+				type: 'setDashboards',
 				dashboards: data || []
 			})
 		})
@@ -56,8 +56,8 @@ export default function Home() {
 			<Header />
 			<HomeRoot>
 				{
-					Object.keys(dashboards).map(dashboardId => {
-						return <DashboardBanner key={ dashboardId } meta={ dashboards[dashboardId] } />
+					Object.entries(dashboards).map(([dashboardID, dashboard]) => {
+						return <DashboardBanner key={ dashboardID } meta={ dashboard } />
 					})
 				}
 

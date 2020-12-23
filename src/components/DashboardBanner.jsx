@@ -16,6 +16,31 @@ const Container = styled.div`
 	`}
 ` 
 
+function upsyncDashboard(dashboard, dispatch) {
+	let options = {
+		method: "POST",
+		body: JSON.stringify(dashboard)
+	}
+
+	fetch('/api/syncDashboard', options)
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.then(data => {
+			dispatch({
+				type: 'setDashboard',
+				dashboard: data || {}
+			})
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
+}
+
 export default function DashboardBanner({ meta }) {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -23,7 +48,7 @@ export default function DashboardBanner({ meta }) {
 	function clickHandler() {
 		meta.id
 			? navigate(`/dashboard${meta.id}`)
-			: dispatch({ type: 'createDashboard' })
+			: upsyncDashboard({title: "New Dashboard"}, dispatch)
 	}
 
 	return (
