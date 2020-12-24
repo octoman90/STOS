@@ -18,7 +18,7 @@ func SyncList(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "POST" {
 				downsyncList(w, r, user.ID)
 			} else { // GET
-				// upsyncList(w, r, user.ID)
+				upsyncList(w, r, user.ID)
 			}
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
@@ -29,13 +29,12 @@ func SyncList(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"Ok": false,
-			"Message": err.Error(),
+			"Message": "No active session",
 		})
 	}
 }
 
 func downsyncList(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
-	// Decode data
 	var list entity.List
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&list); err != nil {
@@ -43,6 +42,28 @@ func downsyncList(w http.ResponseWriter, r *http.Request, userID primitive.Objec
 	}
 
 	if ok, list, message := usecase.DownsyncOneList(userID, list); ok {
+		json.NewEncoder(w).Encode(list)
+	} else {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"Ok": ok,
+			"Message": message,
+		})
+	}
+}
+
+func upsyncList(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
+	dashboardIDs, ok := r.URL.Query()["dashboardID"]
+
+	if !ok {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"Ok": ok,
+			"Message": "No dashboard specified",
+		})
+	}
+
+	dashboardID, _ := primitive.ObjectIDFromHex(dashboardIDs[0])
+
+	if ok, list, message := usecase.UpsyncManyLists(userID, dashboardID); ok {
 		json.NewEncoder(w).Encode(list)
 	} else {
 		json.NewEncoder(w).Encode(map[string]interface{}{

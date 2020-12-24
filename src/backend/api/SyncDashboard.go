@@ -13,11 +13,6 @@ import (
 func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	type Out struct {
-		Ok 			bool 	`json:"ok"`
-		Message 	string 	`json:"message"`
-	}
-
 	if cookie, err := r.Cookie("token"); err == nil {
 		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
 			if r.Method == "POST" {
@@ -26,15 +21,15 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 				upsyncDashboard(w, r, user.ID)
 			}
 		} else {
-			json.NewEncoder(w).Encode(Out{
-				Ok: false,
-				Message: message,
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"Ok": ok,
+				"Message": message,
 			})
 		}
 	} else {
-		json.NewEncoder(w).Encode(Out{
-			Ok: false,
-			Message: "No active session",
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"Ok": false,
+			"Message": "No active session",
 		})
 	}
 }

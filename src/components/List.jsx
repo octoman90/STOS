@@ -21,12 +21,37 @@ const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
 `
 
-export default function List({ listId, dashboardId }) {
+function upsyncList(data, dispatch) {
+	let options = {
+		method: "POST",
+		body: JSON.stringify(data)
+	}
+
+	return fetch('/api/syncList', options)
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.then(data => {
+			dispatch({
+				type: 'setList',
+				list: data || {}
+			})
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
+}
+
+export default function List({ listId, dashboardID }) {
 	const list = useSelector(state => state.lists[listId])
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		dispatch({ type: 'createList', dashboardId })
+		upsyncList({title: "New List", dashboard: dashboardID}, dispatch)
 	}
 
 	if (listId) {
@@ -46,7 +71,7 @@ export default function List({ listId, dashboardId }) {
 					)}
 				</Droppable>
 
-				<Task dashboardId={ dashboardId } listId={ listId } />
+				<Task dashboardId={ dashboardID } listId={ listId } />
 			</Container>
 		)
 	} else {

@@ -15,3 +15,15 @@ func DownsyncOneList(userID primitive.ObjectID, list entity.List) (bool, entity.
 		return false, list, err.Error()
 	}
 }
+
+func UpsyncManyLists(userID primitive.ObjectID, dashboardID primitive.ObjectID) (bool, []entity.List, string) {
+	lists, err := repository.ReadManyLists(entity.List{
+		Dashboard: dashboardID,
+	})
+
+	if err == nil {
+		return true, lists, ""
+	} else {
+		return false, lists, err.Error()
+	}
+}
