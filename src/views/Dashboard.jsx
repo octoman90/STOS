@@ -87,7 +87,7 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 
 						Object.entries(lists).map(([listID, list]) => {
-							return list.dashboard == dashboardId ? <List key={ listID } listId={ listID } dashboardId={ dashboardId } /> : null
+							return list.dashboard == dashboardId ? <List key={ listID } listID={ listID } dashboardID={ dashboardId } /> : null
 						})
 					}
 				</DragDropContext>

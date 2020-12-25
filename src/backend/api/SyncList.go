@@ -63,8 +63,8 @@ func upsyncList(w http.ResponseWriter, r *http.Request, userID primitive.ObjectI
 
 	dashboardID, _ := primitive.ObjectIDFromHex(dashboardIDs[0])
 
-	if ok, list, message := usecase.UpsyncManyLists(userID, dashboardID); ok {
-		json.NewEncoder(w).Encode(list)
+	if ok, lists, message := usecase.UpsyncManyLists(userID, dashboardID); ok {
+		json.NewEncoder(w).Encode(lists)
 	} else {
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"Ok": ok,

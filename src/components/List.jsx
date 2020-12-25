@@ -1,6 +1,6 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { Droppable } from 'react-beautiful-dnd'
+import React, { useEffect } 		from 'react'
+import styled, { css } 				from 'styled-components'
+import { Droppable } 				from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Task from './Task.jsx'
@@ -46,32 +46,57 @@ function upsyncList(data, dispatch) {
 		})
 }
 
-export default function List({ listId, dashboardID }) {
-	const list = useSelector(state => state.lists[listId])
+function downsyncTasks(listID, dispatch) {
+	fetch('/api/syncTask?' + new URLSearchParams({ listID }))
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.then(data => {
+			dispatch({
+				type: 'setTasks',
+				tasks: data || []
+			})
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
+}
+
+export default function List({ listID, dashboardID }) {
+	const list = useSelector(state => state.lists[listID])
+	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		upsyncList({title: "New List", dashboard: dashboardID}, dispatch)
+		upsyncList({ title: "New List", dashboard: dashboardID }, dispatch)
 	}
 
-	if (listId) {
+	useEffect(() => {
+		downsyncTasks(listID, dispatch)
+	}, [listID, dispatch])
+
+	if (listID) {
 		return (
 			<Container className="list">
 				<ListHeader className="list-header">{ list.title }</ListHeader>
-				<Droppable droppableId={ listId }>
+				<Droppable droppableId={ listID }>
 					{ provided => (
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>
-							{ list.taskIds && 
-								list.taskIds.map((taskId, index) => (
-									<Task key={ taskId } taskId={ taskId } index={ index } />
-								))
+							{
+								tasks.map((task, index) => {
+									return listID == task.list ? <Task key={ task.id } taskID={ task.id } index={ index } /> : null
+								})
 							}
 							{ provided.placeholder }
 						</div>
 					)}
 				</Droppable>
 
-				<Task dashboardId={ dashboardID } listId={ listId } />
+				<Task listID={ listID } />
 			</Container>
 		)
 	} else {

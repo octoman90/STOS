@@ -16,9 +16,19 @@ func CreateOneTask(task entity.Task) (primitive.ObjectID, error) {
 	return res.InsertedID.(primitive.ObjectID), err
 }
 
-func ReadOneTask(task entity.Task) (entity.Task, error) {
+func ReadManyTasks(task entity.Task) ([]entity.Task, error) {
 	filter, _ := bson.Marshal(task)
-	err := taskCollection.FindOne(context.TODO(), filter).Decode(&task)
+	var tasks []entity.Task
 
-	return task, err
+	cur, err := taskCollection.Find(context.TODO(), filter)
+
+	if err == nil {
+		for cur.Next(context.TODO()) {
+			if err = cur.Decode(&task); err == nil {
+				tasks = append(tasks, task)
+			}
+		}
+	}
+
+	return tasks, err
 }

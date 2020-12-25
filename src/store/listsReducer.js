@@ -16,15 +16,5 @@ export default function listsReducer(state = {}, action) {
 		}
 	}
 
-	// if (action.type === 'createTask') {
-	// 	let { listId, newTaskId } = action
-	// 	newState[listId].taskIds.push(newTaskId)
-	// } else if (action.type === 'moveTask') {
-	// 	let { taskId, source, destination } = action
-			
-	// 	newState[source.listId].taskIds.splice(source.index, 1)
-	// 	newState[destination.listId].taskIds.splice(destination.index, 0, taskId)
-	// }
-
 	return newState
 }

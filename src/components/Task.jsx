@@ -24,25 +24,50 @@ const Container = styled.div`
 	`}
 `
 
-export default function Task({ taskId, index, dashboardId, listId }) {
-	const task = useSelector(state => state.tasks[taskId])
+function upsyncTask(data, dispatch) {
+	let options = {
+		method: "POST",
+		body: JSON.stringify(data)
+	}
+
+	return fetch('/api/syncTask', options)
+		.then(response => {
+			if (response.ok && response.status === 200) {
+				return response.json()
+			} else {
+				throw new Error(response.statusText)
+			}
+		})
+		.then(data => {
+			dispatch({
+				type: 'setTask',
+				task: data || {}
+			})
+		})
+		.catch(err => {
+			console.log('error', err.message)
+		})
+}
+
+export default function Task({ taskID, index, listID }) {
+	const task = useSelector(state => state.tasks.find(task => task.id == taskID))
 	const dispatch = useDispatch()
 
 	function taskClickHandler() {
-		busDispatch({ type: 'showTaskModal', taskId })
+		busDispatch({ type: 'showTaskModal', taskID })
 	}
 
 	function createTaskClickHandler() {
-		dispatch({ type: 'createTask', dashboardId, listId, newTaskId: `newTask${+new Date()}` })
+		upsyncTask({ title: "New Task", list: listID }, dispatch)
 	}
 
 	if (task) {
 		return (
-			<Draggable draggableId={ taskId } index={ index }>
+			<Draggable draggableId={ taskID } index={ index }>
 				{ provided => (
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
-						{
+						{ task.modules && 
 							task.modules.map((module, index) => {
 								return React.createElement(
 									modules[module.type], 
