@@ -67,12 +67,16 @@ function downsyncTasks(listID, dispatch) {
 }
 
 export default function List({ listID, dashboardID }) {
-	const list = useSelector(state => state.lists[listID])
+	const lists = useSelector(state => state.lists)
+	const list = useSelector(state => state.lists.find(list => list.id == listID))
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		upsyncList({ title: "New List", dashboard: dashboardID }, dispatch)
+		let dashboardLists = lists.filter(list => list.dashboard == dashboardID)
+		let index = dashboardLists.length ? dashboardLists.sort((a, b) => b.index - a.index)[0].index + 1 : 0
+
+		upsyncList({ title: "New List", dashboard: dashboardID, index }, dispatch)
 	}
 
 	useEffect(() => {
@@ -87,7 +91,7 @@ export default function List({ listID, dashboardID }) {
 					{ provided => (
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>
 							{
-								tasks.map((task, index) => {
+								tasks.sort((a, b) => a.index - b.index).map((task, index) => {
 									return listID == task.list ? <Task key={ task.id } taskID={ task.id } index={ index } /> : null
 								})
 							}

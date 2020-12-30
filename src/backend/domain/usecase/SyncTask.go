@@ -27,3 +27,7 @@ func UpsyncManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool
 		return false, tasks, err.Error()
 	}
 }
+
+// func DownsyncManyTasks(userID primitive.ObjectID, task []entity.Task) (bool, []entity.Task, string) {
+//
+// }

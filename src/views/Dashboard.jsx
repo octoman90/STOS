@@ -86,8 +86,8 @@ export default function Dashboard() {
 				<div className="background-layer"></div>
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 
-						Object.entries(lists).map(([listID, list]) => {
-							return list.dashboard == dashboardId ? <List key={ listID } listID={ listID } dashboardID={ dashboardId } /> : null
+						lists.sort((a, b) => a.index - b.index).map((list, index) => {
+							return list.dashboard == dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } /> : null
 						})
 					}
 				</DragDropContext>
