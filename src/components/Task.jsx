@@ -51,7 +51,7 @@ function upsyncTask(data, dispatch) {
 
 export default function Task({ taskID, index, listID }) {
 	const tasks = useSelector(state => state.tasks)
-	const task = useSelector(state => state.tasks.find(task => task.id == taskID))
+	const task = useSelector(state => state.tasks[taskID])
 	const dispatch = useDispatch()
 
 	function taskClickHandler() {
@@ -59,7 +59,7 @@ export default function Task({ taskID, index, listID }) {
 	}
 
 	function createTaskClickHandler() {
-		let listTasks = tasks.filter(task => task.list == listID)
+		let listTasks = Object.values(tasks).filter(task => task.list == listID)
 		let index = listTasks.length ? listTasks.sort((a, b) => b.index - a.index)[0].index + 1 : 0
 
 		upsyncTask({ title: "New Task", list: listID, index }, dispatch)
