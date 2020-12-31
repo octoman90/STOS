@@ -62,13 +62,13 @@ export default function Dashboard() {
 		if (destination && (destination.index !== source.index || destination.droppableId !== source.droppableId)) {
 			dispatch({
 				type: 'moveTask',
-				taskId: result.draggableId,
+				taskID: result.draggableId,
 				source: {
-					listId: source.droppableId,
+					listID: source.droppableId,
 					index: source.index
 				},
 				destination: {
-					listId: destination.droppableId,
+					listID: destination.droppableId,
 					index: destination.index
 				}
 			})

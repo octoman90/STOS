@@ -92,7 +92,7 @@ export default function List({ listID, dashboardID }) {
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>
 							{
 								tasks.sort((a, b) => a.index - b.index).map((task, index) => {
-									return listID == task.list ? <Task key={ task.id } taskID={ task.id } index={ index } /> : null
+									return listID == task.list ? <Task key={ task.id } taskID={ task.id } index={ task.index } /> : null
 								})
 							}
 							{ provided.placeholder }
