@@ -18,7 +18,7 @@ const HomeRoot = styled.div`
 `
 
 function downsyncDashboards(dispatch) {
-	fetch('/api/syncDashboard')
+	fetch('/api/syncDashboards')
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()

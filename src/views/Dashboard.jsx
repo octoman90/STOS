@@ -24,7 +24,7 @@ const TaskModalContainer = styled.div`
 `
 
 function downsyncLists(dashboardID, dispatch) {
-	fetch('/api/syncList?' + new URLSearchParams({ dashboardID }))
+	fetch('/api/syncLists?' + new URLSearchParams({ dashboardID }))
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()

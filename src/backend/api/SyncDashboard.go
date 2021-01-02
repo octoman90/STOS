@@ -37,15 +37,11 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 func upsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
 	dashboardIDs, ok := r.URL.Query()["id"]
 
-	if !ok || len(dashboardIDs[0]) < 1 { // No dashboard specified
-		if ok, dashboards, message := usecase.UpsyncManyDashboards(userID); ok {
-			json.NewEncoder(w).Encode(dashboards)
-		} else {
-			json.NewEncoder(w).Encode(map[string]interface{}{
-				"Ok": ok,
-				"Message": message,
+	if !ok || len(dashboardIDs[0]) < 1 {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+				"Ok": false,
+				"Message": "No dashboard specified",
 			})
-		}
 	} else {
 		var dashboardID primitive.ObjectID
 		if err := dashboardID.UnmarshalJSON([]byte(dashboardIDs[0])); err != nil {
