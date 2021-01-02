@@ -47,7 +47,7 @@ function upsyncList(data, dispatch) {
 }
 
 function downsyncTasks(listID, dispatch) {
-	fetch('/api/syncTask?' + new URLSearchParams({ listID }))
+	fetch('/api/syncTasks?' + new URLSearchParams({ listID }))
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()

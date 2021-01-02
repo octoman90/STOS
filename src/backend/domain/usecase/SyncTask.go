@@ -28,6 +28,12 @@ func UpsyncManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool
 	}
 }
 
-// func DownsyncManyTasks(userID primitive.ObjectID, task []entity.Task) (bool, []entity.Task, string) {
-//
-// }
+func DownsyncManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []entity.Task, string) {
+	for i := 0; i < len(tasks); i++ {
+		if err := repository.UpdateOneTask(tasks[i]); err != nil {
+			return false, tasks, err.Error()
+		}
+	}
+
+	return true, tasks, ""
+}
