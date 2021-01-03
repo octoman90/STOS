@@ -39,14 +39,11 @@ func upsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.Ob
 
 	if !ok || len(dashboardIDs[0]) < 1 {
 		json.NewEncoder(w).Encode(map[string]interface{}{
-				"Ok": false,
-				"Message": "No dashboard specified",
-			})
+			"Ok": false,
+			"Message": "No dashboard specified",
+		})
 	} else {
-		var dashboardID primitive.ObjectID
-		if err := dashboardID.UnmarshalJSON([]byte(dashboardIDs[0])); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
+		dashboardID, _ := primitive.ObjectIDFromHex(dashboardIDs[0])
 
 		if ok, dashboard, message := usecase.UpsyncOneDashboard(userID, dashboardID); ok {
 			json.NewEncoder(w).Encode(dashboard)

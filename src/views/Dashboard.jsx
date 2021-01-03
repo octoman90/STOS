@@ -5,9 +5,17 @@ import { DragDropContext } 				from 'react-beautiful-dnd'
 import useBus 							from 'use-bus'
 import styled 							from 'styled-components'
 
-import Header 		from '../components/Header.jsx'
-import List 		from '../components/List.jsx'
-import TaskModal 	from '../components/TaskModal.jsx'
+import Header 					from '../components/Header.jsx'
+import List 					from '../components/List.jsx'
+import TaskModal 				from '../components/TaskModal.jsx'
+import { downsyncDashboard }	from '../api/dashboards.js'
+
+const InfoBar = styled.div`
+	background: #fff;
+
+	display: flex;
+	padding: 0.5em;
+`
 
 function downsyncLists(dashboardID, dispatch) {
 	fetch('/api/syncLists?' + new URLSearchParams({ dashboardID }))
@@ -145,12 +153,16 @@ export default function Dashboard() {
 	}
 
 	useEffect(() => {
+		downsyncDashboard(dashboardId, dispatch)
 		downsyncLists(dashboardId, dispatch)
 	}, [dashboardId, dispatch])
 
 	return (
 		<div className="layout">
 			<Header />
+			<InfoBar>
+				<div>{ dashboard ? dashboard.title : "" }</div>
+			</InfoBar>
 			<div id="dashboard-root">
 				<div className="background-layer"></div>
 				<DragDropContext onDragEnd={ dragEndHandler }>

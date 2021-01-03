@@ -4,8 +4,9 @@ import styled 						from 'styled-components'
 import { useNavigate } 				from 'react-router-dom'
 import useBus 						from 'use-bus'
 
-import Header 			from '../components/Header.jsx'
-import DashboardBanner 	from '../components/DashboardBanner.jsx'
+import Header 					from '../components/Header.jsx'
+import DashboardBanner 			from '../components/DashboardBanner.jsx'
+import { downsyncDashboards } 	from '../api/dashboards.js'
 
 const HomeRoot = styled.div`
 	height: 100%;
@@ -16,26 +17,6 @@ const HomeRoot = styled.div`
 	gap: 1em;
 	padding: 2em;
 `
-
-function downsyncDashboards(dispatch) {
-	fetch('/api/syncDashboards')
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setDashboards',
-				dashboards: data || []
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
 
 export default function Home() {
 	const navigate = useNavigate()

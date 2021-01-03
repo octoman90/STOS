@@ -16,7 +16,7 @@ func main() {
 	router.HandleFunc("/signUp", api.SignUp).Methods("POST")
 	router.HandleFunc("/logIn", api.LogIn).Methods("POST")
 	router.HandleFunc("/checkSession", api.CheckSession).Methods("GET")
-	router.HandleFunc("/syncDashboard", api.SyncDashboard).Methods("POST")
+	router.HandleFunc("/syncDashboard", api.SyncDashboard).Methods("POST", "GET")
 	router.HandleFunc("/syncDashboards", api.SyncDashboards).Methods("GET")
 	router.HandleFunc("/syncList", api.SyncList).Methods("POST")
 	router.HandleFunc("/syncLists", api.SyncLists).Methods("GET")
