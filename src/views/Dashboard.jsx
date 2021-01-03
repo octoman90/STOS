@@ -9,20 +9,6 @@ import Header 		from '../components/Header.jsx'
 import List 		from '../components/List.jsx'
 import TaskModal 	from '../components/TaskModal.jsx'
 
-const TaskModalContainer = styled.div`
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	position: fixed;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	background-color: #0005
-`
-
 function downsyncLists(dashboardID, dispatch) {
 	fetch('/api/syncLists?' + new URLSearchParams({ dashboardID }))
 		.then(response => {
@@ -136,12 +122,12 @@ export default function Dashboard() {
 	const lists = useSelector(state => state.lists)
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
-	const [taskModalTaskId, setTaskModalTaskId] = useState(null)
+	const [taskModalTaskID, setTaskModalTaskID] = useState(null)
 
 	useBus(
 		'showTaskModal',
-		({ taskId }) => setTaskModalTaskId(taskId),
-		[taskModalTaskId],
+		({ taskID }) => setTaskModalTaskID(taskID),
+		[taskModalTaskID],
 	)
 
 	function dragEndHandler(result) {
@@ -178,10 +164,8 @@ export default function Dashboard() {
 				<List dashboardID={ dashboardId } />
 			</div>
 
-			{ taskModalTaskId &&
-				<TaskModalContainer>
-					<TaskModal taskId={ taskModalTaskId } />
-				</TaskModalContainer>
+			{ taskModalTaskID &&
+				<TaskModal taskID={ taskModalTaskID } />
 			}
 		</div>
 	)
