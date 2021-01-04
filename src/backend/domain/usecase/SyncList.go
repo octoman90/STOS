@@ -8,11 +8,19 @@ import (
 )
 
 func DownsyncOneList(userID primitive.ObjectID, list entity.List) (bool, entity.List, string) {
-	if id, err := repository.CreateOneList(list); err == nil {
-		list.ID = id
-		return true, list, ""
+	if list.ID != primitive.NilObjectID {
+		if err := repository.UpdateOneList(list); err == nil {
+			return true, list, ""
+		} else {
+			return false, list, err.Error()
+		}
 	} else {
-		return false, list, err.Error()
+		if id, err := repository.CreateOneList(list); err == nil {
+			list.ID = id
+			return true, list, ""
+		} else {
+			return false, list, err.Error()
+		}
 	}
 }
 

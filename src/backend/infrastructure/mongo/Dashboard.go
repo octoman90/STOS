@@ -39,3 +39,9 @@ func ReadManyDashboards(dashboard entity.Dashboard) ([]entity.Dashboard, error) 
 
 	return dashboards, err
 }
+
+func UpdateOneDashboard(dashboard entity.Dashboard) error {
+	document, _ := bson.Marshal(dashboard)
+	var replacedDocument bson.M
+	return taskCollection.FindOneAndReplace(context.TODO(), bson.M{"_id": dashboard.ID}, document).Decode(&replacedDocument)
+}

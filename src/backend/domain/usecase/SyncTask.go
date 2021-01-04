@@ -8,11 +8,19 @@ import (
 )
 
 func DownsyncOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Task, string) {
-	if id, err := repository.CreateOneTask(task); err == nil {
-		task.ID = id
-		return true, task, ""
+	if task.ID != primitive.NilObjectID {
+		if err := repository.UpdateOneTask(task); err == nil {
+			return true, task, ""
+		} else {
+			return false, task, err.Error()
+		}
 	} else {
-		return false, task, err.Error()
+		if id, err := repository.CreateOneTask(task); err == nil {
+			task.ID = id
+			return true, task, ""
+		} else {
+			return false, task, err.Error()
+		}
 	}
 }
 
