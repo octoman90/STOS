@@ -38,3 +38,15 @@ func UpdateOneTask(refTask entity.Task, task entity.Task) error {
 	document, _ := bson.Marshal(task)
 	return taskCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&task)
 }
+
+func DeleteManyTasks(task entity.Task) error {
+	filter, _ := bson.Marshal(task)
+	_, err := taskCollection.DeleteMany(context.TODO(), filter)
+	return err
+}
+
+func DeleteOneTask(task entity.Task) error {
+	filter, _ := bson.Marshal(task)
+	_, err := taskCollection.DeleteOne(context.TODO(), filter)
+	return err
+}

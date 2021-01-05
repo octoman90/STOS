@@ -46,7 +46,7 @@ export default function Task({ taskID, index, listID }) {
 			<Draggable draggableId={ taskID } index={ index }>
 				{ provided => (
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
-						{ task.title } { task.index }
+						{ task.title }
 						{ task.modules && 
 							task.modules.map((module, index) => {
 								return React.createElement(

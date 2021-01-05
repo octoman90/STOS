@@ -45,3 +45,15 @@ func UpdateOneList(refList entity.List, list entity.List) error {
 	document, _ := bson.Marshal(list)
 	return listCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&list)
 }
+
+func DeleteManyLists(list entity.List) error {
+	filter, _ := bson.Marshal(list)
+	_, err := listCollection.DeleteMany(context.TODO(), filter)
+	return err
+}
+
+func DeleteOneList(list entity.List) error {
+	filter, _ := bson.Marshal(list)
+	_, err := listCollection.DeleteOne(context.TODO(), filter)
+	return err
+}
