@@ -2,10 +2,14 @@ import React, { useEffect } 		from 'react'
 import styled, { css } 				from 'styled-components'
 import { Droppable } 				from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
+import useBus, {
+	dispatch as busDispatch
+} 									from 'use-bus'
 import DeleteIcon 					from '@material-ui/icons/Delete'
 import EditIcon 					from '@material-ui/icons/Edit'
 
-import Task from './Task.jsx'
+import Task 			from './Task.jsx'
+import { upsyncList } 	from '../api/lists.js'
 
 const Container = styled.div`
 	background-color: #fff;
@@ -22,31 +26,6 @@ const Container = styled.div`
 const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
 `
-
-function upsyncList(data, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(data)
-	}
-
-	return fetch('/api/syncList', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setList',
-				list: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
 
 function downsyncTasks(listID, dispatch) {
 	fetch('/api/syncTasks?' + new URLSearchParams({ listID }))
@@ -68,6 +47,17 @@ function downsyncTasks(listID, dispatch) {
 		})
 }
 
+function renameList(list, value, dispatch) {
+	list.title = value
+
+	dispatch({
+		type: 'setList',
+		list
+	})
+
+	upsyncList(list, dispatch)
+}
+
 export default function List({ listID, dashboardID }) {
 	const lists = useSelector(state => state.lists)
 	const list = useSelector(state => state.lists[listID])
@@ -85,12 +75,30 @@ export default function List({ listID, dashboardID }) {
 		downsyncTasks(listID, dispatch)
 	}, [listID, dispatch])
 
-	if (listID) {
+	function titleEditClickHandler() {
+		busDispatch({
+			type: 'showTextEditModal',
+			field: 'listName',
+			listID 
+		})
+	}
+
+	useBus(
+		'submitTextEditModal',
+		(params) => {
+			if (params.field == 'listName' && params.listID == listID) {
+				renameList(list, params.value, dispatch)
+			}
+		},
+		[list, listID, dispatch],
+	)
+
+	if (list) {
 		return (
 			<Container className="list">
 				<ListHeader className="list-header">
 					{ list.title }
-					<EditIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
+					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
 					<DeleteIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
 				</ListHeader>
 				<Droppable droppableId={ listID }>

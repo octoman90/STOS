@@ -4,7 +4,7 @@ import { useParams } 					from 'react-router-dom'
 import { DragDropContext } 				from 'react-beautiful-dnd'
 import useBus 							from 'use-bus'
 import styled 							from 'styled-components'
-import { dispatch as busDispatch } from 'use-bus'
+import { dispatch as busDispatch } 		from 'use-bus'
 import DeleteIcon 						from '@material-ui/icons/Delete'
 import EditIcon 						from '@material-ui/icons/Edit'
 
@@ -132,7 +132,6 @@ function moveTask(state, taskID, source, destination, dispatch) {
 }
 
 function renameDashboard(dashboard, value, dispatch) {
-	console.log(dashboard, value)
 	dashboard.title = value
 
 	dispatch({
@@ -160,16 +159,16 @@ export default function Dashboard() {
 
 	useBus(
 		'showTextEditModal',
-		({ field, dashboardID }) => {
-			setTextEditModal(field !== undefined ? { field, dashboardID } : {})
+		({ field, dashboardID, listID }) => {
+			setTextEditModal(field !== undefined ? { field, dashboardID, listID } : {})
 		},
 		[textEditModal],
 	)
 
 	useBus(
-		'submitTextModal',
+		'submitTextEditModal',
 		({ field, dashboardID, value }) => {
-			if (field == 'dashboardName' && dashboardID == dashboardId) {
+			if (field == 'dashboardName' && dashboardID == dashboard.id) {
 				renameDashboard(dashboard, value, dispatch)
 			}
 		},
@@ -191,7 +190,11 @@ export default function Dashboard() {
 	}
 
 	function titleEditClickHandler() {
-		busDispatch({ type: 'showTextEditModal', field: 'dashboardName', dashboardID: dashboardId })
+		busDispatch({
+			type: 'showTextEditModal',
+			field: 'dashboardName',
+			dashboardID: dashboardId
+		})
 	}
 
 	useEffect(() => {
@@ -225,7 +228,7 @@ export default function Dashboard() {
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
-				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } />
+				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } />
 			}
 		</div>
 	)

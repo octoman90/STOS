@@ -9,7 +9,9 @@ import (
 
 func DownsyncOneList(userID primitive.ObjectID, list entity.List) (bool, entity.List, string) {
 	if list.ID != primitive.NilObjectID {
-		if err := repository.UpdateOneList(list); err == nil {
+		if err := repository.UpdateOneList(entity.List{
+			ID: list.ID,
+		}, list); err == nil {
 			return true, list, ""
 		} else {
 			return false, list, err.Error()

@@ -40,8 +40,8 @@ func ReadManyLists(list entity.List) ([]entity.List, error) {
 	return lists, err
 }
 
-func UpdateOneList(list entity.List) error {
+func UpdateOneList(refList entity.List, list entity.List) error {
+	filter, _ := bson.Marshal(refList)
 	document, _ := bson.Marshal(list)
-	var replacedDocument bson.M
-	return taskCollection.FindOneAndReplace(context.TODO(), bson.M{"_id": list.ID}, document).Decode(&replacedDocument)
+	return listCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&list)
 }
