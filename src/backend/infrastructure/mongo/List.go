@@ -48,12 +48,27 @@ func UpdateOneList(refList entity.List, list entity.List) error {
 
 func DeleteManyLists(list entity.List) error {
 	filter, _ := bson.Marshal(list)
-	_, err := listCollection.DeleteMany(context.TODO(), filter)
+	cur, err := listCollection.Find(context.TODO(), filter)
+
+	if err == nil {
+		for cur.Next(context.TODO()) {
+			var l entity.List
+			if err = cur.Decode(&l); err == nil {
+				f, _ := bson.Marshal(l)
+				_, err = listCollection.DeleteOne(context.TODO(), f)
+				_ = DeleteManyTasks(entity.Task{ List: l.ID })
+			} else {
+				return err
+			}
+		}
+	}
+
 	return err
 }
 
 func DeleteOneList(list entity.List) error {
 	filter, _ := bson.Marshal(list)
-	_, err := listCollection.DeleteOne(context.TODO(), filter)
+	err := listCollection.FindOneAndDelete(context.TODO(), filter).Decode(&list)
+	_ = DeleteManyTasks(entity.Task{ List: list.ID })
 	return err
 }

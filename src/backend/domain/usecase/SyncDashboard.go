@@ -51,3 +51,11 @@ func DownsyncOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard)
 		}
 	}
 }
+
+func DeleteOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard) (bool, string) {
+	if err := repository.DeleteOneDashboard(entity.Dashboard{ ID: dashboard.ID }); err == nil {
+		return true, ""
+	} else {
+		return false, err.Error()
+	}
+}
