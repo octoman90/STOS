@@ -2,6 +2,8 @@ import React, { useEffect } 		from 'react'
 import styled, { css } 				from 'styled-components'
 import { Droppable } 				from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
+import DeleteIcon 					from '@material-ui/icons/Delete'
+import EditIcon 					from '@material-ui/icons/Edit'
 
 import Task from './Task.jsx'
 
@@ -86,7 +88,11 @@ export default function List({ listID, dashboardID }) {
 	if (listID) {
 		return (
 			<Container className="list">
-				<ListHeader className="list-header">{ list.title }</ListHeader>
+				<ListHeader className="list-header">
+					{ list.title }
+					<EditIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
+					<DeleteIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
+				</ListHeader>
 				<Droppable droppableId={ listID }>
 					{ provided => (
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>

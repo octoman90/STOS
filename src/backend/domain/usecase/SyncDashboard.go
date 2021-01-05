@@ -22,7 +22,6 @@ func UpsyncManyDashboards(userID primitive.ObjectID) (bool, []entity.Dashboard, 
 func UpsyncOneDashboard(userID primitive.ObjectID, dashboardID primitive.ObjectID) (bool, entity.Dashboard, string) {
 	dashboard, err := repository.ReadOneDashboard(entity.Dashboard{
 		ID: dashboardID,
-		Owner: userID,
 	})
 
 	if err == nil {
@@ -34,7 +33,9 @@ func UpsyncOneDashboard(userID primitive.ObjectID, dashboardID primitive.ObjectI
 
 func DownsyncOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard) (bool, entity.Dashboard, string) {
 	if dashboard.ID != primitive.NilObjectID {
-		if err := repository.UpdateOneDashboard(dashboard); err == nil {
+		if err := repository.UpdateOneDashboard(entity.Dashboard{
+			ID: dashboard.ID,
+		}, dashboard); err == nil {
 			return true, dashboard, ""
 		} else {
 			return false, dashboard, err.Error()

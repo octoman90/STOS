@@ -4,11 +4,18 @@ import { useParams } 					from 'react-router-dom'
 import { DragDropContext } 				from 'react-beautiful-dnd'
 import useBus 							from 'use-bus'
 import styled 							from 'styled-components'
+import { dispatch as busDispatch } from 'use-bus'
+import DeleteIcon 						from '@material-ui/icons/Delete'
+import EditIcon 						from '@material-ui/icons/Edit'
 
-import Header 					from '../components/Header.jsx'
-import List 					from '../components/List.jsx'
-import TaskModal 				from '../components/TaskModal.jsx'
-import { downsyncDashboard }	from '../api/dashboards.js'
+import Header 			from '../components/Header.jsx'
+import List 			from '../components/List.jsx'
+import TaskModal 		from '../components/TaskModal.jsx'
+import TextEditModal 	from '../components/TextEditModal.jsx'
+import {
+	downsyncDashboard,
+	upsyncDashboard
+} 						from '../api/dashboards.js'
 
 const InfoBar = styled.div`
 	background: #fff;
@@ -124,6 +131,18 @@ function moveTask(state, taskID, source, destination, dispatch) {
 	upsyncTasks(patch, dispatch)
 }
 
+function renameDashboard(dashboard, value, dispatch) {
+	console.log(dashboard, value)
+	dashboard.title = value
+
+	dispatch({
+		type: 'setDashboard',
+		dashboard
+	})
+
+	upsyncDashboard(dashboard, dispatch)
+}
+
 export default function Dashboard() {
 	const { dashboardId } = useParams()
 	const dashboard = useSelector(state => state.dashboards[dashboardId])
@@ -131,11 +150,30 @@ export default function Dashboard() {
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
 	const [taskModalTaskID, setTaskModalTaskID] = useState(null)
+	const [textEditModal, setTextEditModal] = useState({})
 
 	useBus(
 		'showTaskModal',
 		({ taskID }) => setTaskModalTaskID(taskID),
 		[taskModalTaskID],
+	)
+
+	useBus(
+		'showTextEditModal',
+		({ field, dashboardID }) => {
+			setTextEditModal(field !== undefined ? { field, dashboardID } : {})
+		},
+		[textEditModal],
+	)
+
+	useBus(
+		'submitTextModal',
+		({ field, dashboardID, value }) => {
+			if (field == 'dashboardName' && dashboardID == dashboardId) {
+				renameDashboard(dashboard, value, dispatch)
+			}
+		},
+		[dashboard, dispatch],
 	)
 
 	function dragEndHandler(result) {
@@ -152,6 +190,10 @@ export default function Dashboard() {
 		}
 	}
 
+	function titleEditClickHandler() {
+		busDispatch({ type: 'showTextEditModal', field: 'dashboardName', dashboardID: dashboardId })
+	}
+
 	useEffect(() => {
 		downsyncDashboard(dashboardId, dispatch)
 		downsyncLists(dashboardId, dispatch)
@@ -162,6 +204,8 @@ export default function Dashboard() {
 			<Header />
 			<InfoBar>
 				<div>{ dashboard ? dashboard.title : "" }</div>
+				<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
+				<DeleteIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
 			</InfoBar>
 			<div id="dashboard-root">
 				<div className="background-layer"></div>
@@ -178,6 +222,10 @@ export default function Dashboard() {
 
 			{ taskModalTaskID &&
 				<TaskModal taskID={ taskModalTaskID } />
+			}
+
+			{ Object.keys(textEditModal).length > 0 &&
+				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } />
 			}
 		</div>
 	)

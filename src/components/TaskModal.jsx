@@ -2,6 +2,8 @@ import React 						from 'react'
 import styled 						from 'styled-components'
 import { useSelector } 				from 'react-redux'
 import { dispatch as busDispatch } 	from 'use-bus'
+import DeleteIcon 					from '@material-ui/icons/Delete'
+import EditIcon 					from '@material-ui/icons/Edit'
 
 import Description 	from './taskModules/Description.jsx'
 import TagList 		from './taskModules/TagList.jsx'
@@ -55,6 +57,8 @@ export default function TaskModal({ taskID }) {
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<h2>{ task.title }</h2>
+				<EditIcon />
+				<DeleteIcon />
 				{
 					(task.modules || []).map((module, index) => {
 						return React.createElement(
