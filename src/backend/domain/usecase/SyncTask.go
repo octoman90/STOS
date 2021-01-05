@@ -9,7 +9,9 @@ import (
 
 func DownsyncOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Task, string) {
 	if task.ID != primitive.NilObjectID {
-		if err := repository.UpdateOneTask(task); err == nil {
+		if err := repository.UpdateOneTask(entity.Task{
+			ID: task.ID,
+		}, task); err == nil {
 			return true, task, ""
 		} else {
 			return false, task, err.Error()
@@ -38,7 +40,9 @@ func UpsyncManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool
 
 func DownsyncManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []entity.Task, string) {
 	for i := 0; i < len(tasks); i++ {
-		if err := repository.UpdateOneTask(tasks[i]); err != nil {
+		if err := repository.UpdateOneTask(entity.Task{
+			ID: tasks[i].ID,
+		}, tasks[i]); err != nil {
 			return false, tasks, err.Error()
 		}
 	}

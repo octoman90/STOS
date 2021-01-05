@@ -1,11 +1,12 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { Draggable } from 'react-beautiful-dnd'
+import React 						from 'react'
+import styled, { css } 				from 'styled-components'
+import { Draggable } 				from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
-import { dispatch as busDispatch } from 'use-bus'
+import { dispatch as busDispatch } 	from 'use-bus'
 
-import Description from './taskModules/Description.jsx'
-import TagList from './taskModules/TagList.jsx'
+import Description 		from './taskModules/Description.jsx'
+import TagList 			from './taskModules/TagList.jsx'
+import { upsyncTask } 	from '../api/tasks.js'
 
 const modules = {
 	description: Description,
@@ -23,31 +24,6 @@ const Container = styled.div`
 		color: #777;
 	`}
 `
-
-function upsyncTask(data, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(data)
-	}
-
-	return fetch('/api/syncTask', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setTask',
-				task: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
 
 export default function Task({ taskID, index, listID }) {
 	const tasks = useSelector(state => state.tasks)
@@ -70,7 +46,7 @@ export default function Task({ taskID, index, listID }) {
 			<Draggable draggableId={ taskID } index={ index }>
 				{ provided => (
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
-						{ task.title }
+						{ task.title } { task.index }
 						{ task.modules && 
 							task.modules.map((module, index) => {
 								return React.createElement(

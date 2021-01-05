@@ -33,8 +33,8 @@ func ReadManyTasks(task entity.Task) ([]entity.Task, error) {
 	return tasks, err
 }
 
-func UpdateOneTask(task entity.Task) error {
+func UpdateOneTask(refTask entity.Task, task entity.Task) error {
+	filter, _ := bson.Marshal(refTask)
 	document, _ := bson.Marshal(task)
-	var replacedDocument bson.M
-	return taskCollection.FindOneAndReplace(context.TODO(), bson.M{"_id": task.ID}, document).Decode(&replacedDocument)
+	return taskCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&task)
 }
