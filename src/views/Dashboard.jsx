@@ -2,6 +2,7 @@ import React, { useState, useEffect } 	from 'react'
 import { useSelector, useDispatch } 	from 'react-redux'
 import { useParams } 					from 'react-router-dom'
 import { DragDropContext } 				from 'react-beautiful-dnd'
+import { useNavigate } 					from 'react-router-dom'
 import useBus 							from 'use-bus'
 import styled 							from 'styled-components'
 import { dispatch as busDispatch } 		from 'use-bus'
@@ -12,10 +13,10 @@ import Header 			from '../components/Header.jsx'
 import List 			from '../components/List.jsx'
 import TaskModal 		from '../components/TaskModal.jsx'
 import TextEditModal 	from '../components/TextEditModal.jsx'
-import {
+import dashboardAPI, {
 	downsyncDashboard,
 	upsyncDashboard
-} 						from '../api/dashboards.js'
+}						from '../api/dashboards.js'
 
 const InfoBar = styled.div`
 	background: #fff;
@@ -142,12 +143,17 @@ function renameDashboard(dashboard, value, dispatch) {
 	upsyncDashboard(dashboard, dispatch)
 }
 
+function deleteOneDashboard(dashboard, dispatch) {
+	dashboardAPI.deleteOne(dashboard, dispatch)
+}
+
 export default function Dashboard() {
 	const { dashboardId } = useParams()
 	const dashboard = useSelector(state => state.dashboards[dashboardId])
 	const lists = useSelector(state => state.lists)
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const [taskModalTaskID, setTaskModalTaskID] = useState(null)
 	const [textEditModal, setTextEditModal] = useState({})
 
@@ -197,6 +203,11 @@ export default function Dashboard() {
 		})
 	}
 
+	function deleteClickHandler() {
+		deleteOneDashboard(dashboard, dispatch)
+		navigate('/home')
+	}
+
 	useEffect(() => {
 		downsyncDashboard(dashboardId, dispatch)
 		downsyncLists(dashboardId, dispatch)
@@ -208,7 +219,7 @@ export default function Dashboard() {
 			<InfoBar>
 				<div>{ dashboard ? dashboard.title : "" }</div>
 				<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
-				<DeleteIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
+				<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
 			</InfoBar>
 			<div id="dashboard-root">
 				<div className="background-layer"></div>

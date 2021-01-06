@@ -62,3 +62,30 @@ export function upsyncDashboard(dashboard, dispatch) {
 			console.log('error', err.message)
 		})
 }
+
+export default {
+	deleteOne: (dashboard, dispatch) => {
+		let options = {
+			method: "delete",
+			body: JSON.stringify(dashboard)
+		}
+
+		fetch('/api/syncDashboard', options)
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				dispatch({
+					type: 'deleteDashboard',
+					dashboardID: dashboard.id
+				})
+			})
+			.catch(err => {
+				console.log('error', err.message)
+			})
+	}
+}

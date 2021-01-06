@@ -17,8 +17,10 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
 			if r.Method == "POST" {
 				downsyncDashboard(w, r, user.ID)
-			} else { // GET
+			} else if r.Method == "GET" {
 				upsyncDashboard(w, r, user.ID)
+			} else { // DELETE
+				deleteDashboard(w, r, user.ID)
 			}
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
@@ -73,4 +75,18 @@ func downsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.
 			"Message": message,
 		})
 	}
+}
+
+func deleteDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
+	var dashboard entity.Dashboard
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&dashboard); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	ok, message := usecase.DeleteOneDashboard(userID, dashboard)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"Ok": ok,
+		"Message": message,
+	})
 }
