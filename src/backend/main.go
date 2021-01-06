@@ -15,13 +15,13 @@ func main() {
 
 	router.HandleFunc("/signUp", api.SignUp).Methods("POST")
 	router.HandleFunc("/logIn", api.LogIn).Methods("POST")
-	router.HandleFunc("/checkSession", api.CheckSession).Methods("GET")
-	router.HandleFunc("/syncDashboard", api.SyncDashboard).Methods("POST", "GET", "DELETE")
-	router.HandleFunc("/syncDashboards", api.SyncDashboards).Methods("GET")
-	router.HandleFunc("/syncList", api.SyncList).Methods("POST", "DELETE")
-	router.HandleFunc("/syncLists", api.SyncLists).Methods("GET")
-	router.HandleFunc("/syncTask", api.SyncTask).Methods("POST", "DELETE")
-	router.HandleFunc("/syncTasks", api.SyncTasks).Methods("POST", "GET")
+	router.HandleFunc("/session", api.CheckSession).Methods("GET")
+	router.HandleFunc("/dashboard", api.SyncDashboard).Methods("POST", "GET", "DELETE")
+	router.HandleFunc("/dashboards", api.SyncDashboards).Methods("GET")
+	router.HandleFunc("/list", api.SyncList).Methods("POST", "DELETE")
+	router.HandleFunc("/lists", api.SyncLists).Methods("GET")
+	router.HandleFunc("/task", api.SyncTask).Methods("POST", "DELETE")
+	router.HandleFunc("/tasks", api.SyncTasks).Methods("POST", "GET")
 
 	srv := &http.Server{
 		Handler: 		router,

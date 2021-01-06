@@ -8,7 +8,7 @@ import Home 		from './views/Home.jsx'
 import Dashboard 	from './views/Dashboard.jsx'
 
 function checkSession(dispatch) {
-	fetch('/api/checkSession')
+	fetch('/api/session')
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()

@@ -1,5 +1,5 @@
 export function downsyncDashboards(dispatch) {
-	fetch('/api/syncDashboards')
+	fetch('/api/dashboards')
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()
@@ -19,7 +19,7 @@ export function downsyncDashboards(dispatch) {
 }
 
 export function downsyncDashboard(id, dispatch) {
-	fetch('/api/syncDashboard?' + new URLSearchParams({ id }))
+	fetch('/api/dashboard?' + new URLSearchParams({ id }))
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()
@@ -44,7 +44,7 @@ export function upsyncDashboard(dashboard, dispatch) {
 		body: JSON.stringify(dashboard)
 	}
 
-	fetch('/api/syncDashboard', options)
+	fetch('/api/dashboard', options)
 		.then(response => {
 			if (response.ok && response.status === 200) {
 				return response.json()
@@ -70,7 +70,7 @@ export default {
 			body: JSON.stringify(dashboard)
 		}
 
-		fetch('/api/syncDashboard', options)
+		fetch('/api/dashboard', options)
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()

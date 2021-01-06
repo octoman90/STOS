@@ -12,6 +12,7 @@ import Task 			from './Task.jsx'
 import listAPI, { 
 	upsyncList 
 } 						from '../api/lists.js'
+import taskAPI 			from '../api/tasks.js'
 
 const Container = styled.div`
 	background-color: #fff;
@@ -28,26 +29,6 @@ const Container = styled.div`
 const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
 `
-
-function downsyncTasks(listID, dispatch) {
-	fetch('/api/syncTasks?' + new URLSearchParams({ listID }))
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setTasks',
-				tasks: data || []
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
 
 function renameList(list, value, dispatch) {
 	list.title = value
@@ -74,7 +55,7 @@ export default function List({ listID, dashboardID }) {
 	}
 
 	useEffect(() => {
-		downsyncTasks(listID, dispatch)
+		taskAPI.downsyncMany(listID, dispatch)
 	}, [listID, dispatch])
 
 	function titleEditClickHandler() {

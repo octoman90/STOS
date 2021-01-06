@@ -17,6 +17,8 @@ import dashboardAPI, {
 	downsyncDashboard,
 	upsyncDashboard
 }						from '../api/dashboards.js'
+import listAPI 			from '../api/lists.js'
+import taskAPI 			from '../api/tasks.js'
 
 const InfoBar = styled.div`
 	background: #fff;
@@ -24,51 +26,6 @@ const InfoBar = styled.div`
 	display: flex;
 	padding: 0.5em;
 `
-
-function downsyncLists(dashboardID, dispatch) {
-	fetch('/api/syncLists?' + new URLSearchParams({ dashboardID }))
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setLists',
-				lists: data || []
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
-
-function upsyncTasks(data, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(data)
-	}
-
-	return fetch('/api/syncTasks', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setTasks',
-				tasks: data || []
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
 
 function moveTask(state, taskID, source, destination, dispatch) {
 	const patch = [{
@@ -129,7 +86,7 @@ function moveTask(state, taskID, source, destination, dispatch) {
 		tasks: patch
 	})
 
-	upsyncTasks(patch, dispatch)
+	taskAPI.upsyncMany(patch, dispatch)
 }
 
 function renameDashboard(dashboard, value, dispatch) {
@@ -210,7 +167,7 @@ export default function Dashboard() {
 
 	useEffect(() => {
 		downsyncDashboard(dashboardId, dispatch)
-		downsyncLists(dashboardId, dispatch)
+		listAPI.downsyncMany(dashboardId, dispatch)
 	}, [dashboardId, dispatch])
 
 	return (
