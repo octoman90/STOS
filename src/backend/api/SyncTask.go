@@ -15,7 +15,11 @@ func SyncTask(w http.ResponseWriter, r *http.Request) {
 
 	if cookie, err := r.Cookie("token"); err == nil {
 		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
-			downsyncTask(w, r, user.ID)
+			if r.Method == "POST" {
+				downsyncTask(w, r, user.ID)
+			} else { // DELETE
+				deleteTask(w, r, user.ID)
+			}
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"Ok": ok,
@@ -45,4 +49,18 @@ func downsyncTask(w http.ResponseWriter, r *http.Request, userID primitive.Objec
 			"Message": message,
 		})
 	}
+}
+
+func deleteTask(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
+	var task entity.Task
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&task); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	ok, message := usecase.DeleteOneTask(userID, task)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"Ok": ok,
+		"Message": message,
+	})
 }

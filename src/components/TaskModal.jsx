@@ -9,7 +9,9 @@ import useBus, {
 
 import Description 		from './taskModules/Description.jsx'
 import TagList 			from './taskModules/TagList.jsx'
-import { upsyncTask } 	from '../api/tasks.js'
+import taskAPI, {
+	upsyncTask
+} 						from '../api/tasks.js'
 
 const modules = {
 	description: Description,
@@ -85,13 +87,18 @@ export default function TaskModal({ taskID }) {
 		[task, taskID, dispatch],
 	)
 
+	function deleteClickHandler() {
+		busDispatch({ type: 'showTaskModal', taskID: null })
+		taskAPI.deleteOne(task, dispatch)
+	}
+
 	return (
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<h2>{ task.title }</h2>
 				<EditIcon onClick={ titleEditClickHandler } />
-				<DeleteIcon />
+				<DeleteIcon onClick={ deleteClickHandler } />
 				{
 					(task.modules || []).map((module, index) => {
 						return React.createElement(

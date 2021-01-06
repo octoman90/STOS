@@ -20,7 +20,7 @@ func main() {
 	router.HandleFunc("/syncDashboards", api.SyncDashboards).Methods("GET")
 	router.HandleFunc("/syncList", api.SyncList).Methods("POST", "DELETE")
 	router.HandleFunc("/syncLists", api.SyncLists).Methods("GET")
-	router.HandleFunc("/syncTask", api.SyncTask).Methods("POST")
+	router.HandleFunc("/syncTask", api.SyncTask).Methods("POST", "DELETE")
 	router.HandleFunc("/syncTasks", api.SyncTasks).Methods("POST", "GET")
 
 	srv := &http.Server{

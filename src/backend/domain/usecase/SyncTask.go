@@ -49,3 +49,12 @@ func DownsyncManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []
 
 	return true, tasks, ""
 }
+
+func DeleteOneTask(userID primitive.ObjectID, task entity.Task) (bool, string) {
+	if err := repository.DeleteOneTask(entity.Task{ ID: task.ID }); err == nil {
+		return true, ""
+	} else {
+		return false, err.Error()
+	}
+}
+

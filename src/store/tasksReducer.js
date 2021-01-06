@@ -1,20 +1,23 @@
 export default function tasksReducer(state = {}, action) {
-	const patch = {}
+	const newState = JSON.parse(JSON.stringify(state))
 
 	// eslint-disable-next-line
 	switch (action.type) {
 		case 'setTasks': {
 			action.tasks.forEach(task => {
-				patch[task.id] = task
+				newState[task.id] = task
 			})
 
 			break
 		} case 'setTask': {
-			patch[action.task.id] = action.task
+			newState[action.task.id] = action.task
 
+			break
+		} case 'deleteTask': {
+			delete newState[action.taskID]
 			break
 		}
 	}
 
-	return { ...state, ...patch }
+	return newState
 }
