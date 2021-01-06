@@ -9,7 +9,9 @@ import DeleteIcon 					from '@material-ui/icons/Delete'
 import EditIcon 					from '@material-ui/icons/Edit'
 
 import Task 			from './Task.jsx'
-import { upsyncList } 	from '../api/lists.js'
+import listAPI, { 
+	upsyncList 
+} 						from '../api/lists.js'
 
 const Container = styled.div`
 	background-color: #fff;
@@ -93,13 +95,17 @@ export default function List({ listID, dashboardID }) {
 		[list, listID, dispatch],
 	)
 
+	function deleteClickHandler() {
+		listAPI.deleteOne(list, dispatch)
+	}
+
 	if (list) {
 		return (
 			<Container className="list">
 				<ListHeader className="list-header">
 					{ list.title }
 					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
-					<DeleteIcon className="hover-visible" style={{ verticalAlign: "bottom" }}/>
+					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
 				</ListHeader>
 				<Droppable droppableId={ listID }>
 					{ provided => (

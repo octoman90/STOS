@@ -37,3 +37,11 @@ func UpsyncManyLists(userID primitive.ObjectID, dashboardID primitive.ObjectID) 
 		return false, lists, err.Error()
 	}
 }
+
+func DeleteOneList(userID primitive.ObjectID, list entity.List) (bool, string) {
+	if err := repository.DeleteOneList(entity.List{ ID: list.ID }); err == nil {
+		return true, ""
+	} else {
+		return false, err.Error()
+	}
+}

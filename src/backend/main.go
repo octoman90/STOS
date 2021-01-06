@@ -18,7 +18,7 @@ func main() {
 	router.HandleFunc("/checkSession", api.CheckSession).Methods("GET")
 	router.HandleFunc("/syncDashboard", api.SyncDashboard).Methods("POST", "GET", "DELETE")
 	router.HandleFunc("/syncDashboards", api.SyncDashboards).Methods("GET")
-	router.HandleFunc("/syncList", api.SyncList).Methods("POST")
+	router.HandleFunc("/syncList", api.SyncList).Methods("POST", "DELETE")
 	router.HandleFunc("/syncLists", api.SyncLists).Methods("GET")
 	router.HandleFunc("/syncTask", api.SyncTask).Methods("POST")
 	router.HandleFunc("/syncTasks", api.SyncTasks).Methods("POST", "GET")
