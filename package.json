@@ -18,6 +18,7 @@
 		"use-bus": "^2.3.1"
 	},
 	"scripts": {
+		"test:back": "go test ./src/backend/ut",
 		"start:front": "react-scripts start",
 		"start:back": "go run src/backend/main.go",
 		"build:front": "react-scripts build",
