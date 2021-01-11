@@ -1,4 +1,7 @@
-import React, { useState } 	from 'react'
+import React, {
+	useEffect,
+	useState
+} 							from 'react'
 import { useDispatch } 		from 'react-redux'
 import { useNavigate } 		from 'react-router-dom'
 import useBus 				from 'use-bus'
@@ -92,25 +95,29 @@ export default function Landing() {
 		() => navigate('/home')
 	)
 
+	useEffect(() => {
+		document.title = "Welcome to STOS"
+	}, [])
+
 	return (
 		<Container>
 			<LandingInfo />
 			<Form onSubmit={ e => submitHandler(e, formData, formMode, navigate, dispatch) }>
-				<FormModeSelector active={ formMode === 0 } onClick={() => setFormMode(0)}>Sign Up</FormModeSelector>
-				<FormModeSelector active={ formMode === 1 } onClick={() => setFormMode(1)}>Log In</FormModeSelector>
+				<FormModeSelector id="signUpModeButton" active={ formMode === 0 } onClick={() => setFormMode(0)}>Sign Up</FormModeSelector>
+				<FormModeSelector id="logInModeButton" active={ formMode === 1 } onClick={() => setFormMode(1)}>Log In</FormModeSelector>
 				
-				<TextInput type="text" onChange={ e => inputChangeHandler("username", e.target.value, setFormData) } placeholder="Username"></TextInput>
-				<TextInput type="password" onChange={ e => inputChangeHandler("password", e.target.value, setFormData) } placeholder="Password"></TextInput>
+				<TextInput type="text" name="username" onChange={ e => inputChangeHandler("username", e.target.value, setFormData) } placeholder="Username"></TextInput>
+				<TextInput type="password" name="password" onChange={ e => inputChangeHandler("password", e.target.value, setFormData) } placeholder="Password"></TextInput>
 				
 				{ formMode === 0 &&
-					<TextInput type="password" onChange={ e => inputChangeHandler("repeatPassword", e.target.value, setFormData) } placeholder="Repeat password"></TextInput>
+					<TextInput type="password" name="repeatPassword" onChange={ e => inputChangeHandler("repeatPassword", e.target.value, setFormData) } placeholder="Repeat password"></TextInput>
 				}
 				
 				{ formMode === 0 &&
 					<Accept inputChangeHandler={ inputChangeHandler } setFormData={ setFormData } />
 				}
 
-				<Button>{ formMode === 0 ? 'Sign Up' : 'Log In' }</Button>
+				<Button id="formSubmitButton">{ formMode === 0 ? 'Sign Up' : 'Log In' }</Button>
 			</Form>
 		</Container>
 	)

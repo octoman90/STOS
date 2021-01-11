@@ -14,11 +14,13 @@
 		"react-router-dom": "^6.0.0-beta.0",
 		"react-scripts": "3.4.3",
 		"redux": "^4.0.5",
+		"selenium-webdriver": "^4.0.0-alpha.8",
 		"styled-components": "^5.2.0",
 		"use-bus": "^2.3.1"
 	},
 	"scripts": {
 		"test:back": "go test ./src/backend/ut",
+		"test:front": "node src/tests/index.js",
 		"start:front": "react-scripts start",
 		"start:back": "go run src/backend/main.go",
 		"build:front": "react-scripts build",

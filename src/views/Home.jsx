@@ -29,6 +29,7 @@ export default function Home() {
 	)
 
 	useEffect(() => {
+		document.title = "STOS Home"
 		downsyncDashboards(dispatch)
 	}, [dispatch])
 
