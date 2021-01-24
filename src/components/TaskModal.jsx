@@ -12,9 +12,7 @@ import Description 	from './taskModules/Description.jsx'
 import TagList 		from './taskModules/TagList.jsx'
 import Timer 		from './taskModules/Timer.jsx'
 import UserList 	from './taskModules/UserList.jsx'
-import taskAPI, {
-	upsyncTask
-} 						from '../api/tasks.js'
+import controller 	from '../controller'
 
 const modules = {
 	description: 	Description,
@@ -62,17 +60,6 @@ const NewModule = styled.div`
 	color: #777
 `
 
-function renameTask(task, value, dispatch) {
-	task.title = value
-
-	dispatch({
-		type: 'setTask',
-		task
-	})
-
-	upsyncTask(task, dispatch)
-}
-
 export default function TaskModal({ taskID }) {
 	const task = useSelector(state => state.tasks[taskID])
 	const dispatch = useDispatch()
@@ -93,7 +80,7 @@ export default function TaskModal({ taskID }) {
 		'submitTextEditModal',
 		(params) => {
 			if (params.field == 'taskName' && params.taskID == taskID) {
-				renameTask(task, params.value, dispatch)
+				controller.renameTask(task, params.value, dispatch)
 			}
 		},
 		[task, taskID, dispatch],
@@ -101,7 +88,7 @@ export default function TaskModal({ taskID }) {
 
 	function deleteClickHandler() {
 		busDispatch({ type: 'showTaskModal', taskID: null })
-		taskAPI.deleteOne(task, dispatch)
+		controller.deleteTask(task, dispatch)
 	}
 
 	return (

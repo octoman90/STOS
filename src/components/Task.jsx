@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { dispatch as busDispatch } 	from 'use-bus'
 import PlusIcon 					from '@material-ui/icons/Add'
 
-import Description 		from './taskModules/Description.jsx'
-import TagList 			from './taskModules/TagList.jsx'
-import { upsyncTask } 	from '../api/tasks.js'
+import Description 	from './taskModules/Description.jsx'
+import TagList 		from './taskModules/TagList.jsx'
+import controller	from '../controller'
 
 const modules = {
 	description: Description,
@@ -40,7 +40,7 @@ export default function Task({ taskID, index, listID }) {
 		let listTasks = Object.values(tasks).filter(task => task.list == listID)
 		let index = listTasks.length ? listTasks.sort((a, b) => b.index - a.index)[0].index + 1 : 0
 
-		upsyncTask({ title: "New Task", list: listID, index }, dispatch)
+		controller.createTask(listID, index, dispatch)
 	}
 
 	if (task) {

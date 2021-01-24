@@ -10,7 +10,7 @@ import styled, {
 } 				from 'styled-components'
 import PlusIcon from '@material-ui/icons/Add'
 
-import { upsyncDashboard } from '../api/dashboards.js'
+import controller from '../controller'
 
 const Container = styled.div`
 	background: #f8f8f8;
@@ -35,7 +35,7 @@ export default function DashboardBanner({ meta }) {
 	function clickHandler() {
 		meta.id
 			? navigate(`/dashboard${meta.id}`)
-			: upsyncDashboard({title: "New Dashboard"}, dispatch)
+			: controller.createDashboard(dispatch)
 	}
 
 	return (

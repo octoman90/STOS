@@ -4,9 +4,9 @@ import styled 						from 'styled-components'
 import { useNavigate } 				from 'react-router-dom'
 import useBus 						from 'use-bus'
 
-import Header 					from '../components/Header.jsx'
-import DashboardBanner 			from '../components/DashboardBanner.jsx'
-import { downsyncDashboards } 	from '../api/dashboards.js'
+import Header 			from '../components/Header.jsx'
+import DashboardBanner 	from '../components/DashboardBanner.jsx'
+import controller		from '../controller'
 
 const HomeRoot = styled.div`
 	height: 100%;
@@ -30,7 +30,7 @@ export default function Home() {
 
 	useEffect(() => {
 		document.title = "STOS Home"
-		downsyncDashboards(dispatch)
+		controller.downsyncDashboards(dispatch)
 	}, [dispatch])
 
 	return (

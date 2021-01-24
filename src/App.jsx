@@ -6,45 +6,13 @@ import { dispatch as busDispatch } 		from 'use-bus'
 import Landing 		from './views/Landing.jsx'
 import Home 		from './views/Home.jsx'
 import Dashboard 	from './views/Dashboard.jsx'
-
-function checkSession(dispatch) {
-	fetch('/api/session')
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			if (data.ok) {
-				dispatch({
-					type: 'setLoggedIn',
-					value: true,
-					username: data.username
-				})
-
-				busDispatch({ type: 'loggedIn' })
-			} else {
-				dispatch({
-					type: 'setLoggedIn',
-					value: false,
-					username: ''
-				})
-
-				busDispatch({ type: 'notLoggedIn' })
-			}
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
+import controller	from './controller'
 
 function App() {
 	const dispatch = useDispatch()
 	
 	useEffect(() => {
-		checkSession(dispatch)
+		controller.checkSession(dispatch)
 	}, [dispatch])
 
 	return (

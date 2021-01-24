@@ -10,10 +10,7 @@ import EditIcon 					from '@material-ui/icons/Edit'
 import PlusIcon 					from '@material-ui/icons/Add'
 
 import Task 			from './Task.jsx'
-import listAPI, { 
-	upsyncList 
-} 						from '../api/lists.js'
-import taskAPI 			from '../api/tasks.js'
+import controller 		from '../controller'
 
 const Container = styled.div`
 	background-color: #fff;
@@ -33,17 +30,6 @@ const ListHeader = styled.div`
 	`}
 `
 
-function renameList(list, value, dispatch) {
-	list.title = value
-
-	dispatch({
-		type: 'setList',
-		list
-	})
-
-	upsyncList(list, dispatch)
-}
-
 export default function List({ listID, dashboardID }) {
 	const lists = useSelector(state => state.lists)
 	const list = useSelector(state => state.lists[listID])
@@ -54,11 +40,11 @@ export default function List({ listID, dashboardID }) {
 		let dashboardLists = Object.values(lists).filter(list => list.dashboard == dashboardID)
 		let index = dashboardLists.length ? dashboardLists.sort((a, b) => b.index - a.index)[0].index + 1 : 0
 
-		upsyncList({ title: "New List", dashboard: dashboardID, index }, dispatch)
+		controller.createList(dashboardID, index, dispatch)
 	}
 
 	useEffect(() => {
-		taskAPI.downsyncMany(listID, dispatch)
+		controller.downsyncTasks(listID, dispatch)
 	}, [listID, dispatch])
 
 	function titleEditClickHandler() {
@@ -73,14 +59,14 @@ export default function List({ listID, dashboardID }) {
 		'submitTextEditModal',
 		(params) => {
 			if (params.field == 'listName' && params.listID == listID) {
-				renameList(list, params.value, dispatch)
+				controller.renameList(list, params.value, dispatch)
 			}
 		},
 		[list, listID, dispatch],
 	)
 
 	function deleteClickHandler() {
-		listAPI.deleteOne(list, dispatch)
+		controller.deleteList(list, dispatch)
 	}
 
 	if (list) {

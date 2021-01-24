@@ -5,6 +5,8 @@ import {
 import styled 	from 'styled-components'
 import ExitIcon from '@material-ui/icons/ExitToApp'
 
+import controller from '../controller'
+
 const Container = styled.header`
 	display: flex;
 	padding: 1em;
@@ -26,7 +28,7 @@ export default function Header() {
 	}
 
 	function exitClickHandler() {
-		// controller.logOut()
+		controller.logOut()
 	}
 
 	return (
