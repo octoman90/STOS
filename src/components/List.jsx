@@ -7,6 +7,7 @@ import useBus, {
 } 									from 'use-bus'
 import DeleteIcon 					from '@material-ui/icons/Delete'
 import EditIcon 					from '@material-ui/icons/Edit'
+import PlusIcon 					from '@material-ui/icons/Add'
 
 import Task 			from './Task.jsx'
 import listAPI, { 
@@ -20,14 +21,16 @@ const Container = styled.div`
 	margin: 0.5em;
 	width: 20em;
 	cursor: pointer;
-
-	${props => props.createListButton && css`
-		color: #777;
-	`}
 `
 
 const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
+	font-weight: bold;
+
+	${props => props.createListButton && css`
+		color: #777;
+		text-align: center;
+	`}
 `
 
 function renameList(list, value, dispatch) {
@@ -106,8 +109,10 @@ export default function List({ listID, dashboardID }) {
 		)
 	} else {
 		return (
-			<Container createListButton className="list create-list-button" onClick={ createListClickHandler }>
-				<ListHeader className="list-header">Add list</ListHeader>
+			<Container className="list create-list-button" onClick={ createListClickHandler }>
+				<ListHeader createListButton className="list-header">
+					<PlusIcon />
+				</ListHeader>
 			</Container>
 		)
 	}

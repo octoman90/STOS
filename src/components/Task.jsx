@@ -3,6 +3,7 @@ import styled, { css } 				from 'styled-components'
 import { Draggable } 				from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
 import { dispatch as busDispatch } 	from 'use-bus'
+import PlusIcon 					from '@material-ui/icons/Add'
 
 import Description 		from './taskModules/Description.jsx'
 import TagList 			from './taskModules/TagList.jsx'
@@ -22,6 +23,7 @@ const Container = styled.div`
 
 	${props => props.createTaskButton && css`
 		color: #777;
+		align-items: center;
 	`}
 `
 
@@ -48,7 +50,7 @@ export default function Task({ taskID, index, listID }) {
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
 						{ task.modules && 
-							task.modules.map((module, index) => {
+							JSON.parse(task.modules).map((module, index) => {
 								return React.createElement(
 									modules[module.type], 
 									{
@@ -66,7 +68,7 @@ export default function Task({ taskID, index, listID }) {
 	} else {
 		return (
 			<Container createTaskButton className="task create-task-button" onClick={ createTaskClickHandler }>
-				Add Task
+				<PlusIcon />
 			</Container>
 		)
 	}

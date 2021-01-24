@@ -1,7 +1,14 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import React 	from 'react'
+import {
+	useDispatch
+} 				from 'react-redux'
+import {
+	useNavigate
+} 				from 'react-router-dom'
+import styled, {
+	css
+} 				from 'styled-components'
+import PlusIcon from '@material-ui/icons/Add'
 
 import { upsyncDashboard } from '../api/dashboards.js'
 
@@ -15,6 +22,9 @@ const Container = styled.div`
 
 	${props => props.createDashboardButton && css`
 		color: #777;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	`}
 ` 
 
@@ -30,7 +40,7 @@ export default function DashboardBanner({ meta }) {
 
 	return (
 		<Container createDashboardButton={ meta.id === undefined } onClick={ clickHandler }>
-			{ meta.title || "Add Dashboard" }
+			{ meta.title || <PlusIcon style={{ zoom: 2 }}/> }
 		</Container>
 	)
 }

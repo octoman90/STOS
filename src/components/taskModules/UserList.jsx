@@ -4,20 +4,32 @@ import DeleteIcon 					from '@material-ui/icons/Delete'
 import EditIcon 					from '@material-ui/icons/Edit'
 
 const Container = styled.div`
-	padding: 0.5em;
-	border: 1px solid #777;
+	display: block;
 	margin: 0.5em 0;
+	padding: 0.5em 0;
+	gap: 0.5em;
 	display: flex;
 	justify-content: space-between;
 `
 
-export default function Description({ meta, full }) {
+const U = styled.div`
+	padding: 0.5em;
+	background-color: #fff;
+	border-radius: 0.3em;
+	width: 7em;
+	display: inline;
+	border: 1px solid #777;
+`
+
+export default function UserList({ meta, full }) {
 	if (full) {
 		return (
 			<Container>
-				{ full ? meta.content : null }
 				<div>
-					<EditIcon />
+					{ meta.content.map((user, index) => <U key={ index }>{ user }</U>)}
+					<U style={{ width: '2em' }}>+</U>
+				</div>
+				<div>
 					<DeleteIcon />
 				</div>
 			</Container>

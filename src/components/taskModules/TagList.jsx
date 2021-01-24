@@ -7,6 +7,7 @@ const Container = styled.div`
 	align-items: flex-start;
 	margin: 0.5em 0;
 	gap: 0.5em;
+	margin: 0.5em 0;
 `
 
 const Tag = styled.div`
