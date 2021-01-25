@@ -34,7 +34,7 @@ const Modal = styled.div`
 	z-index: 101;
 `
 
-export default function TaskModal({ field, dashboardID, listID, taskID }) {
+export default function TaskModal({ field, dashboardID, listID, taskID, dt = 'text' }) {
 	const [value, setValue] = useState('')
 
 	function backLayerClickHandler() {
@@ -46,11 +46,21 @@ export default function TaskModal({ field, dashboardID, listID, taskID }) {
 		busDispatch({ type: 'showTextEditModal' })
 	}
 
+	console.log(dt)
+
 	return (
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
-				<input type="text" onChange={ event => setValue(event.target.value) }></input>
+				{
+					(() => {
+						if (dt == 'text') {
+							return <input type="text" onChange={ event => setValue(event.target.value) }></input>
+						} else if (dt == 'datetime') {
+							return <input type="datetime-local" onChange={ event => setValue(event.target.value) }></input>
+						}
+					})()
+				}
 				<button type="button" onClick={ buttonClickHandler }>Submit</button>
 			</Modal>
 		</Container>

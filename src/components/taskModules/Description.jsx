@@ -29,7 +29,7 @@ export default function Description({ meta, task, index, full }) {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'moduleDescription',
-
+			dt: 'text'
 		})
 	}
 

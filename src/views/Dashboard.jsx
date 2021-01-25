@@ -48,8 +48,9 @@ export default function Dashboard() {
 
 	useBus(
 		'showTextEditModal',
-		({ field, dashboardID, listID, taskID }) => {
-			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID } : {})
+		({ field, dashboardID, listID, taskID, dt }) => {
+			console.log('x', dt)
+			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, dt } : {})
 		},
 		[textEditModal],
 	)
@@ -122,7 +123,7 @@ export default function Dashboard() {
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
-				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } />
+				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } dt={ textEditModal.dt } />
 			}
 
 			{ addModuleModalTaskID &&
