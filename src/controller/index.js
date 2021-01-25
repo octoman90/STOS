@@ -300,5 +300,20 @@ export default {
 		})
 
 		upsyncTask(task, dispatch)
+	},
+
+	editTaskModule: (task, index, newContent, dispatch) => {
+		let module = JSON.parse(task.modules[index])
+		module.content = newContent
+		task.modules[index] = JSON.stringify(module)
+
+		console.log(task)
+
+		dispatch({
+			type: 'setTask',
+			task
+		})
+
+		upsyncTask(task, dispatch)
 	}
 }
