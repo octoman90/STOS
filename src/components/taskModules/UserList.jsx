@@ -1,6 +1,11 @@
-import React 	from 'react'
-import styled 	from 'styled-components'
-import DeleteIcon 					from '@material-ui/icons/Delete'
+import React 		from 'react'
+import styled 		from 'styled-components'
+import DeleteIcon 	from '@material-ui/icons/Delete'
+import {
+	useDispatch
+} 					from 'react-redux'
+
+import controller 	from '../../controller'
 
 const Container = styled.div`
 	display: block;
@@ -20,7 +25,13 @@ const U = styled.div`
 	border: 1px solid #777;
 `
 
-export default function UserList({ meta, full }) {
+export default function UserList({ meta, task, index, full }) {
+	const dispatch = useDispatch()
+
+	function deleteClickHandler() {
+		controller.deleteTaskModule(task, index, dispatch)
+	}
+
 	return (
 		<Container>
 			<div>
@@ -32,7 +43,7 @@ export default function UserList({ meta, full }) {
 			{ full &&
 				(
 					<div>
-						<DeleteIcon />
+						<DeleteIcon onClick={ deleteClickHandler } />
 					</div>
 				)
 			}

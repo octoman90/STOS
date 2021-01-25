@@ -113,7 +113,9 @@ export default function TaskModal({ taskID }) {
 							{
 								key: index, 
 								meta: module, 
-								full: true
+								full: true,
+								task,
+								index
 							}
 						)
 					})

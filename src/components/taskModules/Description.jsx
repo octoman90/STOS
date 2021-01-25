@@ -1,7 +1,12 @@
-import React 	from 'react'
-import styled 	from 'styled-components'
-import DeleteIcon 					from '@material-ui/icons/Delete'
-import EditIcon 					from '@material-ui/icons/Edit'
+import React 		from 'react'
+import styled 		from 'styled-components'
+import DeleteIcon 	from '@material-ui/icons/Delete'
+import EditIcon 	from '@material-ui/icons/Edit'
+import {
+	useDispatch
+} 					from 'react-redux'
+
+import controller 	from '../../controller'
 
 const Container = styled.div`
 	padding: 0.5em;
@@ -11,7 +16,13 @@ const Container = styled.div`
 	justify-content: space-between;
 `
 
-export default function Description({ meta, full }) {
+export default function Description({ meta, task, index, full }) {
+	const dispatch = useDispatch()
+
+	function deleteClickHandler() {
+		controller.deleteTaskModule(task, index, dispatch)
+	}
+
 	if (full) {
 		return (
 			<Container>
@@ -21,7 +32,7 @@ export default function Description({ meta, full }) {
 				}
 				<div>
 					<EditIcon />
-					<DeleteIcon />
+					<DeleteIcon onClick={ deleteClickHandler } />
 				</div>
 			</Container>
 		)

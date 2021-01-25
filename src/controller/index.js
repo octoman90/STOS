@@ -289,5 +289,16 @@ export default {
 		})
 
 		upsyncTask(task, dispatch)
+	},
+
+	deleteTaskModule: (task, index, dispatch) => {
+		task.modules.splice(index, 1)
+
+		dispatch({
+			type: 'setTask',
+			task
+		})
+
+		upsyncTask(task, dispatch)
 	}
 }
