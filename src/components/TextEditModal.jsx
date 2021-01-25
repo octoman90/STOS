@@ -1,6 +1,5 @@
 import React, { useState } 			from 'react'
 import styled 						from 'styled-components'
-import { useSelector } 				from 'react-redux'
 import { dispatch as busDispatch } 	from 'use-bus'
 
 const Container = styled.div`

@@ -15,7 +15,10 @@ export default function Description({ meta, full }) {
 	if (full) {
 		return (
 			<Container>
-				{ full ? meta.content : null }
+				{ meta.content
+					? meta.content
+					: "Press the pencil icon on the right to set the description."
+				}
 				<div>
 					<EditIcon />
 					<DeleteIcon />

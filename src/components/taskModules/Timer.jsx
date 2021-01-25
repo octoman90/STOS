@@ -13,17 +13,13 @@ const Container = styled.div`
 `
 
 export default function Timer({ meta, full }) {
-	if (full) {
-		return (
-			<Container>
-				{ meta.content }
-				<div>
-					<EditIcon />
-					<DeleteIcon />
-				</div>
-			</Container>
-		)
-	} else {
-		return (null)
-	}
+	return (
+		<Container>
+			{ meta.content }
+			<div>
+				<EditIcon />
+				<DeleteIcon />
+			</div>
+		</Container>
+	)
 }

@@ -9,14 +9,14 @@ import useBus, {
 } 									from 'use-bus'
 
 import Description 	from './taskModules/Description.jsx'
-import TagList 		from './taskModules/TagList.jsx'
+import Poll			from './taskModules/Poll'
 import Timer 		from './taskModules/Timer.jsx'
 import UserList 	from './taskModules/UserList.jsx'
 import controller 	from '../controller'
 
 const modules = {
 	description: 	Description,
-	tagList: 		TagList,
+	poll: 			Poll,
 	timer: 			Timer,
 	userList: 		UserList
 }
@@ -91,6 +91,10 @@ export default function TaskModal({ taskID }) {
 		controller.deleteTask(task, dispatch)
 	}
 
+	function newModuleClickHandler() {
+		busDispatch({ type: 'showAddModuleModal', taskID })
+	}
+
 	return (
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
@@ -100,8 +104,10 @@ export default function TaskModal({ taskID }) {
 					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } />
 					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } />
 				</div>
-				{
-					(task.modules || []).map((module, index) => {
+				{ task.modules && 
+					task.modules.map((moduleJSON, index) => {
+						let module = JSON.parse(moduleJSON)
+
 						return React.createElement(
 							modules[module.type], 
 							{
@@ -113,11 +119,7 @@ export default function TaskModal({ taskID }) {
 					})
 				}
 
-				<Description key={ 0 } meta={{ content: "Zaimplementować interfejs." }} full={ true } />
-				<Timer key={ 1 } meta={{ content: "10d 5h 57m" }} full={ true } />
-				<UserList key={ 2 } meta={{ content: ['Maksym'] }} full={ true } />
-
-				<NewModule>
+				<NewModule onClick={ newModuleClickHandler } >
 					<PlusIcon style={{ zoom: 2 }} />
 				</NewModule>
 			</Modal>

@@ -1,7 +1,6 @@
 import React, { useEffect } 			from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useDispatch } 					from 'react-redux'
-import { dispatch as busDispatch } 		from 'use-bus'
 
 import Landing 		from './views/Landing.jsx'
 import Home 		from './views/Home.jsx'

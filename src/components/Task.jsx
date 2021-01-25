@@ -6,12 +6,16 @@ import { dispatch as busDispatch } 	from 'use-bus'
 import PlusIcon 					from '@material-ui/icons/Add'
 
 import Description 	from './taskModules/Description.jsx'
-import TagList 		from './taskModules/TagList.jsx'
+import Poll			from './taskModules/Poll'
+import Timer 		from './taskModules/Timer.jsx'
+import UserList 	from './taskModules/UserList.jsx'
 import controller	from '../controller'
 
 const modules = {
-	description: Description,
-	tagList: TagList
+	description: 	Description,
+	poll: 			Poll,
+	timer: 			Timer,
+	userList: 		UserList
 }
 
 const Container = styled.div`
@@ -50,7 +54,9 @@ export default function Task({ taskID, index, listID }) {
 					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
 						{ task.modules && 
-							JSON.parse(task.modules).map((module, index) => {
+							task.modules.map((moduleJSON, index) => {
+								let module = JSON.parse(moduleJSON)
+
 								return React.createElement(
 									modules[module.type], 
 									{

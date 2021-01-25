@@ -5,7 +5,6 @@ import React, {
 import { useDispatch } 		from 'react-redux'
 import { useNavigate } 		from 'react-router-dom'
 import useBus 				from 'use-bus'
-import { dispatch as busDispatch } from 'use-bus'
 
 import Container 		from '../components/landing/Container'
 import LandingInfo 		from '../components/landing/LandingInfo'

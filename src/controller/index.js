@@ -269,5 +269,25 @@ export default {
 
 	createDashboard: (dispatch) => {
 		upsyncDashboard({title: "New Dashboard"}, dispatch)
+	},
+
+	addModule: (task, mType, dispatch) => {
+		let m = {
+			type: mType,
+			content: null
+		}
+
+		if (!task.modules) {
+			task.modules = []
+		}
+
+		task.modules.push(JSON.stringify(m))
+
+		dispatch({
+			type: 'setTask',
+			task
+		})
+
+		upsyncTask(task, dispatch)
 	}
 }

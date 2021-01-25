@@ -1,7 +1,6 @@
 import React 	from 'react'
 import styled 	from 'styled-components'
 import DeleteIcon 					from '@material-ui/icons/Delete'
-import EditIcon 					from '@material-ui/icons/Edit'
 
 const Container = styled.div`
 	display: block;
@@ -22,19 +21,15 @@ const U = styled.div`
 `
 
 export default function UserList({ meta, full }) {
-	if (full) {
-		return (
-			<Container>
-				<div>
-					{ meta.content.map((user, index) => <U key={ index }>{ user }</U>)}
-					<U style={{ width: '2em' }}>+</U>
-				</div>
-				<div>
-					<DeleteIcon />
-				</div>
-			</Container>
-		)
-	} else {
-		return (null)
-	}
+	return (
+		<Container>
+			<div>
+				{ (meta.content || []).map((user, index) => <U key={ index }>{ user }</U>)}
+				<U style={{ width: '2em' }}>+</U>
+			</div>
+			<div>
+				<DeleteIcon />
+			</div>
+		</Container>
+	)
 }

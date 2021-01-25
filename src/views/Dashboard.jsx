@@ -12,6 +12,7 @@ import EditIcon 						from '@material-ui/icons/Edit'
 import Header 			from '../components/Header.jsx'
 import List 			from '../components/List.jsx'
 import TaskModal 		from '../components/TaskModal.jsx'
+import AddModuleModal 	from '../components/AddModuleModal.jsx'
 import TextEditModal 	from '../components/TextEditModal.jsx'
 import controller		from '../controller'
 
@@ -30,12 +31,19 @@ export default function Dashboard() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [taskModalTaskID, setTaskModalTaskID] = useState(null)
+	const [addModuleModalTaskID, showAddModuleModalTaskID] = useState(null)
 	const [textEditModal, setTextEditModal] = useState({})
 
 	useBus(
 		'showTaskModal',
 		({ taskID }) => setTaskModalTaskID(taskID),
 		[taskModalTaskID],
+	)
+
+	useBus(
+		'showAddModuleModal',
+		({ taskID }) => showAddModuleModalTaskID(taskID),
+		[addModuleModalTaskID],
 	)
 
 	useBus(
@@ -115,6 +123,10 @@ export default function Dashboard() {
 
 			{ Object.keys(textEditModal).length > 0 &&
 				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } />
+			}
+
+			{ addModuleModalTaskID &&
+				<AddModuleModal taskID={ addModuleModalTaskID } />
 			}
 		</div>
 	)
