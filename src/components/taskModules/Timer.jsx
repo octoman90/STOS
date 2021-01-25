@@ -16,10 +16,14 @@ export default function Timer({ meta, full }) {
 	return (
 		<Container>
 			{ meta.content }
-			<div>
-				<EditIcon />
-				<DeleteIcon />
-			</div>
+			{ full &&
+				(
+					<div>
+						<EditIcon />
+						<DeleteIcon />
+					</div>
+				)
+			}
 		</Container>
 	)
 }

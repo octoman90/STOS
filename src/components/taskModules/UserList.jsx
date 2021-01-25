@@ -25,11 +25,17 @@ export default function UserList({ meta, full }) {
 		<Container>
 			<div>
 				{ (meta.content || []).map((user, index) => <U key={ index }>{ user }</U>)}
-				<U style={{ width: '2em' }}>+</U>
+				{ full &&
+					<U style={{ width: '2em' }}>+</U>
+				}
 			</div>
-			<div>
-				<DeleteIcon />
-			</div>
+			{ full &&
+				(
+					<div>
+						<DeleteIcon />
+					</div>
+				)
+			}
 		</Container>
 	)
 }
