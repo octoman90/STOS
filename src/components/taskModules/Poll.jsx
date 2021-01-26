@@ -13,6 +13,16 @@ const Container = styled.div`
 	padding: 0.5em 0;
 	display: flex;
 `
+
+const BarContainer = styled.div`
+	display: block;
+	width: 100%
+`
+
+function PollBar({ votes, total, visibleVotes }) {
+	return (null)
+}
+
 export default function UserList({ meta, task, index, full }) {
 	const dispatch = useDispatch()
 
@@ -23,7 +33,13 @@ export default function UserList({ meta, task, index, full }) {
 	if (full) {
 		return (
 			<Container>
-				poll
+				<BarContainer>
+					{
+						Object.entries(meta.content.votes).map(([name, votes]) => {
+							return <PollBar votes={ votes } total={ meta.content.voted.length } visibleVotes={ false }>{ name }</PollBar>
+						})
+					}
+				</BarContainer>
 				<DeleteIcon onClick={ deleteClickHandler } />
 			</Container>
 		)

@@ -28,7 +28,7 @@ const BackLayer = styled.div`
 const Modal = styled.div`
 	background-color: #fff;
 	padding: 1em;
-	height: 70vh;
+	height: 10vh;
 	width: 35vw;
 
 	z-index: 101;

@@ -277,6 +277,16 @@ export default {
 			content: null
 		}
 
+		if (mType == 'poll') {
+			m.content = {
+				voted: [],
+				votes: {
+					yes: 0,
+					no: 0
+				}
+			}
+		}
+
 		if (!task.modules) {
 			task.modules = []
 		}
@@ -306,8 +316,6 @@ export default {
 		let module = JSON.parse(task.modules[index])
 		module.content = newContent
 		task.modules[index] = JSON.stringify(module)
-
-		console.log(task)
 
 		dispatch({
 			type: 'setTask',
