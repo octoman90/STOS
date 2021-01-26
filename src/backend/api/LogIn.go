@@ -17,12 +17,6 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 		Password string `json:"password"`
 	}
 
-	type Out struct {
-		Ok 			bool 	`json:"ok"`
-		Username 	string 	`json:"username,omitempty"`
-		Message 	string 	`json:"message,omitempty"`
-	}
-
 	var in In
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&in); err != nil {
@@ -36,9 +30,10 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 		cookies.SetCookie(w, "token", token)
 	}
 
-	json.NewEncoder(w).Encode(Out{
-		Ok: ok,
-		Username: user.Name,
-		Message: message,
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok": ok,
+		"username": user.Name,
+		"id": user.ID,
+		"message": message,
 	})
 }

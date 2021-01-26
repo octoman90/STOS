@@ -51,7 +51,8 @@ export default {
 					dispatch({
 						type: 'setLoggedIn',
 						value: true,
-						username: data.username
+						username: data.username,
+						id: data.id
 					})
 
 					busDispatch({ type: 'loggedIn' })
@@ -92,7 +93,8 @@ export default {
 					dispatch({
 						type: 'setLoggedIn',
 						value: true,
-						username: data.username
+						username: data.username,
+						id: data.id
 					})
 
 					busDispatch({ type: 'loggedIn' })
@@ -244,7 +246,8 @@ export default {
 					dispatch({
 						type: 'setLoggedIn',
 						value: true,
-						username: data.username
+						username: data.username,
+						id: data.id
 					})
 
 					busDispatch({ type: 'loggedIn' })
@@ -252,7 +255,8 @@ export default {
 					dispatch({
 						type: 'setLoggedIn',
 						value: false,
-						username: ''
+						username: '',
+						id: ''
 					})
 
 					busDispatch({ type: 'notLoggedIn' })

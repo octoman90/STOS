@@ -22,6 +22,7 @@ func main() {
 	router.HandleFunc("/lists", api.SyncLists).Methods("GET")
 	router.HandleFunc("/task", api.SyncTask).Methods("POST", "DELETE")
 	router.HandleFunc("/tasks", api.SyncTasks).Methods("POST", "GET")
+	router.HandleFunc("/user", api.User).Methods("GET")
 
 	srv := &http.Server{
 		Handler: 		router,
