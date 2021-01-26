@@ -49,7 +49,6 @@ export default function Dashboard() {
 	useBus(
 		'showTextEditModal',
 		({ field, dashboardID, listID, taskID, dt }) => {
-			console.log('x', dt)
 			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, dt } : {})
 		},
 		[textEditModal],

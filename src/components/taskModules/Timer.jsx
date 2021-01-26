@@ -18,6 +18,7 @@ const Container = styled.div`
 	margin: 0.5em 0;
 	display: flex;
 	justify-content: space-between;
+	background-color: rgba(0, 255, 0, 0.1)
 `
 
 export default function Description({ meta, task, index, full }) {
@@ -48,10 +49,25 @@ export default function Description({ meta, task, index, full }) {
 		controller.deleteTaskModule(task, index, dispatch)
 	}
 
+	function calculateRemainingTime(to) {
+		let s = +new Date()
+		let f = Date.parse(to)
+		let diff = f - s
+		if (diff >= 0) {
+			let days = Math.floor(diff / 8.64e7)
+			let hours = Math.floor((diff - days * 8.64e7) / 3.6e6)
+			let minutes = Math.floor((diff - days * 8.64e7 - hours * 3.6e6) / 6e4)
+
+			return `${days}D ${hours}H ${minutes}M`
+		} else {
+			return `0`
+		}
+	}
+
 	return (
 		<Container>
 			{ meta.content
-				? meta.content
+				? calculateRemainingTime(meta.content)
 				: "Press the pencil icon on the right to set the deadline."
 			}
 			{ full &&

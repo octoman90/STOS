@@ -46,8 +46,6 @@ export default function TaskModal({ field, dashboardID, listID, taskID, dt = 'te
 		busDispatch({ type: 'showTextEditModal' })
 	}
 
-	console.log(dt)
-
 	return (
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
