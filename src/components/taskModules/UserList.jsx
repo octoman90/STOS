@@ -25,11 +25,11 @@ const U = styled.div`
 	border: 1px solid #777;
 `
 
-export default function UserList({ meta, task, index, full }) {
+export default function UserList({ meta, task, full }) {
 	const dispatch = useDispatch()
 
 	function deleteClickHandler() {
-		controller.deleteTaskModule(task, index, dispatch)
+		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
 
 	return (

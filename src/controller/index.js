@@ -121,6 +121,7 @@ export default {
 			return Object.values(state).find(task => task.list === listID && task.index === index).id
 		}
 
+		// eslint-disable-next-line
 		if (source.listID == destination.listID) {
 			if (source.index < destination.index) {
 				for (let i = source.index + 1; i <= destination.index; ++i) {
@@ -278,9 +279,11 @@ export default {
 	addModule: (task, mType, dispatch) => {
 		let m = {
 			type: mType,
+			id: (+new Date()).toString(16) + (Math.floor(Math.random() * 100)).toString(16),
 			content: null
 		}
 
+		// eslint-disable-next-line
 		if (mType == 'poll') {
 			m.content = {
 				voted: [],
@@ -305,7 +308,8 @@ export default {
 		upsyncTask(task, dispatch)
 	},
 
-	deleteTaskModule: (task, index, dispatch) => {
+	deleteTaskModule: (task, id, dispatch) => {
+		let index = task.modules.findIndex((json) => json.includes(id))
 		task.modules.splice(index, 1)
 
 		dispatch({
@@ -316,7 +320,8 @@ export default {
 		upsyncTask(task, dispatch)
 	},
 
-	editTaskModule: (task, index, newContent, dispatch) => {
+	editTaskModule: (task, id, newContent, dispatch) => {
+		let index = task.modules.findIndex((json) => json.includes(id))
 		let module = JSON.parse(task.modules[index])
 		module.content = newContent
 		task.modules[index] = JSON.stringify(module)

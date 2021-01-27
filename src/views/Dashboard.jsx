@@ -48,8 +48,8 @@ export default function Dashboard() {
 
 	useBus(
 		'showTextEditModal',
-		({ field, dashboardID, listID, taskID, dt }) => {
-			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, dt } : {})
+		({ field, dashboardID, listID, taskID, moduleID, dt }) => {
+			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, moduleID, dt } : {})
 		},
 		[textEditModal],
 	)
@@ -57,6 +57,7 @@ export default function Dashboard() {
 	useBus(
 		'submitTextEditModal',
 		({ field, dashboardID, value }) => {
+			// eslint-disable-next-line
 			if (field == 'dashboardName' && dashboardID == dashboard.id) {
 				controller.renameDashboard(dashboard, value, dispatch)
 			}
@@ -109,7 +110,7 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 
 						Object.values(lists).sort((a, b) => a.index - b.index).map(list => {
-							return list.dashboard == dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } /> : null
+							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } /> : null
 						})
 					}
 				</DragDropContext>
@@ -122,7 +123,7 @@ export default function Dashboard() {
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
-				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } dt={ textEditModal.dt } />
+				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } moduleID={ textEditModal.moduleID } dt={ textEditModal.dt } />
 			}
 
 			{ addModuleModalTaskID &&

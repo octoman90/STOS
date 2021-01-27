@@ -34,7 +34,7 @@ const Modal = styled.div`
 	z-index: 101;
 `
 
-export default function TaskModal({ field, dashboardID, listID, taskID, dt = 'text' }) {
+export default function TaskModal({ field, dashboardID, listID, taskID, moduleID, dt = 'text' }) {
 	const [value, setValue] = useState('')
 
 	function backLayerClickHandler() {
@@ -42,7 +42,7 @@ export default function TaskModal({ field, dashboardID, listID, taskID, dt = 'te
 	}
 
 	function buttonClickHandler() {
-		busDispatch({ type: 'submitTextEditModal', field, dashboardID, listID, taskID, value })
+		busDispatch({ type: 'submitTextEditModal', field, dashboardID, listID, taskID, moduleID, value })
 		busDispatch({ type: 'showTextEditModal' })
 	}
 
@@ -52,8 +52,10 @@ export default function TaskModal({ field, dashboardID, listID, taskID, dt = 'te
 			<Modal>
 				{
 					(() => {
+						// eslint-disable-next-line
 						if (dt == 'text') {
 							return <input type="text" onChange={ event => setValue(event.target.value) }></input>
+						// eslint-disable-next-line
 						} else if (dt == 'datetime') {
 							return <input type="datetime-local" onChange={ event => setValue(event.target.value) }></input>
 						}

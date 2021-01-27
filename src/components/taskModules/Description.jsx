@@ -20,32 +20,31 @@ const Container = styled.div`
 	justify-content: space-between;
 `
 
-export default function Description({ meta, task, index, full }) {
+export default function Description({ meta, task, full }) {
 	const dispatch = useDispatch()
-	let waitingForEdit = false
 
 	function editClickHandler() {
-		waitingForEdit = true
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'moduleDescription',
+			moduleID: meta.id,
 			dt: 'text'
 		})
 	}
 
 	useBus(
 		'submitTextEditModal',
-		({ field, value }) => {
-			if (field == 'moduleDescription' && waitingForEdit) {
-				waitingForEdit = false
-				controller.editTaskModule(task, index, value, dispatch)
+		({ field, moduleID, value }) => {
+			// eslint-disable-next-line
+			if (field == 'moduleDescription' && moduleID == meta.id) {
+				controller.editTaskModule(task, meta.id, value, dispatch)
 			}
 		},
-		[task, index, dispatch],
+		[task, meta, dispatch],
 	)
 
 	function deleteClickHandler() {
-		controller.deleteTaskModule(task, index, dispatch)
+		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
 
 	if (full) {

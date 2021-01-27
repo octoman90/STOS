@@ -21,32 +21,31 @@ const Container = styled.div`
 	background-color: rgba(0, 255, 0, 0.1)
 `
 
-export default function Description({ meta, task, index, full }) {
+export default function Description({ meta, task, full }) {
 	const dispatch = useDispatch()
-	let waitingForEdit = false
 
 	function editClickHandler() {
-		waitingForEdit = true
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'moduleTimer',
+			moduleID: meta.id,
 			dt: 'datetime'
 		})
 	}
 
 	useBus(
 		'submitTextEditModal',
-		({ field, value }) => {
-			if (field == 'moduleTimer' && waitingForEdit) {
-				waitingForEdit = false
-				controller.editTaskModule(task, index, value, dispatch)
+		({ field, moduleID, value }) => {
+			// eslint-disable-next-line
+			if (field == 'moduleTimer' && moduleID == meta.id) {
+				controller.editTaskModule(task, meta.id, value, dispatch)
 			}
 		},
-		[task, index, dispatch],
+		[task, meta, dispatch],
 	)
 
 	function deleteClickHandler() {
-		controller.deleteTaskModule(task, index, dispatch)
+		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
 
 	function calculateRemainingTime(to) {

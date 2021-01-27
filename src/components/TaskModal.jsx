@@ -79,6 +79,7 @@ export default function TaskModal({ taskID }) {
 	useBus(
 		'submitTextEditModal',
 		(params) => {
+			// eslint-disable-next-line
 			if (params.field == 'taskName' && params.taskID == taskID) {
 				controller.renameTask(task, params.value, dispatch)
 			}
@@ -114,8 +115,7 @@ export default function TaskModal({ taskID }) {
 								key: index, 
 								meta: module, 
 								full: true,
-								task,
-								index
+								task
 							}
 						)
 					})
