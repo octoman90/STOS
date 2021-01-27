@@ -288,10 +288,10 @@ export default {
 		if (mType == 'poll') {
 			m.content = {
 				voted: [],
-				votes: {
-					yes: 0,
-					no: 0
-				}
+				votes: [
+					['yes', 0],
+					['no', 0]
+				]
 			}
 		}
 

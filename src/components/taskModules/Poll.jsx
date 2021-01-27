@@ -2,8 +2,9 @@ import React 	from 'react'
 import styled 	from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
 import {
+	useSelector,
 	useDispatch
-} 				from 'react-redux'
+} 					from 'react-redux'
 
 import controller 	from '../../controller'
 
@@ -19,15 +20,34 @@ const BarContainer = styled.div`
 	width: 100%
 `
 
-function PollBar({ votes, total, visibleVotes }) {
-	return (null)
+function PollBar({ votes, name, visibleVotes }) {
+	return (
+		<div>
+			{ name }
+			{ visibleVotes ? votes : null }
+		</div>
+	)
 }
 
 export default function UserList({ meta, task, full }) {
 	const dispatch = useDispatch()
+	const cUser = useSelector(state => state.user)
 
 	function deleteClickHandler() {
 		controller.deleteTaskModule(task, meta.id, dispatch)
+	}
+
+	let visibleVotes = meta.content.voted.includes(cUser.id)
+
+	function voteClickHandler(alreadyVoted, index) {
+		console.log(cUser.name, 'voted for', index, ';', alreadyVoted)
+		if (alreadyVoted) {
+			return
+		}
+		meta.content.voted.push(cUser.id)
+
+		meta.content.votes[index][1]++
+		controller.editTaskModule(task, meta.id, { action: 'replace', meta }, dispatch)
 	}
 
 	if (full) {
@@ -35,8 +55,8 @@ export default function UserList({ meta, task, full }) {
 			<Container>
 				<BarContainer>
 					{
-						Object.entries(meta.content.votes).map(([name, votes]) => {
-							return <PollBar votes={ votes } total={ meta.content.voted.length } visibleVotes={ false }>{ name }</PollBar>
+						meta.content.votes.map(([name, votes], index) => {
+							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ console.log } />
 						})
 					}
 				</BarContainer>
