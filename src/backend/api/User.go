@@ -15,14 +15,14 @@ func User(w http.ResponseWriter, r *http.Request) {
 			getUser(w, r)
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
-				"Ok": ok,
-				"Message": message,
+				"ok": ok,
+				"message": message,
 			})
 		}
 	} else {
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"Ok": false,
-			"Message": "No active session",
+			"ok": false,
+			"message": "No active session",
 		})
 	}
 }
@@ -42,8 +42,8 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(user)
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
-				"Ok": ok,
-				"Message": message,
+				"ok": ok,
+				"message": message,
 			})
 		}
 	}

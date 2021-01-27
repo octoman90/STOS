@@ -37,8 +37,8 @@ export default function Description({ meta, task, full }) {
 		'submitTextEditModal',
 		({ field, moduleID, value }) => {
 			// eslint-disable-next-line
-			if (field == 'moduleTimer' && moduleID == meta.id) {
-				controller.editTaskModule(task, meta.id, value, dispatch)
+			if (full && field == 'moduleTimer' && moduleID == meta.id) {
+				controller.editTaskModule(task, meta.id, { action: 'replace', value }, dispatch)
 			}
 		},
 		[task, meta, dispatch],

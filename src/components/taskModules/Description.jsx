@@ -2,11 +2,10 @@ import React 		from 'react'
 import styled 		from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
 import EditIcon 	from '@material-ui/icons/Edit'
-import useBus 		from 'use-bus'
 import {
 	useDispatch
 } 					from 'react-redux'
-import {
+import useBus, {
 	dispatch as busDispatch
 } 					from 'use-bus'
 
@@ -36,8 +35,8 @@ export default function Description({ meta, task, full }) {
 		'submitTextEditModal',
 		({ field, moduleID, value }) => {
 			// eslint-disable-next-line
-			if (field == 'moduleDescription' && moduleID == meta.id) {
-				controller.editTaskModule(task, meta.id, value, dispatch)
+			if (full && field == 'moduleDescription' && moduleID == meta.id) {
+				controller.editTaskModule(task, meta.id, { action: 'replace', value }, dispatch)
 			}
 		},
 		[task, meta, dispatch],

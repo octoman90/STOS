@@ -11,6 +11,7 @@ import dashboardAPI, {
 	downsyncDashboard,
 	upsyncDashboard
 } 						from './api/dashboards.js'
+import userApi			from './api/users.js'
 
 export default {
 	signUp: (formData, dispatch) => {
@@ -323,14 +324,49 @@ export default {
 	editTaskModule: (task, id, newContent, dispatch) => {
 		let index = task.modules.findIndex((json) => json.includes(id))
 		let module = JSON.parse(task.modules[index])
-		module.content = newContent
-		task.modules[index] = JSON.stringify(module)
 
-		dispatch({
-			type: 'setTask',
-			task
-		})
+		// eslint-disable-next-line
+		if (newContent.action == 'replace') {
+			module.content = newContent.value
 
-		upsyncTask(task, dispatch)
+			task.modules[index] = JSON.stringify(module)
+
+			dispatch({
+				type: 'setTask',
+				task
+			})
+
+			upsyncTask(task, dispatch)
+		// eslint-disable-next-line
+		} else if (newContent.action == 'push') {
+			if (module.type == 'userList') {} {
+				if (!module.content) {
+					module.content = []
+				}
+
+				if (module.content.find((user) => user[1] === newContent.value) !== undefined) {
+					return
+				}
+
+				userApi.downsyncOne(newContent.value)
+					.then(data => {
+						module.content.push([data.id, data.name])
+						return module
+					})
+					.then(module => {
+						task.modules[index] = JSON.stringify(module)
+
+						dispatch({
+							type: 'setTask',
+							task
+						})
+
+						upsyncTask(task, dispatch)
+					})
+					.catch(err => {
+						// ignore the error
+					})
+			}
+		}
 	}
 }

@@ -4,6 +4,9 @@ import DeleteIcon 	from '@material-ui/icons/Delete'
 import {
 	useDispatch
 } 					from 'react-redux'
+import useBus, {
+	dispatch as busDispatch
+} 					from 'use-bus'
 
 import controller 	from '../../controller'
 
@@ -28,6 +31,26 @@ const U = styled.div`
 export default function UserList({ meta, task, full }) {
 	const dispatch = useDispatch()
 
+	function plusClickHandler() {
+		busDispatch({
+			type: 'showTextEditModal',
+			field: 'moduleUserList',
+			moduleID: meta.id,
+			dt: 'text'
+		})
+	}
+
+	useBus(
+		'submitTextEditModal',
+		({ field, moduleID, value }) => {
+			// eslint-disable-next-line
+			if (full && field == 'moduleUserList' && moduleID == meta.id) {
+				controller.editTaskModule(task, meta.id, { action: 'push', value }, dispatch)
+			}
+		},
+		[task, meta, dispatch],
+	)
+
 	function deleteClickHandler() {
 		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
@@ -35,9 +58,9 @@ export default function UserList({ meta, task, full }) {
 	return (
 		<Container>
 			<div>
-				{ (meta.content || []).map((user, index) => <U key={ index }>{ user }</U>)}
+				{ (meta.content || []).map((user, index) => <U key={ index }>{ user[1] }</U>)}
 				{ full &&
-					<U style={{ width: '2em' }}>+</U>
+					<U style={{ width: '2em' }} onClick={ plusClickHandler }>+</U>
 				}
 			</div>
 			{ full &&
