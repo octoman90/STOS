@@ -43,7 +43,7 @@ export default function TaskModal({ field, dashboardID, listID, taskID, moduleID
 
 	function buttonClickHandler() {
 		busDispatch({ type: 'submitTextEditModal', field, dashboardID, listID, taskID, moduleID, value })
-		busDispatch({ type: 'showTextEditModal' })
+		backLayerClickHandler()
 	}
 
 	return (

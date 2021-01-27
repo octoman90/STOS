@@ -62,7 +62,8 @@ export default function Task({ taskID, index, listID }) {
 									{
 										key: index, 
 										meta: module, 
-										full: false
+										full: false,
+										task
 									}
 								)
 							})
