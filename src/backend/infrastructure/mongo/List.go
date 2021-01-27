@@ -33,6 +33,7 @@ func ReadManyLists(list entity.List) ([]entity.List, error) {
 		for cur.Next(context.TODO()) {
 			if err = cur.Decode(&list); err == nil {
 				lists = append(lists, list)
+				list = entity.List{}
 			}
 		}
 	}

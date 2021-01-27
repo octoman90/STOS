@@ -26,6 +26,7 @@ func ReadManyTasks(task entity.Task) ([]entity.Task, error) {
 		for cur.Next(context.TODO()) {
 			if err = cur.Decode(&task); err == nil {
 				tasks = append(tasks, task)
+				task = entity.Task{}
 			}
 		}
 	}
