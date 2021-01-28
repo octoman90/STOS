@@ -309,6 +309,7 @@ export default {
 		// eslint-disable-next-line
 		if (mType == 'poll') {
 			m.content = {
+				title: 'Should we move this feature to the next sprint?',
 				voted: [],
 				votes: [
 					['yes', 0],

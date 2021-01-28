@@ -1,6 +1,7 @@
 import React 	from 'react'
 import styled 	from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
+import EditIcon 	from '@material-ui/icons/Edit'
 import {
 	useSelector,
 	useDispatch
@@ -12,7 +13,8 @@ const Container = styled.div`
 	display: block;
 	margin: 0.5em 0;
 	padding: 0.5em 0;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 2em;
 `
 
 const BarContainer = styled.div`
@@ -53,6 +55,8 @@ export default function UserList({ meta, task, full }) {
 	if (full) {
 		return (
 			<Container>
+				<b>{ meta.content.title }</b>
+				<EditIcon />
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
