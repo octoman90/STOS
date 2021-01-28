@@ -22,12 +22,22 @@ const BarContainer = styled.div`
 	width: 100%
 `
 
-function PollBar({ votes, name, visibleVotes, onClick }) {
-	return (
-		<div onClick={ onClick }>
-			{ name } { visibleVotes ? votes : null }
-		</div>
-	)
+function PollBar({ votes, name, visibleVotes, addButton, onClick }) {
+	if (addButton) {
+		return (
+			<div onClick={ onClick }>
+				+
+			</div>
+		)
+	} else {
+		return (
+			<div onClick={ onClick }>
+				{ name } { visibleVotes ? votes : null }
+				<EditIcon className="hover-visible" />
+				<DeleteIcon className="hover-visible" />
+			</div>
+		)
+	}
 }
 
 export default function UserList({ meta, task, full }) {
@@ -52,6 +62,10 @@ export default function UserList({ meta, task, full }) {
 		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
+	function addOptionClickHandler() {
+
+	}
+
 	if (full) {
 		return (
 			<Container>
@@ -63,6 +77,7 @@ export default function UserList({ meta, task, full }) {
 							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ () => voteClickHandler(visibleVotes, index) } />
 						})
 					}
+					<PollBar addButton={ true } onClick={ addOptionClickHandler } />
 				</BarContainer>
 				<DeleteIcon onClick={ deleteClickHandler } />
 			</Container>
