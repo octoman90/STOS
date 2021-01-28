@@ -55,6 +55,11 @@ export default function Dashboard() {
 	)
 
 	useBus(
+		'loggedOut',
+		() => navigate('/')
+	)
+
+	useBus(
 		'submitTextEditModal',
 		({ field, dashboardID, value }) => {
 			// eslint-disable-next-line

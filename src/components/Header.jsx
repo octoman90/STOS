@@ -4,6 +4,9 @@ import {
 } 				from 'react-router-dom'
 import styled 	from 'styled-components'
 import ExitIcon from '@material-ui/icons/ExitToApp'
+import {
+	useDispatch
+} 				from 'react-redux'
 
 import controller from '../controller'
 
@@ -22,13 +25,14 @@ const Logo = styled.div`
 
 export default function Header() {
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	function logoClickHandler() {
 		navigate('/home')
 	}
 
 	function exitClickHandler() {
-		controller.logOut()
+		controller.logOut(dispatch)
 	}
 
 	return (

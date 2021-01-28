@@ -106,6 +106,32 @@ export default {
 			})
 	},
 
+	logOut: (dispatch) => {
+		fetch('/api/logOut', { method: 'POST' })
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (data.ok) {
+					dispatch({
+						type: 'setLoggedIn',
+						value: false,
+						username: null,
+						id: null
+					})
+
+					busDispatch({ type: 'loggedOut' })
+				}
+			})
+			.catch(err => {
+				console.log('error', err.message)
+			})
+	},
+
 	moveTask: (state, taskID, source, destination, dispatch) => {
 		const patch = [{
 			...state[taskID],
@@ -178,10 +204,6 @@ export default {
 		})
 
 		upsyncDashboard(dashboard, dispatch)
-	},
-
-	logOut: () => {
-		// TODO
 	},
 
 	renameList: (list, value, dispatch) => {
@@ -257,11 +279,11 @@ export default {
 					dispatch({
 						type: 'setLoggedIn',
 						value: false,
-						username: '',
-						id: ''
+						username: null,
+						id: null
 					})
 
-					busDispatch({ type: 'notLoggedIn' })
+					busDispatch({ type: 'loggedOut' })
 				}
 			})
 			.catch(err => {

@@ -15,6 +15,7 @@ func main() {
 
 	router.HandleFunc("/signUp", api.SignUp).Methods("POST")
 	router.HandleFunc("/logIn", api.LogIn).Methods("POST")
+	router.HandleFunc("/logOut", api.LogOut).Methods("POST")
 	router.HandleFunc("/session", api.CheckSession).Methods("GET")
 	router.HandleFunc("/dashboard", api.SyncDashboard).Methods("POST", "GET", "DELETE")
 	router.HandleFunc("/dashboards", api.SyncDashboards).Methods("GET")

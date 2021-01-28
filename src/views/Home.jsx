@@ -24,7 +24,7 @@ export default function Home() {
 	const dashboards = useSelector(state => state.dashboards)
 
 	useBus(
-		'notLoggedIn',
+		'loggedOut',
 		() => navigate('/')
 	)
 
