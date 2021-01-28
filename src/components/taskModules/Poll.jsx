@@ -20,11 +20,10 @@ const BarContainer = styled.div`
 	width: 100%
 `
 
-function PollBar({ votes, name, visibleVotes }) {
+function PollBar({ votes, name, visibleVotes, onClick }) {
 	return (
-		<div>
-			{ name }
-			{ visibleVotes ? votes : null }
+		<div onClick={ onClick }>
+			{ name } { visibleVotes ? votes : null }
 		</div>
 	)
 }
@@ -40,14 +39,15 @@ export default function UserList({ meta, task, full }) {
 	let visibleVotes = meta.content.voted.includes(cUser.id)
 
 	function voteClickHandler(alreadyVoted, index) {
-		console.log(cUser.name, 'voted for', index, ';', alreadyVoted)
 		if (alreadyVoted) {
 			return
 		}
-		meta.content.voted.push(cUser.id)
 
-		meta.content.votes[index][1]++
-		controller.editTaskModule(task, meta.id, { action: 'replace', meta }, dispatch)
+		let newContent = JSON.parse(JSON.stringify(meta.content))
+		newContent.voted.push(cUser.id)
+		newContent.votes[index][1]++
+
+		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
 	if (full) {
@@ -56,7 +56,7 @@ export default function UserList({ meta, task, full }) {
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
-							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ console.log } />
+							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ () => voteClickHandler(visibleVotes, index) } />
 						})
 					}
 				</BarContainer>
