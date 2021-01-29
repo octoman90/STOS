@@ -8,5 +8,4 @@ type Dashboard struct {
 	Owner			primitive.ObjectID 		`bson:"owner,omitempty" json:"owner"`
 	Users 			[]primitive.ObjectID 	`bson:"users,omitempty" json:"users"`
 	Collaborative 	bool 					`bson:"collaborative,omitempty" json:"collaborative"`
-	Public 			bool 					`bson:"public,omitempty" json:"public"`
 }
