@@ -1,7 +1,8 @@
-import React 	from 'react'
-import styled 	from 'styled-components'
+import React 		from 'react'
+import styled 		from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
 import EditIcon 	from '@material-ui/icons/Edit'
+import PlusIcon 	from '@material-ui/icons/Add'
 import {
 	useSelector,
 	useDispatch
@@ -77,7 +78,7 @@ export default function UserList({ meta, task, full }) {
 							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ () => voteClickHandler(visibleVotes, index) } />
 						})
 					}
-					<PollBar addButton={ true } onClick={ addOptionClickHandler } />
+					<PlusIcon />
 				</BarContainer>
 				<DeleteIcon onClick={ deleteClickHandler } />
 			</Container>
