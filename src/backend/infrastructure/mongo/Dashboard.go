@@ -44,7 +44,8 @@ func UpdateOneDashboard(refDashboard entity.Dashboard, dashboard entity.Dashboar
 	filter, _ := bson.Marshal(refDashboard)
 	document, _ := bson.Marshal(dashboard)
 
-	return dashboardCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&dashboard)
+	var d entity.Dashboard
+	return dashboardCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&d)
 }
 
 func DeleteOneDashboard(dashboard entity.Dashboard) error {

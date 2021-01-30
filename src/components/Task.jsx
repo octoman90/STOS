@@ -60,7 +60,7 @@ export default function Task({ taskID, index, listID }) {
 								return React.createElement(
 									modules[module.type], 
 									{
-										key: index, 
+										key: module.id,
 										meta: module, 
 										full: false,
 										task

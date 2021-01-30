@@ -1,12 +1,15 @@
-import React 						from 'react'
-import styled 						from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
-import DeleteIcon 					from '@material-ui/icons/Delete'
-import EditIcon 					from '@material-ui/icons/Edit'
-import PlusIcon 					from '@material-ui/icons/Add'
+import React				from 'react'
+import styled 				from 'styled-components'
+import {
+	useSelector,
+	useDispatch
+} 							from 'react-redux'
+import DeleteIcon 			from '@material-ui/icons/Delete'
+import EditIcon 			from '@material-ui/icons/Edit'
+import PlusIcon 			from '@material-ui/icons/Add'
 import useBus, {
 	dispatch as busDispatch
-} 									from 'use-bus'
+} 							from 'use-bus'
 
 import Description 	from './taskModules/Description.jsx'
 import Poll			from './taskModules/Poll'
@@ -112,7 +115,7 @@ export default function TaskModal({ taskID }) {
 						return React.createElement(
 							modules[module.type], 
 							{
-								key: index, 
+								key: module.id,
 								meta: module, 
 								full: true,
 								task
