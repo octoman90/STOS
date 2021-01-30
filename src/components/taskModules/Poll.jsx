@@ -64,7 +64,10 @@ export default function UserList({ meta, task, full }) {
 	}
 
 	function addOptionClickHandler() {
+		let newContent = JSON.parse(JSON.stringify(meta.content))
+		newContent.votes.push(['Another option', 0])
 
+		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
 	if (full) {
@@ -78,7 +81,7 @@ export default function UserList({ meta, task, full }) {
 							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ () => voteClickHandler(visibleVotes, index) } />
 						})
 					}
-					<PlusIcon />
+					<PlusIcon onClick={ addOptionClickHandler } />
 				</BarContainer>
 				<DeleteIcon onClick={ deleteClickHandler } />
 			</Container>
