@@ -27,7 +27,8 @@ export default function Description({ meta, task, full }) {
 			type: 'showTextEditModal',
 			field: 'moduleDescription',
 			moduleID: meta.id,
-			dt: 'text'
+			dt: 'text',
+			caption: 'Enter the new description:'
 		})
 	}
 

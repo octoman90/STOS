@@ -75,7 +75,8 @@ export default function TaskModal({ taskID }) {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'taskName',
-			taskID 
+			taskID,
+			caption: 'Enter the new task title:'
 		})
 	}
 

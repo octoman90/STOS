@@ -68,7 +68,7 @@ export default function AddModuleModal({ taskID }) {
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<div style={{ display: 'flex', margin: '0.5em' }}>
-					<h2 style={{ margin: '0' }}>Select a module type</h2>
+					<h2 style={{ margin: '0' }}>Select the module type</h2>
 				</div>
 				{
 					Object.entries(modules).map(([type, tTitle]) => {

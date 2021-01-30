@@ -48,8 +48,8 @@ export default function Dashboard() {
 
 	useBus(
 		'showTextEditModal',
-		({ field, dashboardID, listID, taskID, moduleID, innerIndex, dt }) => {
-			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, moduleID, innerIndex, dt } : {})
+		({ field, dashboardID, listID, taskID, moduleID, innerIndex, dt, caption }) => {
+			setTextEditModal(field !== undefined ? { field, dashboardID, listID, taskID, moduleID, innerIndex, dt, caption } : {})
 		},
 		[textEditModal],
 	)
@@ -88,7 +88,8 @@ export default function Dashboard() {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'dashboardName',
-			dashboardID: dashboardId
+			dashboardID: dashboardId,
+			caption: 'Enter the new dashboard title:'
 		})
 	}
 
@@ -128,7 +129,7 @@ export default function Dashboard() {
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
-				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } moduleID={ textEditModal.moduleID } innerIndex={ textEditModal.innerIndex } dt={ textEditModal.dt } />
+				<TextEditModal field={ textEditModal.field } dashboardID={ textEditModal.dashboardID } listID={ textEditModal.listID } taskID={ textEditModal.taskID } moduleID={ textEditModal.moduleID } innerIndex={ textEditModal.innerIndex } dt={ textEditModal.dt } caption={ textEditModal.caption } />
 			}
 
 			{ addModuleModalTaskID &&

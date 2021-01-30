@@ -29,7 +29,8 @@ export default function Description({ meta, task, full }) {
 			type: 'showTextEditModal',
 			field: 'moduleTimer',
 			moduleID: meta.id,
-			dt: 'datetime'
+			dt: 'datetime',
+			caption: 'Enter the new due date:'
 		})
 	}
 

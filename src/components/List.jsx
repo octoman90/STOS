@@ -51,7 +51,8 @@ export default function List({ listID, dashboardID }) {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'listName',
-			listID 
+			listID,
+			caption: 'Enter the list title:'
 		})
 	}
 

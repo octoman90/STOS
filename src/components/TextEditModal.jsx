@@ -34,7 +34,7 @@ const Modal = styled.div`
 	z-index: 101;
 `
 
-export default function TaskModal({ field, dashboardID, listID, taskID, moduleID, innerIndex, dt = 'text' }) {
+export default function TaskModal({ field, dashboardID, listID, taskID, moduleID, innerIndex, dt = 'text', caption }) {
 	const [value, setValue] = useState('')
 
 	function backLayerClickHandler() {
@@ -50,6 +50,7 @@ export default function TaskModal({ field, dashboardID, listID, taskID, moduleID
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
+				<b>{ caption }</b><br />
 				{
 					(() => {
 						// eslint-disable-next-line

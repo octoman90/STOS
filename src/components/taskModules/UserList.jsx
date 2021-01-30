@@ -36,7 +36,8 @@ export default function UserList({ meta, task, full }) {
 			type: 'showTextEditModal',
 			field: 'moduleUserList',
 			moduleID: meta.id,
-			dt: 'text'
+			dt: 'text',
+			caption: 'Enter user\'s name:'
 		})
 	}
 

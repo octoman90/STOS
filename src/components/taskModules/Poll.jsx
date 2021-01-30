@@ -82,7 +82,8 @@ export default function Poll({ meta, task, full }) {
 			field: 'modulePollOption',
 			moduleID: meta.id,
 			innerIndex: index,
-			dt: 'text'
+			dt: 'text',
+			caption: 'Enter the new option:'
 		})
 	}
 
@@ -105,7 +106,8 @@ export default function Poll({ meta, task, full }) {
 			type: 'showTextEditModal',
 			field: 'modulePollTitle',
 			moduleID: meta.id,
-			dt: 'text'
+			dt: 'text',
+			caption: 'Enter the new question:'
 		})
 	}
 
