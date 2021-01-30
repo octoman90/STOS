@@ -34,7 +34,7 @@ const Modal = styled.div`
 	z-index: 101;
 `
 
-export default function TaskModal({ field, dashboardID, listID, taskID, moduleID, dt = 'text' }) {
+export default function TaskModal({ field, dashboardID, listID, taskID, moduleID, innerIndex, dt = 'text' }) {
 	const [value, setValue] = useState('')
 
 	function backLayerClickHandler() {
@@ -42,7 +42,7 @@ export default function TaskModal({ field, dashboardID, listID, taskID, moduleID
 	}
 
 	function buttonClickHandler() {
-		busDispatch({ type: 'submitTextEditModal', field, dashboardID, listID, taskID, moduleID, value })
+		busDispatch({ type: 'submitTextEditModal', field, dashboardID, listID, taskID, moduleID, value, innerIndex })
 		backLayerClickHandler()
 	}
 

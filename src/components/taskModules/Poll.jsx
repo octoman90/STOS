@@ -30,11 +30,11 @@ const PB = styled.div`
 	display: flex;
 `
 
-function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onDeleteClick}) {
+function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onRenameClick, onDeleteClick}) {
 	return (
 		<PB>
 			<div onClick={ () => !visibleVotes ? onVoteClick(visibleVotes, index) : null }>{ name } { visibleVotes ? votes : null }</div>
-			<EditIcon className="hover-visible" />
+			<EditIcon className="hover-visible" onClick={ () => onRenameClick(index) } />
 			<DeleteIcon className="hover-visible" onClick={ () => onDeleteClick(index) } />
 		</PB>
 	)
@@ -76,6 +76,30 @@ export default function Poll({ meta, task, full }) {
 		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
+	function renameOptionClickHandler(index) {
+		busDispatch({
+			type: 'showTextEditModal',
+			field: 'modulePollOption',
+			moduleID: meta.id,
+			innerIndex: index,
+			dt: 'text'
+		})
+	}
+
+	useBus(
+		'submitTextEditModal',
+		({ field, moduleID, innerIndex, value }) => {
+			// eslint-disable-next-line
+			if (full && field == 'modulePollOption' && moduleID == meta.id) {
+				let newContent = JSON.parse(JSON.stringify(meta.content))
+				newContent.votes[innerIndex][0] = value
+
+				controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+			}
+		},
+		[task, meta, dispatch],
+	)
+
 	function renameClickHandler() {
 		busDispatch({
 			type: 'showTextEditModal',
@@ -107,7 +131,7 @@ export default function Poll({ meta, task, full }) {
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
-							return <PollBar key={ index } index={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onDeleteClick={ deleteOptionClickHandler } />
+							return <PollBar key={ index } index={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onRenameClick={ renameOptionClickHandler } onDeleteClick={ deleteOptionClickHandler } />
 						})
 					}
 					<PlusIcon onClick={ addOptionClickHandler } />
