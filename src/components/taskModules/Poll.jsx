@@ -7,6 +7,9 @@ import {
 	useSelector,
 	useDispatch
 } 					from 'react-redux'
+import useBus, {
+	dispatch as busDispatch
+} 					from 'use-bus'
 
 import controller 	from '../../controller'
 
@@ -68,16 +71,39 @@ export default function Poll({ meta, task, full }) {
 
 	function deleteOptionClickHandler(index) {
 		let newContent = JSON.parse(JSON.stringify(meta.content))
- 		newContent.votes.splice(index, 1)
+		newContent.votes.splice(index, 1)
 
 		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
+
+	function renameClickHandler() {
+		busDispatch({
+			type: 'showTextEditModal',
+			field: 'modulePollTitle',
+			moduleID: meta.id,
+			dt: 'text'
+		})
+	}
+
+	useBus(
+		'submitTextEditModal',
+		({ field, moduleID, value }) => {
+			// eslint-disable-next-line
+			if (full && field == 'modulePollTitle' && moduleID == meta.id) {
+				let newContent = JSON.parse(JSON.stringify(meta.content))
+				newContent.title = value
+
+				controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+			}
+		},
+		[task, meta, dispatch],
+	)
 
 	if (full) {
 		return (
 			<Container>
 				<b>{ meta.content.title }</b>
-				<EditIcon />
+				<EditIcon onClick={ renameClickHandler } />
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
