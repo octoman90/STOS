@@ -23,25 +23,21 @@ const BarContainer = styled.div`
 	width: 100%
 `
 
-function PollBar({ votes, name, visibleVotes, addButton, onClick }) {
-	if (addButton) {
-		return (
-			<div onClick={ onClick }>
-				+
-			</div>
-		)
-	} else {
-		return (
-			<div onClick={ onClick }>
-				{ name } { visibleVotes ? votes : null }
-				<EditIcon className="hover-visible" />
-				<DeleteIcon className="hover-visible" />
-			</div>
-		)
-	}
+const PB = styled.div`
+	display: flex;
+`
+
+function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onDeleteClick}) {
+	return (
+		<PB>
+			<div onClick={ () => !visibleVotes ? onVoteClick(visibleVotes, index) : null }>{ name } { visibleVotes ? votes : null }</div>
+			<EditIcon className="hover-visible" />
+			<DeleteIcon className="hover-visible" onClick={ () => onDeleteClick(index) } />
+		</PB>
+	)
 }
 
-export default function UserList({ meta, task, full }) {
+export default function Poll({ meta, task, full }) {
 	const dispatch = useDispatch()
 	const cUser = useSelector(state => state.user)
 
@@ -70,6 +66,13 @@ export default function UserList({ meta, task, full }) {
 		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
+	function deleteOptionClickHandler(index) {
+		let newContent = JSON.parse(JSON.stringify(meta.content))
+ 		newContent.votes.splice(index, 1)
+
+		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+	}
+
 	if (full) {
 		return (
 			<Container>
@@ -78,7 +81,7 @@ export default function UserList({ meta, task, full }) {
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
-							return <PollBar key={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onClick={ () => voteClickHandler(visibleVotes, index) } />
+							return <PollBar key={ index } index={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onDeleteClick={ deleteOptionClickHandler } />
 						})
 					}
 					<PlusIcon onClick={ addOptionClickHandler } />
