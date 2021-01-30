@@ -55,10 +55,21 @@ export default function UserList({ meta, task, full }) {
 		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
 
+	function userClickHandler(index) {
+		if (!full) {
+			return
+		}
+
+		let newContent = JSON.parse(JSON.stringify(meta.content))
+		newContent.splice(index, 1)
+
+		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+	}
+
 	return (
 		<Container>
 			<div>
-				{ (meta.content || []).map((user, index) => <U key={ index }>{ user[1] }</U>)}
+				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) }>{ user[1] }</U>)}
 				{ full &&
 					<U style={{ width: '2em' }} onClick={ plusClickHandler }>+</U>
 				}
