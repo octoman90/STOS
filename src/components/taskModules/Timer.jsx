@@ -1,4 +1,7 @@
-import React 		from 'react'
+import React, {
+	useReducer,
+	useEffect
+} 					from 'react'
 import styled 		from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
 import EditIcon 	from '@material-ui/icons/Edit'
@@ -23,6 +26,7 @@ const Container = styled.div`
 
 export default function Description({ meta, task, full }) {
 	const dispatch = useDispatch()
+	const [, forceUpdate] = useReducer(x => x + 1, 0)
 
 	function editClickHandler() {
 		busDispatch({
@@ -44,6 +48,12 @@ export default function Description({ meta, task, full }) {
 		},
 		[task, meta, dispatch],
 	)
+
+	useEffect(() => {
+		let interval = setInterval(forceUpdate, 5e4)
+
+		return () => clearInterval(interval)
+	})
 
 	function deleteClickHandler() {
 		controller.deleteTaskModule(task, meta.id, dispatch)
