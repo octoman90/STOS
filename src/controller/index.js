@@ -352,8 +352,6 @@ export default {
 				if (!dashboard.userIDs.includes(user.id)) {
 					dashboard.userIDs.push(user.id)
 
-					console.log(dashboard)
-
 					dashboardAPI.upsyncOne(dashboard)
 						.then(dashboard => {
 							dispatch({
@@ -365,6 +363,26 @@ export default {
 							console.log(err)
 						})
 				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	},
+
+	removeUserFromDashboard: (dashboard, userID, dispatch) => {
+		if (!dashboard.userIDs || !dashboard.userIDs.includes(userID)) {
+			return
+		}
+
+		let index = dashboard.userIDs.findIndex(id => id === userID)
+		dashboard.userIDs.splice(index, 1)
+
+		dashboardAPI.upsyncOne(dashboard)
+			.then(dashboard => {
+				dispatch({
+					type: 'setDashboard',
+					dashboard: dashboard || {}
+				})
 			})
 			.catch(err => {
 				console.log(err)

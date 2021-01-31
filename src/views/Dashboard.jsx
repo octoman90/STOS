@@ -62,7 +62,7 @@ function DashboardUserList({ dashboard }) {
 	)
 
 	function userClickHandler(userID) {
-		// TODO
+		controller.removeUserFromDashboard(dashboard, userID, dispatch)
 	}
 
 	return (
