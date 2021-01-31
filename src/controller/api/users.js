@@ -1,6 +1,6 @@
 export default {
-	downsyncOne: (username) => {
-		return fetch('/api/user?' + new URLSearchParams({ username }))
+	downsyncOne: (id, username) => {
+		return fetch('/api/user?' + (username ? new URLSearchParams({ username }) : '') + (id ? new URLSearchParams({ id }) : ''))
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()

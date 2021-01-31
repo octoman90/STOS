@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"../entity"
@@ -8,8 +9,15 @@ import (
 )
 
 func UpsyncManyDashboards(userID primitive.ObjectID) (bool, []entity.Dashboard, string) {
-	dashboards, err := repository.ReadManyDashboards(entity.Dashboard{
-		Owner: userID,
+	// dashboards, err := repository.ReadManyDashboards(entity.Dashboard{
+	// 	Owner: userID,
+	// })
+
+	dashboards, err := repository.ReadManyDashboards(bson.M{
+		"$or": []bson.M{
+			bson.M{"ownerID": userID},
+			bson.M{"users": userID},
+		},
 	})
 
 	if err == nil {

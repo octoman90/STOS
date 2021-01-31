@@ -11,7 +11,6 @@ import useBus, {
 import controller 	from '../../controller'
 
 const Container = styled.div`
-	display: block;
 	margin: 0.5em 0;
 	padding: 0.5em 0;
 	gap: 0.5em;

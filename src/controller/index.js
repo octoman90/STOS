@@ -8,10 +8,9 @@ import taskAPI, {
 } 						from './api/tasks.js'
 import dashboardAPI, {
 	downsyncDashboards,
-	downsyncDashboard,
 	upsyncDashboard
 } 						from './api/dashboards.js'
-import userApi			from './api/users.js'
+import userAPI			from './api/users.js'
 
 export default {
 	signUp: (formData, dispatch) => {
@@ -229,11 +228,39 @@ export default {
 	},
 
 	downsyncDashboards,
-	downsyncDashboard,
+
+	downsyncDashboard: (dashboardID, dispatch) => {
+		console.log('dd')
+		dashboardAPI.downsyncOne(dashboardID)
+			.then(data => {
+				dispatch({
+					type: 'setDashboard',
+					dashboard: data || {}
+				})
+
+				let usersToFetch = [data.ownerID, ...(data.userIDs || [])]
+				usersToFetch.forEach((userID) => {
+					userAPI.downsyncOne(userID)
+						.then((data) => {
+							dispatch({
+								type: 'setUser',
+								user: data || {}
+							})
+						})
+						.catch(err => {
+							// ignore the error
+						})
+				})
+			})
+			.catch(err => {
+				console.log('error?', err)
+				// ignore the error
+			})
+	},
 
 	deleteDashboard: (dashboard, dispatch) => {
 		dashboardAPI.deleteOne(dashboard, dispatch)
-		// TODO: Recalculate indeces
+		// TODO: Recalculate indices
 	},
 
 	deleteList: (list, dispatch) => {
@@ -371,7 +398,7 @@ export default {
 					return
 				}
 
-				userApi.downsyncOne(newContent.value)
+				userAPI.downsyncOne(null, newContent.value)
 					.then(data => {
 						module.content.push([data.id, data.name])
 						return module

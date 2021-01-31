@@ -1,6 +1,7 @@
 package api
 
 import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"encoding/json"
 	"net/http"
 
@@ -28,17 +29,27 @@ func User(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
-	usernames, ok := r.URL.Query()["username"]
+	var id primitive.ObjectID
+	var name string
+	atLeastOne := false
 
-	if !ok || len(usernames[0]) < 1 {
+	if ids, ok := r.URL.Query()["id"]; ok {
+		atLeastOne = true
+		id, _ = primitive.ObjectIDFromHex(ids[0])
+	}
+
+	if usernames, ok := r.URL.Query()["username"]; ok {
+		atLeastOne = true
+		name = usernames[0]
+	}
+
+	if !atLeastOne {
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"Ok": false,
-			"Message": "No username specified",
+			"Message": "No parameters specified",
 		})
 	} else {
-		username := usernames[0]
-
-		if ok, user, message := usecase.UpsyncOneUser(username); ok {
+		if ok, user, message := usecase.UpsyncOneUser(id, name); ok {
 			json.NewEncoder(w).Encode(user)
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{

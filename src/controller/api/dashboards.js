@@ -18,26 +18,6 @@ export function downsyncDashboards(dispatch) {
 		})
 }
 
-export function downsyncDashboard(id, dispatch) {
-	fetch('/api/dashboard?' + new URLSearchParams({ id }))
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setDashboard',
-				dashboard: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
-
 export function upsyncDashboard(dashboard, dispatch) {
 	let options = {
 		method: "POST",
@@ -64,6 +44,24 @@ export function upsyncDashboard(dashboard, dispatch) {
 }
 
 export default {
+	downsyncOne: (id) => {
+		return fetch('/api/dashboard?' + new URLSearchParams({ id }))
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
+			})
+	},
+
 	deleteOne: (dashboard, dispatch) => {
 		let options = {
 			method: "delete",

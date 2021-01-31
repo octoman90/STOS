@@ -23,14 +23,15 @@ func ReadOneDashboard(dashboard entity.Dashboard) (entity.Dashboard, error) {
 	return dashboard, err
 }
 
-func ReadManyDashboards(dashboard entity.Dashboard) ([]entity.Dashboard, error) {
-	filter, _ := bson.Marshal(dashboard)
+func ReadManyDashboards(filter bson.M) ([]entity.Dashboard, error) {
+	// filter, _ := bson.Marshal(dashboard)
 	var dashboards []entity.Dashboard
-
 	cur, err := dashboardCollection.Find(context.TODO(), filter)
 
 	if err == nil {
 		for cur.Next(context.TODO()) {
+			var dashboard entity.Dashboard
+
 			if err = cur.Decode(&dashboard); err == nil {
 				dashboards = append(dashboards, dashboard)
 			}
