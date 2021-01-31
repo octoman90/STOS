@@ -268,7 +268,6 @@ export default {
 
 	deleteDashboard: (dashboard, dispatch) => {
 		dashboardAPI.deleteOne(dashboard, dispatch)
-		// TODO: Recalculate indices
 	},
 
 	deleteList: (list, dispatch) => {
@@ -331,11 +330,16 @@ export default {
 	},
 
 	createDashboard: (dispatch) => {
-		dashboardAPI.upsyncOne({title: "New Dashboard"})
+		dashboardAPI.upsyncOne({title: 'New Dashboard'})
 			.then(dashboard => {
 				dispatch({
 					type: 'setDashboard',
 					dashboard: dashboard || {}
+				})
+
+				let listsToCreate = ['To Do', 'In Process', 'Done']
+				listsToCreate.forEach((title) => {
+					upsyncList({ title, dashboard: dashboard.id }, dispatch)
 				})
 			})
 			.catch(err => {
