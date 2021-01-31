@@ -12,7 +12,7 @@ import dashboardAPI, {
 import userAPI			from './api/users.js'
 
 export default {
-	signUp: (formData, dispatch) => {
+	signUp: function (formData, dispatch) {
 		if (formData.username.length < 5) {
 			console.log('username should be at least 5 characters long')
 			return
@@ -59,6 +59,7 @@ export default {
 			})
 			.catch(err => {
 				console.log('error', err.message)
+				setTimeout(() => this.logIn(formData, dispatch), 1e3);
 			})
 	},
 
