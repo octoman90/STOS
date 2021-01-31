@@ -55,27 +55,20 @@ function DashboardUserList({ dashboard }) {
 		({ field, value }) => {
 			// eslint-disable-next-line
 			if (field == 'dashboardUsers') {
-				// controller.editTaskModule(task, meta.id, { action: 'push', value }, dispatch)
+				controller.addUserToDashboard(dashboard, value, dispatch)
 			}
 		},
 		[dashboard, dispatch],
 	)
 
-	function deleteClickHandler() {
-		// controller.deleteTaskModule(task, meta.id, dispatch)
-	}
-
 	function userClickHandler(userID) {
-		// let newContent = JSON.parse(JSON.stringify(meta.content))
-		// newContent.splice(index, 1)
-
-		// controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+		// TODO
 	}
 
 	return (
 		<DUL>
 			<U>{ (users[dashboard.ownerID] || { name: '' }).name }</U>
-			{ (dashboard.userIDs || []).map(userID => <U key={ userID } onClick={ () => userClickHandler(userID) }>{ users[userID].name }</U>)}
+			{ (dashboard.userIDs || []).map(userID => <U key={ userID } onClick={ () => userClickHandler(userID) }>{ (users[userID] || { name: '' }).name }</U>)}
 			<U style={{ width: '1em' }} onClick={ plusClickHandler }>+</U>
 		</DUL>
 	)

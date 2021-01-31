@@ -7,8 +7,7 @@ import taskAPI, {
 	upsyncTask
 } 						from './api/tasks.js'
 import dashboardAPI, {
-	downsyncDashboards,
-	upsyncDashboard
+	downsyncDashboards
 } 						from './api/dashboards.js'
 import userAPI			from './api/users.js'
 
@@ -202,7 +201,16 @@ export default {
 			dashboard
 		})
 
-		upsyncDashboard(dashboard, dispatch)
+		dashboardAPI.upsyncOne(dashboard)
+			.then(dashboard => {
+				dispatch({
+					type: 'setDashboard',
+					dashboard: dashboard || {}
+				})
+			})
+			.catch(err => {
+				// Ignore the error
+			})
 	},
 
 	renameList: (list, value, dispatch) => {
@@ -230,7 +238,6 @@ export default {
 	downsyncDashboards,
 
 	downsyncDashboard: (dashboardID, dispatch) => {
-		console.log('dd')
 		dashboardAPI.downsyncOne(dashboardID)
 			.then(data => {
 				dispatch({
@@ -323,7 +330,45 @@ export default {
 	},
 
 	createDashboard: (dispatch) => {
-		upsyncDashboard({title: "New Dashboard"}, dispatch)
+		dashboardAPI.upsyncOne({title: "New Dashboard"})
+			.then(dashboard => {
+				dispatch({
+					type: 'setDashboard',
+					dashboard: dashboard || {}
+				})
+			})
+			.catch(err => {
+				// Ignore the error
+			})
+	},
+
+	addUserToDashboard: (dashboard, value, dispatch) => {
+		userAPI.downsyncOne(null, value)
+			.then(user => {
+				if (!dashboard.userIDs) {
+					dashboard.userIDs = []
+				}
+
+				if (!dashboard.userIDs.includes(user.id)) {
+					dashboard.userIDs.push(user.id)
+
+					console.log(dashboard)
+
+					dashboardAPI.upsyncOne(dashboard)
+						.then(dashboard => {
+							dispatch({
+								type: 'setDashboard',
+								dashboard: dashboard || {}
+							})
+						})
+						.catch(err => {
+							console.log(err)
+						})
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
 	},
 
 	addModule: (task, mType, dispatch) => {

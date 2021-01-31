@@ -18,32 +18,23 @@ export function downsyncDashboards(dispatch) {
 		})
 }
 
-export function upsyncDashboard(dashboard, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(dashboard)
-	}
-
-	fetch('/api/dashboard', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setDashboard',
-				dashboard: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
-
 export default {
+	upsyncOne: (dashboard) => {
+		let options = {
+			method: "POST",
+			body: JSON.stringify(dashboard)
+		}
+
+		return fetch('/api/dashboard', options)
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+	},
+
 	downsyncOne: (id) => {
 		return fetch('/api/dashboard?' + new URLSearchParams({ id }))
 			.then(response => {

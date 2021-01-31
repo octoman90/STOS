@@ -16,7 +16,7 @@ func UpsyncManyDashboards(userID primitive.ObjectID) (bool, []entity.Dashboard, 
 	dashboards, err := repository.ReadManyDashboards(bson.M{
 		"$or": []bson.M{
 			bson.M{"ownerID": userID},
-			bson.M{"users": userID},
+			bson.M{"userIDs": userID},
 		},
 	})
 
