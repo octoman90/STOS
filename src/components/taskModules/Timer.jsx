@@ -24,7 +24,7 @@ const Container = styled.div`
 	background-color: rgba(0, 255, 0, 0.1)
 `
 
-export default function Description({ meta, task, full }) {
+export default function Description({ meta, task, full, currentUserCanEdit }) {
 	const dispatch = useDispatch()
 	const [, forceUpdate] = useReducer(x => x + 1, 0)
 
@@ -80,7 +80,7 @@ export default function Description({ meta, task, full }) {
 				? calculateRemainingTime(meta.content)
 				: "Press the pencil icon on the right to set the deadline."
 			}
-			{ full &&
+			{ full && currentUserCanEdit &&
 				(
 					<div>
 						<EditIcon onClick={ editClickHandler } />

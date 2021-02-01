@@ -19,7 +19,7 @@ const Container = styled.div`
 	justify-content: space-between;
 `
 
-export default function Description({ meta, task, full }) {
+export default function Description({ meta, task, full, currentUserCanEdit }) {
 	const dispatch = useDispatch()
 
 	function editClickHandler() {
@@ -54,10 +54,12 @@ export default function Description({ meta, task, full }) {
 					? meta.content
 					: "Press the pencil icon on the right to set the description."
 				}
-				<div>
-					<EditIcon onClick={ editClickHandler } />
-					<DeleteIcon onClick={ deleteClickHandler } />
-				</div>
+				{ currentUserCanEdit &&
+					<div>
+						<EditIcon onClick={ editClickHandler } />
+						<DeleteIcon onClick={ deleteClickHandler } />
+					</div>
+				}
 			</Container>
 		)
 	} else {

@@ -399,6 +399,21 @@ export default {
 			})
 	},
 
+	setDashboardCollaborative: (dashboard, value, dispatch) => {
+		dashboard.collaborative = value
+
+		dashboardAPI.upsyncOne(dashboard)
+			.then(dashboard => {
+				dispatch({
+					type: 'setDashboard',
+					dashboard: dashboard || {}
+				})
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	},
+
 	addModule: (task, mType, dispatch) => {
 		let m = {
 			type: mType,

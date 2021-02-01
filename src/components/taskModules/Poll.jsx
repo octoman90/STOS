@@ -30,17 +30,21 @@ const PB = styled.div`
 	display: flex;
 `
 
-function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onRenameClick, onDeleteClick}) {
+function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onRenameClick, onDeleteClick, currentUserCanEdit}) {
 	return (
 		<PB>
 			<div onClick={ () => !visibleVotes ? onVoteClick(visibleVotes, index) : null }>{ name } { visibleVotes ? votes : null }</div>
-			<EditIcon className="hover-visible" onClick={ () => onRenameClick(index) } />
-			<DeleteIcon className="hover-visible" onClick={ () => onDeleteClick(index) } />
+			{ currentUserCanEdit &&
+				<EditIcon className="hover-visible" onClick={ () => onRenameClick(index) } />
+			}
+			{ currentUserCanEdit &&
+				<DeleteIcon className="hover-visible" onClick={ () => onDeleteClick(index) } />
+			}
 		</PB>
 	)
 }
 
-export default function Poll({ meta, task, full }) {
+export default function Poll({ meta, task, full, currentUserCanEdit }) {
 	const dispatch = useDispatch()
 	const cUser = useSelector(state => state.user)
 
@@ -129,16 +133,24 @@ export default function Poll({ meta, task, full }) {
 		return (
 			<Container>
 				<b>{ meta.content.title }</b>
-				<EditIcon onClick={ renameClickHandler } />
+				{ currentUserCanEdit
+					? <EditIcon onClick={ renameClickHandler } />
+					: <div></div>
+				}
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
-							return <PollBar key={ index } index={ index } votes={ votes } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onRenameClick={ renameOptionClickHandler } onDeleteClick={ deleteOptionClickHandler } />
+							return <PollBar key={ index } index={ index } votes={ votes } currentUserCanEdit={ currentUserCanEdit } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onRenameClick={ renameOptionClickHandler } onDeleteClick={ deleteOptionClickHandler } />
 						})
 					}
-					<PlusIcon onClick={ addOptionClickHandler } />
+					{ currentUserCanEdit &&
+						<PlusIcon onClick={ addOptionClickHandler } />
+					}
 				</BarContainer>
-				<DeleteIcon onClick={ deleteClickHandler } />
+				{ currentUserCanEdit
+					? <DeleteIcon onClick={ deleteClickHandler } />
+					: <div></div>
+				}
 			</Container>
 		)
 	} else {

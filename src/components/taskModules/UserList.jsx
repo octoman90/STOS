@@ -27,7 +27,7 @@ const U = styled.div`
 	border: 1px solid #777;
 `
 
-export default function UserList({ meta, task, full }) {
+export default function UserList({ meta, task, full, currentUserCanEdit }) {
 	const dispatch = useDispatch()
 
 	function plusClickHandler() {
@@ -56,7 +56,7 @@ export default function UserList({ meta, task, full }) {
 	}
 
 	function userClickHandler(index) {
-		if (!full) {
+		if (!full || !currentUserCanEdit) {
 			return
 		}
 
@@ -70,11 +70,11 @@ export default function UserList({ meta, task, full }) {
 		<Container>
 			<div>
 				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) }>{ user[1] }</U>)}
-				{ full &&
+				{ full && currentUserCanEdit &&
 					<U style={{ width: '2em' }} onClick={ plusClickHandler }>+</U>
 				}
 			</div>
-			{ full &&
+			{ full && currentUserCanEdit &&
 				(
 					<div>
 						<DeleteIcon onClick={ deleteClickHandler } />

@@ -63,7 +63,7 @@ const NewModule = styled.div`
 	color: #777
 `
 
-export default function TaskModal({ taskID }) {
+export default function TaskModal({ taskID, currentUserCanEdit }) {
 	const task = useSelector(state => state.tasks[taskID])
 	const dispatch = useDispatch()
 
@@ -106,8 +106,12 @@ export default function TaskModal({ taskID }) {
 			<Modal>
 				<div style={{ display: 'flex', margin: '0.5em' }}>
 					<h2 style={{ margin: '0' }}>{ task.title }</h2>
-					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } />
-					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } />
+					{ currentUserCanEdit &&
+						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } />
+					}
+					{ currentUserCanEdit &&
+						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } />
+					}
 				</div>
 				{ task.modules && 
 					task.modules.map((moduleJSON, index) => {
@@ -119,15 +123,18 @@ export default function TaskModal({ taskID }) {
 								key: module.id,
 								meta: module, 
 								full: true,
+								currentUserCanEdit,
 								task
 							}
 						)
 					})
 				}
 
-				<NewModule onClick={ newModuleClickHandler } >
-					<PlusIcon style={{ zoom: 2 }} />
-				</NewModule>
+				{ currentUserCanEdit &&
+					<NewModule onClick={ newModuleClickHandler } >
+						<PlusIcon style={{ zoom: 2 }} />
+					</NewModule>
+				}
 			</Modal>
 		</Container>
 	)

@@ -30,7 +30,7 @@ const ListHeader = styled.div`
 	`}
 `
 
-export default function List({ listID, dashboardID }) {
+export default function List({ listID, dashboardID, currentUserCanEdit }) {
 	const lists = useSelector(state => state.lists)
 	const list = useSelector(state => state.lists[listID])
 	const tasks = useSelector(state => state.tasks)
@@ -75,8 +75,12 @@ export default function List({ listID, dashboardID }) {
 			<Container className="list">
 				<ListHeader className="list-header">
 					{ list.title }
-					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
-					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+					{ currentUserCanEdit &&
+						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
+					}
+					{ currentUserCanEdit &&
+						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+					}
 				</ListHeader>
 				<Droppable droppableId={ listID }>
 					{ provided => (
@@ -91,7 +95,9 @@ export default function List({ listID, dashboardID }) {
 					)}
 				</Droppable>
 
-				<Task listID={ listID } />
+				{ currentUserCanEdit &&
+					<Task listID={ listID } />
+				}
 			</Container>
 		)
 	} else {

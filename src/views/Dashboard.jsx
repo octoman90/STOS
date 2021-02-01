@@ -40,7 +40,7 @@ const U = styled.div`
 	text-align: center;
 `
 
-function DashboardUserList({ dashboard }) {
+function DashboardUserList({ dashboard, currentUserCanEdit }) {
 	const dispatch = useDispatch()
 	const users = useSelector(state => state.users)
 
@@ -65,6 +65,10 @@ function DashboardUserList({ dashboard }) {
 	)
 
 	function userClickHandler(userID) {
+		if (!currentUserCanEdit) {
+			return
+		}
+
 		controller.removeUserFromDashboard(dashboard, userID, dispatch)
 	}
 
@@ -72,16 +76,24 @@ function DashboardUserList({ dashboard }) {
 		<DUL>
 			<U>{ (users[dashboard.ownerID] || { name: '' }).name }</U>
 			{ (dashboard.userIDs || []).map(userID => <U key={ userID } onClick={ () => userClickHandler(userID) }>{ (users[userID] || { name: '' }).name }</U>)}
-			<U style={{ width: '1em' }} onClick={ plusClickHandler }>+</U>
+			{ currentUserCanEdit &&
+				<U style={{ width: '1em' }} onClick={ plusClickHandler }>+</U>
+			}
 		</DUL>
 	)
 }
 
 function CollaborativeIcon({ dashboard }) {
+	const dispatch = useDispatch()
+
+	function clickHandler(value) {
+		controller.setDashboardCollaborative(dashboard, value, dispatch)
+	}
+
 	if (dashboard.collaborative) {
-		return <CollabYeIcon className="hover-visible" style={{ verticalAlign: "bottom" }} />
+		return <CollabYeIcon className="hover-visible" onClick={ () => clickHandler(false) } style={{ verticalAlign: "bottom" }} />
 	} else {
-		return <CollabNoIcon className="hover-visible" style={{ verticalAlign: "bottom" }} />
+		return <CollabNoIcon className="hover-visible" onClick={ () => clickHandler(true) } style={{ verticalAlign: "bottom" }} />
 	}
 }
 
@@ -90,11 +102,13 @@ export default function Dashboard() {
 	const dashboard = useSelector(state => state.dashboards[dashboardId])
 	const lists = useSelector(state => state.lists)
 	const tasks = useSelector(state => state.tasks)
+	const user = useSelector(state => state.user)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [taskModalTaskID, setTaskModalTaskID] = useState(null)
 	const [addModuleModalTaskID, showAddModuleModalTaskID] = useState(null)
 	const [textEditModal, setTextEditModal] = useState({})
+	const currentUserCanEdit = dashboard && (dashboard.ownerID === user.id || dashboard.collaborative)
 
 	useBus(
 		'showTaskModal',
@@ -133,6 +147,10 @@ export default function Dashboard() {
 	)
 
 	function dragEndHandler(result) {
+		if (!currentUserCanEdit) {
+			return
+		}
+
 		const { destination, source } = result
 
 		if (destination && (destination.index !== source.index || destination.droppableId !== source.droppableId)) {
@@ -170,13 +188,17 @@ export default function Dashboard() {
 			<Header />
 			<InfoBar>
 				<div>{ dashboard ? dashboard.title : "" }</div>
-				<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
-				<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
-				{ dashboard && 
+				{ currentUserCanEdit &&
+					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
+				}
+				{ currentUserCanEdit &&
+					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+				}
+				{ currentUserCanEdit && 
 					<CollaborativeIcon dashboard={ dashboard } />
 				}
 				{ dashboard &&
-					<DashboardUserList dashboard={ dashboard } />
+					<DashboardUserList currentUserCanEdit={ currentUserCanEdit } dashboard={ dashboard } />
 				}
 			</InfoBar>
 			<div id="dashboard-root">
@@ -184,16 +206,18 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{ 
 						Object.values(lists).sort((a, b) => a.index - b.index).map(list => {
-							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } /> : null
+							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } currentUserCanEdit={ currentUserCanEdit } /> : null
 						})
 					}
 				</DragDropContext>
 
-				<List dashboardID={ dashboardId } />
+				{ currentUserCanEdit &&
+					<List dashboardID={ dashboardId } />
+				}
 			</div>
 
 			{ taskModalTaskID &&
-				<TaskModal taskID={ taskModalTaskID } />
+				<TaskModal currentUserCanEdit={ currentUserCanEdit } taskID={ taskModalTaskID } />
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
