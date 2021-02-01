@@ -14,18 +14,18 @@ import userAPI			from './api/users.js'
 export default {
 	signUp: function (formData, dispatch) {
 		if (formData.username.length < 5) {
-			console.log('username should be at least 5 characters long')
+			alert('username should be at least 5 characters long')
 			return
 		} else if (formData.password.length < 5) {
-			console.log('password should be at least 5 characters long')
+			alert('password should be at least 5 characters long')
 			return
 		}
 
 		if (formData.password !== formData.repeatPassword) {
-			console.log('passwords don\'t match')
+			alert('passwords don\'t match')
 			return
 		} else if (formData.accepted === false) {
-			console.log('you need to accept')
+			alert('you need to accept')
 			return
 		}
 
@@ -65,10 +65,10 @@ export default {
 
 	logIn: (formData, dispatch) => {
 		if (formData.username.length < 5) {
-			console.log('username should be at least 5 characters long')
+			alert('username should be at least 5 characters long')
 			return
 		} else if (formData.password.length < 5) {
-			console.log('password should be at least 5 characters long')
+			alert('password should be at least 5 characters long')
 			return
 		}
 
