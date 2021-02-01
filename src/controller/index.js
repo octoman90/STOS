@@ -350,6 +350,11 @@ export default {
 	addUserToDashboard: (dashboard, value, dispatch) => {
 		userAPI.downsyncOne(null, value)
 			.then(user => {
+				dispatch({
+					type: 'setUser',
+					user: user || {}
+				})
+
 				if (!dashboard.userIDs) {
 					dashboard.userIDs = []
 				}

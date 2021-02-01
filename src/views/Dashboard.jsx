@@ -8,6 +8,8 @@ import styled 							from 'styled-components'
 import { dispatch as busDispatch } 		from 'use-bus'
 import DeleteIcon 						from '@material-ui/icons/Delete'
 import EditIcon 						from '@material-ui/icons/Edit'
+import CollabNoIcon 					from '@material-ui/icons/AssignmentLate'
+import CollabYeIcon 					from '@material-ui/icons/AssignmentTurnedIn'
 
 import Header 			from '../components/Header.jsx'
 import List 			from '../components/List.jsx'
@@ -24,12 +26,13 @@ const InfoBar = styled.div`
 `
 
 const DUL = styled.div`
+	margin-left: 5em;
 	display: flex;
 	gap: 0.5em;
 `
 
 const U = styled.div`
-	padding: 0.5em;
+	padding: 0.25em;
 	background-color: #fff;
 	border-radius: 0.3em;
 	width: 7em;
@@ -72,6 +75,14 @@ function DashboardUserList({ dashboard }) {
 			<U style={{ width: '1em' }} onClick={ plusClickHandler }>+</U>
 		</DUL>
 	)
+}
+
+function CollaborativeIcon({ dashboard }) {
+	if (dashboard.collaborative) {
+		return <CollabYeIcon className="hover-visible" style={{ verticalAlign: "bottom" }} />
+	} else {
+		return <CollabNoIcon className="hover-visible" style={{ verticalAlign: "bottom" }} />
+	}
 }
 
 export default function Dashboard() {
@@ -161,6 +172,9 @@ export default function Dashboard() {
 				<div>{ dashboard ? dashboard.title : "" }</div>
 				<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
 				<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+				{ dashboard && 
+					<CollaborativeIcon dashboard={ dashboard } />
+				}
 				{ dashboard &&
 					<DashboardUserList dashboard={ dashboard } />
 				}
