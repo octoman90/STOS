@@ -17,13 +17,13 @@ func main() {
 	router.HandleFunc("/logIn", api.LogIn).Methods("POST")
 	router.HandleFunc("/logOut", api.LogOut).Methods("POST")
 	router.HandleFunc("/session", api.CheckSession).Methods("GET")
-	router.HandleFunc("/dashboard", api.SyncDashboard).Methods("POST", "GET", "DELETE")
-	router.HandleFunc("/dashboards", api.SyncDashboards).Methods("GET")
-	router.HandleFunc("/list", api.SyncList).Methods("POST", "DELETE")
-	router.HandleFunc("/lists", api.SyncLists).Methods("GET")
-	router.HandleFunc("/task", api.SyncTask).Methods("POST", "DELETE")
-	router.HandleFunc("/tasks", api.SyncTasks).Methods("POST", "GET")
-	router.HandleFunc("/user", api.User).Methods("GET")
+	router.HandleFunc("/dashboard", api.SyncDashboard).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/dashboards", api.SyncDashboards).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/list", api.SyncList).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/lists", api.SyncLists).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/task", api.SyncTask).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/tasks", api.SyncTasks).Methods("POST", "GET", "UPDATE", "DELETE")
+	router.HandleFunc("/user", api.User).Methods("GET", "UPDATE", "DELETE")
 
 	srv := &http.Server{
 		Handler: 		router,
