@@ -65,8 +65,6 @@ func downsyncDashboard(w http.ResponseWriter, r *http.Request, userID primitive.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	dashboard.Owner = userID
-
 	if ok, dashboard, message := usecase.DownsyncOneDashboard(userID, dashboard); ok {
 		json.NewEncoder(w).Encode(dashboard)
 	} else {
