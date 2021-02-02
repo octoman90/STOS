@@ -1,36 +1,11 @@
-export function upsyncTask(data, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(data)
-	}
-
-	return fetch('/api/task', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setTask',
-				task: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
-
 export default {
-	upsyncMany: (tasks, dispatch) => {
+	createOne: task => {
 		let options = {
 			method: "POST",
-			body: JSON.stringify(tasks)
+			body: JSON.stringify(task)
 		}
 
-		return fetch('/api/tasks', options)
+		return fetch('/api/task', options)
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()
@@ -39,18 +14,18 @@ export default {
 				}
 			})
 			.then(data => {
-				dispatch({
-					type: 'setTasks',
-					tasks: data || []
-				})
-			})
-			.catch(err => {
-				console.log('error', err.message)
+				if (data === null){
+					return {}
+				} else if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
 	},
 
-	downsyncMany: (listID, dispatch) => {
-		fetch('/api/tasks?' + new URLSearchParams({ listID }))
+	readMany: (listID, dispatch) => {
+		return fetch('/api/task?' + new URLSearchParams({ listID }))
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()
@@ -59,13 +34,63 @@ export default {
 				}
 			})
 			.then(data => {
-				dispatch({
-					type: 'setTasks',
-					tasks: data || []
-				})
+				if (data === null){
+					return []
+				} else if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
-			.catch(err => {
-				console.log('error', err.message)
+	},
+
+	updateOne: task => {
+		let options = {
+			method: 'UPDATE',
+			body: JSON.stringify([task])
+		}
+
+		return fetch('/api/task', options)
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (data === null){
+					return {}
+				} else if (!('ok' in data) || data.ok) {
+					return data[0]
+				} else {
+					throw new Error(data.message)
+				}
+			})
+	},
+
+	updateMany: (tasks, dispatch) => {
+		let options = {
+			method: 'UPDATE',
+			body: JSON.stringify(tasks)
+		}
+
+		return fetch('/api/task', options)
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (data === null){
+					return []
+				} else if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
 	},
 

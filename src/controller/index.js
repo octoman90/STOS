@@ -1,9 +1,7 @@
 import { dispatch as busDispatch } from 'use-bus'
 
 import listAPI		from './api/lists.js'
-import taskAPI, {
-	upsyncTask
-} 					from './api/tasks.js'
+import taskAPI 		from './api/tasks.js'
 import dashboardAPI	from './api/dashboards.js'
 import userAPI		from './api/users.js'
 
@@ -179,7 +177,9 @@ export default {
 			tasks: patch
 		})
 
-		taskAPI.upsyncMany(patch, dispatch)
+		taskAPI.updateMany(patch)
+			.then(tasks => dispatch({ type: 'setTasks', tasks }))
+			.catch(console.error)
 	},
 
 	renameDashboard: (dashboard, value, dispatch) => {
@@ -223,7 +223,9 @@ export default {
 			task
 		})
 
-		upsyncTask(task, dispatch)
+		taskAPI.updateOne(task)
+			.then(task => dispatch({ type: 'setTask', task }))
+			.catch(console.error)
 	},
 
 	downsyncDashboards: (dispatch) => {
@@ -274,11 +276,15 @@ export default {
 	},
 
 	downsyncTasks: (listID, dispatch) => {
-		taskAPI.downsyncMany(listID, dispatch)
+		taskAPI.readMany(listID)
+			.then(tasks => dispatch({ type: 'setTasks', tasks }))
+			.catch(console.error)
 	},
 
 	createTask: (listID, index, dispatch) => {
-		upsyncTask({ title: "New Task", list: listID, index }, dispatch)
+		taskAPI.createOne({ title: "New Task", list: listID, index })
+			.then(task => dispatch({ type: 'setTask', task }))
+			.catch(console.error)
 	},
 
 	deleteTask: (task, dispatch) => {
@@ -435,7 +441,9 @@ export default {
 			task
 		})
 
-		upsyncTask(task, dispatch)
+		taskAPI.updateOne(task)
+			.then(task => dispatch({ type: 'setTask', task }))
+			.catch(console.error)
 	},
 
 	deleteTaskModule: (task, id, dispatch) => {
@@ -447,7 +455,9 @@ export default {
 			task
 		})
 
-		upsyncTask(task, dispatch)
+		taskAPI.updateOne(task)
+			.then(task => dispatch({ type: 'setTask', task }))
+			.catch(console.error)
 	},
 
 	editTaskModule: (task, id, newContent, dispatch) => {
@@ -465,7 +475,9 @@ export default {
 				task
 			})
 
-			upsyncTask(task, dispatch)
+			taskAPI.updateOne(task)
+				.then(task => dispatch({ type: 'setTask', task }))
+				.catch(console.error)
 		// eslint-disable-next-line
 		} else if (newContent.action == 'push') {
 			if (module.type == 'userList') {} {
@@ -490,7 +502,9 @@ export default {
 							task
 						})
 
-						upsyncTask(task, dispatch)
+						taskAPI.updateOne(task)
+							.then(task => dispatch({ type: 'setTask', task }))
+							.catch(console.error)
 					})
 					.catch(err => {
 						// ignore the error

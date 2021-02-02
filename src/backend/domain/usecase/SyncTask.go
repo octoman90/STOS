@@ -7,26 +7,16 @@ import (
 	"../../infrastructure/repository"
 )
 
-func DownsyncOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Task, string) {
-	if task.ID != primitive.NilObjectID {
-		if err := repository.UpdateOneTask(entity.Task{
-			ID: task.ID,
-		}, task); err == nil {
-			return true, task, ""
-		} else {
-			return false, task, err.Error()
-		}
+func CreateOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Task, string) {
+	if id, err := repository.CreateOneTask(task); err == nil {
+		task.ID = id
+		return true, task, ""
 	} else {
-		if id, err := repository.CreateOneTask(task); err == nil {
-			task.ID = id
-			return true, task, ""
-		} else {
-			return false, task, err.Error()
-		}
+		return false, task, err.Error()
 	}
 }
 
-func UpsyncManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool, []entity.Task, string) {
+func ReadManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool, []entity.Task, string) {
 	tasks, err := repository.ReadManyTasks(entity.Task{
 		List: listID,
 	})
@@ -38,7 +28,7 @@ func UpsyncManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool
 	}
 }
 
-func DownsyncManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []entity.Task, string) {
+func UpdateManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []entity.Task, string) {
 	for i := 0; i < len(tasks); i++ {
 		if err := repository.UpdateOneTask(entity.Task{
 			ID: tasks[i].ID,
