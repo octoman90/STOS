@@ -3,7 +3,7 @@ export default function userReducer(state = {}, action) {
 
 	switch(action.type) {
 		case 'setLoggedIn': {
-			newState.loggedIn = action.value
+			newState.loggedIn = true
 			newState.name = action.username
 			newState.id = action.id
 

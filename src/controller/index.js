@@ -49,7 +49,6 @@ export default {
 				if (data.ok) {
 					dispatch({
 						type: 'setLoggedIn',
-						value: true,
 						username: data.username,
 						id: data.id
 					})
@@ -92,7 +91,6 @@ export default {
 				if (data.ok) {
 					dispatch({
 						type: 'setLoggedIn',
-						value: true,
 						username: data.username,
 						id: data.id
 					})
