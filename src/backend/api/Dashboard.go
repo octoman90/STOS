@@ -17,7 +17,7 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 		if ok, user, message := usecase.CheckSession(cookie.Value); ok {
 			switch r.Method {
 				case "POST":
-					createDashboard(w, r, user.ID)
+					postDashboard(w, r, user.ID)
 				case "GET":
 					getDashboard(w, r, user.ID)
 				case "UPDATE":
@@ -39,7 +39,7 @@ func SyncDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func createDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
+func postDashboard(w http.ResponseWriter, r *http.Request, userID primitive.ObjectID) {
 	var dashboard entity.Dashboard
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&dashboard); err != nil {

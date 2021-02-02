@@ -1,13 +1,11 @@
 import { dispatch as busDispatch } from 'use-bus'
 
-import listAPI, { 
-	upsyncList 
-} 						from './api/lists.js'
+import listAPI		from './api/lists.js'
 import taskAPI, {
 	upsyncTask
-} 						from './api/tasks.js'
-import dashboardAPI		from './api/dashboards.js'
-import userAPI			from './api/users.js'
+} 					from './api/tasks.js'
+import dashboardAPI	from './api/dashboards.js'
+import userAPI		from './api/users.js'
 
 export default {
 	signUp: function (formData, dispatch) {
@@ -212,7 +210,9 @@ export default {
 			list
 		})
 
-		upsyncList(list, dispatch)
+		listAPI.updateOne(list)
+			.then(list => dispatch({ type: 'setList', list }))
+			.catch(console.error)
 	},
 
 	renameTask: (task, value, dispatch) => {
@@ -227,13 +227,13 @@ export default {
 	},
 
 	downsyncDashboards: (dispatch) => {
-		dashboardAPI.downsyncMany()
+		dashboardAPI.readMany()
 			.then(dashboards => dispatch({ type: 'setDashboards', dashboards }))
 			.catch(console.error)
 	},
 
 	downsyncDashboard: (dashboardID, dispatch) => {
-		dashboardAPI.downsyncOne(dashboardID)
+		dashboardAPI.readOne(dashboardID)
 			.then(data => {
 				dispatch({
 					type: 'setDashboard',
@@ -267,8 +267,10 @@ export default {
 		listAPI.deleteOne(list, dispatch)
 	},
 
-	createList: (dashboardID, index, dispatch) => {
-		upsyncList({ title: "New List", dashboard: dashboardID, index }, dispatch)
+	createList: (dashboardID, dispatch) => {
+		listAPI.createOne({ title: "New List", dashboard: dashboardID })
+			.then(list => dispatch({ type: 'setList', list }))
+			.catch(console.error)
 	},
 
 	downsyncTasks: (listID, dispatch) => {
@@ -313,7 +315,9 @@ export default {
 	},
 
 	downsyncManyLists: (dashboardID, dispatch) => {
-		listAPI.downsyncMany(dashboardID, dispatch)
+		listAPI.readMany(dashboardID)
+			.then(lists => dispatch({ type: 'setLists', lists }))
+			.catch(console.error)
 	},
 
 	createDashboard: (dispatch) => {
@@ -325,13 +329,13 @@ export default {
 				})
 
 				let listsToCreate = ['To Do', 'In Process', 'Done']
-				listsToCreate.forEach((title) => {
-					upsyncList({ title, dashboard: dashboard.id }, dispatch)
+				listsToCreate.forEach(title => {
+					listAPI.createOne({ title, dashboard: dashboard.id })
+						.then(list => dispatch({ type: 'setList', list }))
+						.catch(console.error)
 				})
 			})
-			.catch(err => {
-				// Ignore the error
-			})
+			.catch(console.error)
 	},
 
 	addUserToDashboard: (dashboard, value, dispatch) => {

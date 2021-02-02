@@ -1,5 +1,5 @@
 export default {
-	createOne: (dashboard) => {
+	createOne: dashboard => {
 		let options = {
 			method: "POST",
 			body: JSON.stringify(dashboard)
@@ -15,7 +15,7 @@ export default {
 			})
 	},
 
-	downsyncOne: (id) => {
+	readOne: id => {
 		return fetch('/api/dashboard?' + new URLSearchParams({ id }))
 			.then(response => {
 				if (response.ok && response.status === 200) {
@@ -33,7 +33,7 @@ export default {
 			})
 	},
 
-	downsyncMany: () => {
+	readMany: () => {
 		return fetch('/api/dashboard')
 			.then(response => {
 				if (response.ok && response.status === 200) {
@@ -53,7 +53,7 @@ export default {
 			})
 	},
 
-	updateOne: (dashboard) => {
+	updateOne: dashboard => {
 		let options = {
 			method: "UPDATE",
 			body: JSON.stringify(dashboard)

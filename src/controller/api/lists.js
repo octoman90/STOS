@@ -1,31 +1,11 @@
-export function upsyncList(data, dispatch) {
-	let options = {
-		method: "POST",
-		body: JSON.stringify(data)
-	}
-
-	return fetch('/api/list', options)
-		.then(response => {
-			if (response.ok && response.status === 200) {
-				return response.json()
-			} else {
-				throw new Error(response.statusText)
-			}
-		})
-		.then(data => {
-			dispatch({
-				type: 'setList',
-				list: data || {}
-			})
-		})
-		.catch(err => {
-			console.log('error', err.message)
-		})
-}
-
 export default {
-	downsyncMany: (dashboardID, dispatch) => {
-		fetch('/api/lists?' + new URLSearchParams({ dashboardID }))
+	createOne: list => {
+		let options = {
+			method: "POST",
+			body: JSON.stringify(list)
+		}
+
+		return fetch('/api/list', options)
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()
@@ -34,13 +14,54 @@ export default {
 				}
 			})
 			.then(data => {
-				dispatch({
-					type: 'setLists',
-					lists: data || []
-				})
+				if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
-			.catch(err => {
-				console.log('error', err.message)
+	},
+
+	readMany: dashboardID => {
+		return fetch('/api/list?' + new URLSearchParams({ dashboardID }))
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (data === null){
+					return []
+				} else if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
+			})
+	},
+
+	updateOne: list => {
+		let options = {
+			method: "UPDATE",
+			body: JSON.stringify(list)
+		}
+
+		return fetch('/api/list', options)
+			.then(response => {
+				if (response.ok && response.status === 200) {
+					return response.json()
+				} else {
+					throw new Error(response.statusText)
+				}
+			})
+			.then(data => {
+				if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
 	},
 

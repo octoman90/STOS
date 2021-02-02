@@ -31,16 +31,12 @@ const ListHeader = styled.div`
 `
 
 export default function List({ listID, dashboardID, currentUserCanEdit }) {
-	const lists = useSelector(state => state.lists)
 	const list = useSelector(state => state.lists[listID])
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
 
 	function createListClickHandler() {
-		let dashboardLists = Object.values(lists).filter(list => list.dashboard == dashboardID)
-		let index = dashboardLists.length ? dashboardLists.sort((a, b) => b.index - a.index)[0].index + 1 : 0
-
-		controller.createList(dashboardID, index, dispatch)
+		controller.createList(dashboardID, dispatch)
 	}
 
 	useEffect(() => {
