@@ -35,24 +35,22 @@ func UpsyncOneDashboard(userID primitive.ObjectID, dashboardID primitive.ObjectI
 	}
 }
 
-func DownsyncOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard) (bool, entity.Dashboard, string) {
-	if dashboard.ID != primitive.NilObjectID {
-		if err := repository.UpdateOneDashboard(entity.Dashboard{
-			ID: dashboard.ID,
-		}, dashboard); err == nil {
-			return true, dashboard, ""
-		} else {
-			return false, dashboard, err.Error()
-		}
-	} else {
-		dashboard.Owner = userID
+func CreateOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard) (bool, entity.Dashboard, string) {
+	dashboard.Owner = userID
 
-		if id, err := repository.CreateOneDashboard(dashboard); err == nil {
-			dashboard.ID = id
-			return true, dashboard, ""
-		} else {
-			return false, dashboard, err.Error()
-		}
+	if id, err := repository.CreateOneDashboard(dashboard); err == nil {
+		dashboard.ID = id
+		return true, dashboard, ""
+	} else {
+		return false, dashboard, err.Error()
+	}
+}
+
+func UpdateOneDashboard(userID primitive.ObjectID, dashboard entity.Dashboard) (bool, entity.Dashboard, string) {
+	if err := repository.UpdateOneDashboard(entity.Dashboard{ ID: dashboard.ID }, dashboard); err == nil {
+		return true, dashboard, ""
+	} else {
+		return false, dashboard, err.Error()
 	}
 }
 

@@ -6,9 +6,7 @@ import listAPI, {
 import taskAPI, {
 	upsyncTask
 } 						from './api/tasks.js'
-import dashboardAPI, {
-	downsyncDashboards
-} 						from './api/dashboards.js'
+import dashboardAPI		from './api/dashboards.js'
 import userAPI			from './api/users.js'
 
 export default {
@@ -194,7 +192,7 @@ export default {
 			dashboard
 		})
 
-		dashboardAPI.upsyncOne(dashboard)
+		dashboardAPI.updateOne(dashboard)
 			.then(dashboard => {
 				dispatch({
 					type: 'setDashboard',
@@ -228,7 +226,11 @@ export default {
 		upsyncTask(task, dispatch)
 	},
 
-	downsyncDashboards,
+	downsyncDashboards: (dispatch) => {
+		dashboardAPI.downsyncMany()
+			.then(dashboards => dispatch({ type: 'setDashboards', dashboards }))
+			.catch(console.error)
+	},
 
 	downsyncDashboard: (dashboardID, dispatch) => {
 		dashboardAPI.downsyncOne(dashboardID)
@@ -253,7 +255,6 @@ export default {
 				})
 			})
 			.catch(err => {
-				console.log('error?', err)
 				// ignore the error
 			})
 	},
@@ -316,7 +317,7 @@ export default {
 	},
 
 	createDashboard: (dispatch) => {
-		dashboardAPI.upsyncOne({title: 'New Dashboard'})
+		dashboardAPI.createOne({title: 'New Dashboard'})
 			.then(dashboard => {
 				dispatch({
 					type: 'setDashboard',
@@ -348,7 +349,7 @@ export default {
 				if (!dashboard.userIDs.includes(user.id)) {
 					dashboard.userIDs.push(user.id)
 
-					dashboardAPI.upsyncOne(dashboard)
+					dashboardAPI.updateOne(dashboard)
 						.then(dashboard => {
 							dispatch({
 								type: 'setDashboard',
@@ -373,7 +374,7 @@ export default {
 		let index = dashboard.userIDs.findIndex(id => id === userID)
 		dashboard.userIDs.splice(index, 1)
 
-		dashboardAPI.upsyncOne(dashboard)
+		dashboardAPI.updateOne(dashboard)
 			.then(dashboard => {
 				dispatch({
 					type: 'setDashboard',
@@ -388,7 +389,7 @@ export default {
 	setDashboardCollaborative: (dashboard, value, dispatch) => {
 		dashboard.collaborative = value
 
-		dashboardAPI.upsyncOne(dashboard)
+		dashboardAPI.updateOne(dashboard)
 			.then(dashboard => {
 				dispatch({
 					type: 'setDashboard',
