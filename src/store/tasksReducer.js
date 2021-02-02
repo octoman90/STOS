@@ -16,6 +16,8 @@ export default function tasksReducer(state = {}, action) {
 		} case 'deleteTask': {
 			delete newState[action.taskID]
 			break
+		} case 'clearAllStates': {
+			return {}
 		}
 	}
 

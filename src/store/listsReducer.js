@@ -17,6 +17,8 @@ export default function listsReducer(state = {}, action) {
 			delete newState[action.listID]
 
 			break
+		} case 'clearAllStates': {
+			return {}
 		}
 	}
 

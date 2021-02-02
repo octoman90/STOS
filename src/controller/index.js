@@ -116,13 +116,7 @@ export default {
 			})
 			.then(data => {
 				if (data.ok) {
-					dispatch({
-						type: 'setLoggedIn',
-						value: false,
-						username: null,
-						id: null
-					})
-
+					dispatch({ type: 'clearAllStates' })
 					busDispatch({ type: 'loggedOut' })
 				}
 			})
@@ -310,13 +304,7 @@ export default {
 
 					busDispatch({ type: 'loggedIn' })
 				} else {
-					dispatch({
-						type: 'setLoggedIn',
-						value: false,
-						username: null,
-						id: null
-					})
-
+					dispatch({ type: 'clearAllStates' })
 					busDispatch({ type: 'loggedOut' })
 				}
 			})

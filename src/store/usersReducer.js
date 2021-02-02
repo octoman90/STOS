@@ -17,6 +17,8 @@ export default function usersReducer(state = {}, action) {
 			delete newState[action.userID]
 
 			break
+		} case 'clearAllStates': {
+			return {}
 		}
 	}
 

@@ -16,6 +16,8 @@ export default function dashboardsReducer(state = {}, action) {
 		} case 'deleteDashboard': {
 			delete newState[action.dashboardID]
 			break
+		} case 'clearAllStates': {
+			return {}
 		}
 	}
 
