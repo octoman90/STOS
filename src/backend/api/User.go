@@ -1,10 +1,12 @@
 package api
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"encoding/json"
 	"net/http"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"../domain/entity"
 	"../domain/usecase"
 )
 
@@ -13,7 +15,14 @@ func User(w http.ResponseWriter, r *http.Request) {
 
 	if cookie, err := r.Cookie("token"); err == nil {
 		if ok, _, message := usecase.CheckSession(cookie.Value); ok {
-			getUser(w, r)
+			switch r.Method {
+				case "GET":
+					getUser(w, r)
+				case "UPDATE":
+					updateUser(w, r)
+				case "DELETE":
+					deleteUser(w, r)
+			}
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
 				"ok": ok,
@@ -49,7 +58,12 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 			"Message": "No parameters specified",
 		})
 	} else {
-		if ok, user, message := usecase.UpsyncOneUser(id, name); ok {
+		user := entity.User{
+			ID: id,
+			Name: name,
+		}
+
+		if ok, user, message := usecase.ReadOneUser(user); ok {
 			json.NewEncoder(w).Encode(user)
 		} else {
 			json.NewEncoder(w).Encode(map[string]interface{}{
@@ -58,4 +72,35 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 	}
+}
+
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	var user entity.User
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	if ok, user, message := usecase.UpdateOneUser(user); ok {
+		json.NewEncoder(w).Encode(user)
+	} else {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"Ok": ok,
+			"Message": message,
+		})
+	}
+}
+
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	var user entity.User
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	ok, message := usecase.DeleteOneUser(user)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"Ok": ok,
+		"Message": message,
+	})
 }

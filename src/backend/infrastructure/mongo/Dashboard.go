@@ -49,6 +49,26 @@ func UpdateOneDashboard(refDashboard entity.Dashboard, dashboard entity.Dashboar
 	return dashboardCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&d)
 }
 
+func DeleteManyDashboards(dashboard entity.Dashboard) error {
+	filter, _ := bson.Marshal(dashboard)
+	cur, err := dashboardCollection.Find(context.TODO(), filter)
+
+	if err == nil {
+		for cur.Next(context.TODO()) {
+			var d entity.Dashboard
+			if err = cur.Decode(&d); err == nil {
+				f, _ := bson.Marshal(d)
+				_, err = dashboardCollection.DeleteOne(context.TODO(), f)
+				_ = DeleteManyLists(entity.List{ Dashboard: d.ID })
+			} else {
+				return err
+			}
+		}
+	}
+
+	return err
+}
+
 func DeleteOneDashboard(dashboard entity.Dashboard) error {
 	filter, _ := bson.Marshal(dashboard)
 	if err := dashboardCollection.FindOneAndDelete(context.TODO(), filter).Decode(&dashboard); err == nil {

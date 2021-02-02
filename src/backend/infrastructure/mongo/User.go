@@ -22,3 +22,19 @@ func ReadOneUser(user entity.User) (entity.User, error) {
 
 	return user, err
 }
+
+func UpdateOneUser(refUser entity.User, user entity.User) error {
+	filter, _ := bson.Marshal(refUser)
+	document, _ := bson.Marshal(user)
+
+	var u entity.User
+	return userCollection.FindOneAndReplace(context.TODO(), filter, document).Decode(&u)
+}
+
+func DeleteOneUser(user entity.User) error {
+	filter, _ := bson.Marshal(user)
+	_, err := userCollection.DeleteOne(context.TODO(), filter)
+	_ = DeleteManyDashboards(entity.Dashboard{ Owner: user.ID })
+
+	return err
+}
