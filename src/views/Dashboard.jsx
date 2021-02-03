@@ -25,6 +25,10 @@ const InfoBar = styled.div`
 	padding: 0.5em;
 `
 
+const DTitle = styled.div`
+	cursor: default
+`
+
 const DUL = styled.div`
 	margin-left: 5em;
 	display: flex;
@@ -38,6 +42,7 @@ const U = styled.div`
 	width: 7em;
 	border: 1px solid #777;
 	text-align: center;
+	cursor: not-allowed;
 `
 
 function DashboardUserList({ dashboard, currentUserCanEdit }) {
@@ -74,10 +79,10 @@ function DashboardUserList({ dashboard, currentUserCanEdit }) {
 
 	return (
 		<DUL>
-			<U>{ (users[dashboard.ownerID] || { name: '' }).name }</U>
+			<U style={{ cursor: 'default' }}>{ (users[dashboard.ownerID] || { name: '' }).name }</U>
 			{ (dashboard.userIDs || []).map(userID => <U key={ userID } onClick={ () => userClickHandler(userID) }>{ (users[userID] || { name: '' }).name }</U>)}
 			{ currentUserCanEdit &&
-				<U style={{ width: '1em' }} onClick={ plusClickHandler }>+</U>
+				<U style={{ width: '1em', cursor: 'pointer' }} onClick={ plusClickHandler }>+</U>
 			}
 		</DUL>
 	)
@@ -91,9 +96,9 @@ function CollaborativeIcon({ dashboard }) {
 	}
 
 	if (dashboard.collaborative) {
-		return <CollabYeIcon className="hover-visible" onClick={ () => clickHandler(false) } style={{ verticalAlign: "bottom" }} />
+		return <CollabYeIcon className="hover-visible" onClick={ () => clickHandler(false) } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
 	} else {
-		return <CollabNoIcon className="hover-visible" onClick={ () => clickHandler(true) } style={{ verticalAlign: "bottom" }} />
+		return <CollabNoIcon className="hover-visible" onClick={ () => clickHandler(true) } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
 	}
 }
 
@@ -187,12 +192,12 @@ export default function Dashboard() {
 		<div className="layout">
 			<Header />
 			<InfoBar>
-				<div>{ dashboard ? dashboard.title : "" }</div>
+				<DTitle>{ dashboard ? dashboard.title : "" }</DTitle>
 				{ currentUserCanEdit &&
-					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
+					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }}/>
 				}
 				{ currentUserCanEdit &&
-					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }}/>
 				}
 				{ currentUserCanEdit && 
 					<CollaborativeIcon dashboard={ dashboard } />

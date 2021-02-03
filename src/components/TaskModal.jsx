@@ -15,6 +15,7 @@ import Description 	from './taskModules/Description.jsx'
 import Poll			from './taskModules/Poll'
 import Timer 		from './taskModules/Timer.jsx'
 import UserList 	from './taskModules/UserList.jsx'
+import ModalHeader 	from './ModalHeader'
 import controller 	from '../controller'
 
 const modules = {
@@ -105,12 +106,12 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<div style={{ display: 'flex', margin: '0.5em' }}>
-					<h2 style={{ margin: '0' }}>{ task.title }</h2>
+					<ModalHeader>{ task.title }</ModalHeader>
 					{ currentUserCanEdit &&
-						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } />
+						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ cursor: 'pointer' }} />
 					}
 					{ currentUserCanEdit &&
-						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } />
+						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					}
 				</div>
 				{ task.modules && 
@@ -132,7 +133,7 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 
 				{ currentUserCanEdit &&
 					<NewModule onClick={ newModuleClickHandler } >
-						<PlusIcon style={{ zoom: 2 }} />
+						<PlusIcon style={{ zoom: 2, cursor: 'pointer' }} />
 					</NewModule>
 				}
 			</Modal>

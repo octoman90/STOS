@@ -5,6 +5,7 @@ import {
 	dispatch as busDispatch
 } 									from 'use-bus'
 
+import ModalHeader 	from './ModalHeader'
 import controller 	from '../controller'
 
 const modules = {
@@ -48,6 +49,8 @@ const Modal = styled.div`
 
 const Row = styled.div`
 	background-color: #ccc;
+	padding: 0.25em;
+	cursor: pointer;
 `
 
 export default function AddModuleModal({ taskID }) {
@@ -68,7 +71,7 @@ export default function AddModuleModal({ taskID }) {
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<div style={{ display: 'flex', margin: '0.5em' }}>
-					<h2 style={{ margin: '0' }}>Select the module type</h2>
+					<ModalHeader>Select the module type:</ModalHeader>
 				</div>
 				{
 					Object.entries(modules).map(([type, tTitle]) => {

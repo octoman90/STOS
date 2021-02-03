@@ -17,16 +17,17 @@ const Container = styled.div`
 	padding: 0.5em;
 	margin: 0.5em;
 	width: 20em;
-	cursor: pointer;
 `
 
 const ListHeader = styled.div`
 	padding: 1em 0.5em 1.5em 0.5em;
 	font-weight: bold;
+	cursor: default;
 
 	${props => props.createListButton && css`
 		color: #777;
 		text-align: center;
+		cursor: pointer;
 	`}
 `
 
@@ -68,14 +69,14 @@ export default function List({ listID, dashboardID, currentUserCanEdit }) {
 
 	if (list) {
 		return (
-			<Container className="list">
-				<ListHeader className="list-header">
+			<Container>
+				<ListHeader>
 					{ list.title }
 					{ currentUserCanEdit &&
-						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom" }}/>
+						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
 					}
 					{ currentUserCanEdit &&
-						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom" }}/>
+						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
 					}
 				</ListHeader>
 				<Droppable droppableId={ listID }>
@@ -98,8 +99,8 @@ export default function List({ listID, dashboardID, currentUserCanEdit }) {
 		)
 	} else {
 		return (
-			<Container className="list create-list-button" onClick={ createListClickHandler }>
-				<ListHeader createListButton className="list-header">
+			<Container onClick={ createListClickHandler }>
+				<ListHeader createListButton>
 					<PlusIcon />
 				</ListHeader>
 			</Container>

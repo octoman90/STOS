@@ -38,7 +38,7 @@ export default function Header() {
 	return (
 		<Container>
 			<Logo onClick={ logoClickHandler }>STOS</Logo>
-			<ExitIcon onClick={ exitClickHandler } />
+			<ExitIcon onClick={ exitClickHandler } style={{ cursor: 'pointer' }} />
 		</Container>
 	)
 }

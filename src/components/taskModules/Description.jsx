@@ -17,6 +17,7 @@ const Container = styled.div`
 	margin: 0.5em 0;
 	display: flex;
 	justify-content: space-between;
+	cursor: default;
 `
 
 export default function Description({ meta, task, full, currentUserCanEdit }) {
@@ -56,8 +57,8 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 				}
 				{ currentUserCanEdit &&
 					<div>
-						<EditIcon onClick={ editClickHandler } />
-						<DeleteIcon onClick={ deleteClickHandler } />
+						<EditIcon onClick={ editClickHandler } style={{ cursor: 'pointer' }} />
+						<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					</div>
 				}
 			</Container>

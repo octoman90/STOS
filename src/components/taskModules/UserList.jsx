@@ -1,5 +1,7 @@
 import React 		from 'react'
-import styled 		from 'styled-components'
+import styled, {
+	css
+} 					from 'styled-components'
 import DeleteIcon 	from '@material-ui/icons/Delete'
 import {
 	useDispatch
@@ -25,6 +27,10 @@ const U = styled.div`
 	width: 7em;
 	display: inline;
 	border: 1px solid #777;
+
+	${props => props.full && css`
+		cursor: not-allowed;
+	`}
 `
 
 export default function UserList({ meta, task, full, currentUserCanEdit }) {
@@ -69,15 +75,15 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 	return (
 		<Container>
 			<div>
-				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) }>{ user[1] }</U>)}
+				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) } full={ full }>{ user[1] }</U>)}
 				{ full && currentUserCanEdit &&
-					<U style={{ width: '2em' }} onClick={ plusClickHandler }>+</U>
+					<U style={{ width: '2em' }} onClick={ plusClickHandler } style={{ cursor: 'pointer' }}>+</U>
 				}
 			</div>
 			{ full && currentUserCanEdit &&
 				(
 					<div>
-						<DeleteIcon onClick={ deleteClickHandler } />
+						<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					</div>
 				)
 			}

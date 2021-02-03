@@ -51,7 +51,7 @@ export default function Task({ taskID, index, listID }) {
 		return (
 			<Draggable draggableId={ taskID } index={ index }>
 				{ provided => (
-					<Container className="task" { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
+					<Container { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
 						{ task.modules && 
 							task.modules.map((moduleJSON, index) => {
@@ -74,7 +74,7 @@ export default function Task({ taskID, index, listID }) {
 		)
 	} else {
 		return (
-			<Container createTaskButton className="task create-task-button" onClick={ createTaskClickHandler }>
+			<Container createTaskButton onClick={ createTaskClickHandler }>
 				<PlusIcon />
 			</Container>
 		)

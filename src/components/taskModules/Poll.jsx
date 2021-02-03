@@ -28,6 +28,7 @@ const BarContainer = styled.div`
 
 const PB = styled.div`
 	display: flex;
+	cursor: pointer;
 `
 
 function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onRenameClick, onDeleteClick, currentUserCanEdit}) {
@@ -132,9 +133,9 @@ export default function Poll({ meta, task, full, currentUserCanEdit }) {
 	if (full) {
 		return (
 			<Container>
-				<b>{ meta.content.title }</b>
+				<b style={{ cursor: 'default' }} >{ meta.content.title }</b>
 				{ currentUserCanEdit
-					? <EditIcon onClick={ renameClickHandler } />
+					? <EditIcon onClick={ renameClickHandler } style={{ cursor: 'pointer' }} />
 					: <div></div>
 				}
 				<BarContainer>
@@ -144,11 +145,11 @@ export default function Poll({ meta, task, full, currentUserCanEdit }) {
 						})
 					}
 					{ currentUserCanEdit &&
-						<PlusIcon onClick={ addOptionClickHandler } />
+						<PlusIcon onClick={ addOptionClickHandler } style={{ cursor: 'pointer' }} />
 					}
 				</BarContainer>
 				{ currentUserCanEdit
-					? <DeleteIcon onClick={ deleteClickHandler } />
+					? <DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					: <div></div>
 				}
 			</Container>

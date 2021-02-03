@@ -2,6 +2,8 @@ import React, { useState } 			from 'react'
 import styled 						from 'styled-components'
 import { dispatch as busDispatch } 	from 'use-bus'
 
+import ModalHeader from './ModalHeader'
+
 const Container = styled.div`
 	top: 0;
 	bottom: 0;
@@ -50,7 +52,7 @@ export default function TaskModal({ field, dashboardID, listID, taskID, moduleID
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
-				<b>{ caption }</b><br />
+				<ModalHeader>{ caption }</ModalHeader><br />
 				{
 					(() => {
 						// eslint-disable-next-line
