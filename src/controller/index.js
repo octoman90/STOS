@@ -287,8 +287,31 @@ export default {
 			.catch(console.error)
 	},
 
-	deleteTask: (task, dispatch) => {
-		taskAPI.deleteOne(task, dispatch)
+	deleteTask: (state, task, dispatch) => {
+		function getMaxIndex(listID) {
+			let sorted = Object.values(state).filter(task => task.list === listID).sort((a, b) => b.index - a.index)
+			return sorted.length ? sorted[0].index : -1
+		}
+
+		let maxIndex = getMaxIndex(task.list)
+		if (maxIndex > task.index) {
+			let patch = []
+
+			for (let i = task.index + 1; i <= maxIndex; ++i) {
+				patch.push({
+					...Object.values(state).find(t => t.list === task.list && t.index === i),
+					index: i - 1
+				})
+			}
+
+			taskAPI.updateMany(patch)
+				.then(tasks => dispatch({ type: 'setTasks', tasks }))
+				.catch(console.error)
+		}
+
+		taskAPI.deleteOne(task)
+			.then(() => dispatch({ type: 'deleteTask', taskID: task.id }))
+			.catch(console.error)
 	},
 
 	checkSession: (dispatch) => {

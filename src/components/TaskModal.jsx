@@ -65,7 +65,8 @@ const NewModule = styled.div`
 `
 
 export default function TaskModal({ taskID, currentUserCanEdit }) {
-	const task = useSelector(state => state.tasks[taskID])
+	const tasks = useSelector(state => state.tasks)
+	const task = tasks[taskID]
 	const dispatch = useDispatch()
 
 	function backLayerClickHandler() {
@@ -94,7 +95,7 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 
 	function deleteClickHandler() {
 		busDispatch({ type: 'showTaskModal', taskID: null })
-		controller.deleteTask(task, dispatch)
+		controller.deleteTask(tasks, task, dispatch)
 	}
 
 	function newModuleClickHandler() {

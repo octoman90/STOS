@@ -1,7 +1,7 @@
 export default {
 	createOne: task => {
 		let options = {
-			method: "POST",
+			method: 'POST',
 			body: JSON.stringify(task)
 		}
 
@@ -94,13 +94,13 @@ export default {
 			})
 	},
 
-	deleteOne: (task, dispatch) => {
+	deleteOne: task => {
 		let options = {
-			method: "delete",
+			method: 'DELETE',
 			body: JSON.stringify(task)
 		}
 
-		fetch('/api/task', options)
+		return fetch('/api/task', options)
 			.then(response => {
 				if (response.ok && response.status === 200) {
 					return response.json()
@@ -109,13 +109,11 @@ export default {
 				}
 			})
 			.then(data => {
-				dispatch({
-					type: 'deleteTask',
-					taskID: task.id
-				})
-			})
-			.catch(err => {
-				console.log('error', err.message)
+				if (!('ok' in data) || data.ok) {
+					return data
+				} else {
+					throw new Error(data.message)
+				}
 			})
 	}
 }
