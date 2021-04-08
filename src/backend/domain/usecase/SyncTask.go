@@ -3,8 +3,8 @@ package usecase
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"../entity"
 	"../../infrastructure/repository"
+	"../entity"
 )
 
 func CreateOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Task, string) {
@@ -17,9 +17,7 @@ func CreateOneTask(userID primitive.ObjectID, task entity.Task) (bool, entity.Ta
 }
 
 func ReadManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool, []entity.Task, string) {
-	tasks, err := repository.ReadManyTasks(entity.Task{
-		List: listID,
-	})
+	tasks, err := repository.ReadManyTasks(entity.Task{List: listID})
 
 	if err == nil {
 		return true, tasks, ""
@@ -29,10 +27,8 @@ func ReadManyTasks(userID primitive.ObjectID, listID primitive.ObjectID) (bool, 
 }
 
 func UpdateManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []entity.Task, string) {
-	for i := 0; i < len(tasks); i++ {
-		if err := repository.UpdateOneTask(entity.Task{
-			ID: tasks[i].ID,
-		}, tasks[i]); err != nil {
+	for _, task := range tasks {
+		if err := repository.UpdateOneTask(entity.Task{ID: task.ID}, task); err != nil {
 			return false, tasks, err.Error()
 		}
 	}
@@ -41,10 +37,9 @@ func UpdateManyTasks(userID primitive.ObjectID, tasks []entity.Task) (bool, []en
 }
 
 func DeleteOneTask(userID primitive.ObjectID, task entity.Task) (bool, string) {
-	if err := repository.DeleteOneTask(entity.Task{ ID: task.ID }); err == nil {
+	if err := repository.DeleteOneTask(entity.Task{ID: task.ID}); err == nil {
 		return true, ""
 	} else {
 		return false, err.Error()
 	}
 }
-
