@@ -190,7 +190,7 @@ export default function Dashboard() {
 		<div className="layout">
 			<Header />
 			<InfoBar>
-				<DTitle>{ dashboard ? dashboard.title : "" }</DTitle>
+				<DTitle>{ dashboard?.title }</DTitle>
 				{ currentUserCanEdit &&
 					<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }}/>
 				}
