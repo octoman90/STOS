@@ -41,7 +41,7 @@ export default function Task({ taskID, index, listID }) {
 	}
 
 	function createTaskClickHandler() {
-		let listTasks = Object.values(tasks).filter(task => task.list == listID)
+		let listTasks = Object.values(tasks).filter(task => task.list === listID)
 		let index = listTasks.length ? listTasks.sort((a, b) => b.index - a.index)[0].index + 1 : 0
 
 		controller.createTask(listID, index, dispatch)
@@ -53,15 +53,15 @@ export default function Task({ taskID, index, listID }) {
 				{ provided => (
 					<Container { ...provided.draggableProps } { ...provided.dragHandleProps } ref={ provided.innerRef } onClick={ taskClickHandler }>
 						{ task.title }
-						{ task.modules && 
+						{ task.modules &&
 							task.modules.map((moduleJSON, index) => {
 								let module = JSON.parse(moduleJSON)
 
 								return React.createElement(
-									modules[module.type], 
+									modules[module.type],
 									{
 										key: module.id,
-										meta: module, 
+										meta: module,
 										full: false,
 										task
 									}

@@ -56,7 +56,7 @@ export default function List({ listID, dashboardID, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		(params) => {
-			if (params.field == 'listName' && params.listID == listID) {
+			if (params.field === 'listName' && params.listID === listID) {
 				controller.renameList(list, params.value, dispatch)
 			}
 		},
@@ -84,7 +84,7 @@ export default function List({ listID, dashboardID, currentUserCanEdit }) {
 						<div ref={ provided.innerRef } { ...provided.droppableProps }>
 							{
 								Object.values(tasks).sort((a, b) => a.index - b.index).map(task => {
-									return listID == task.list ? <Task key={ task.id } taskID={ task.id } index={ task.index } /> : null
+									return listID === task.list ? <Task key={ task.id } taskID={ task.id } index={ task.index } /> : null
 								})
 							}
 							{ provided.placeholder }

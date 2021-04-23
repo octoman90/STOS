@@ -7,11 +7,11 @@ export default function userReducer(state = {}, action) {
 			newState.name = action.username
 			newState.id = action.id
 
-			break
+			return newState
 		} case 'clearAllStates': {
 			return {}
+		} default: {
+			return newState
 		}
 	}
-
-	return newState
 }

@@ -85,8 +85,7 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		(params) => {
-			// eslint-disable-next-line
-			if (params.field == 'taskName' && params.taskID == taskID) {
+			if (params.field === 'taskName' && params.taskID === taskID) {
 				controller.renameTask(task, params.value, dispatch)
 			}
 		},
@@ -115,15 +114,15 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					}
 				</div>
-				{ task.modules && 
+				{ task.modules &&
 					task.modules.map((moduleJSON, index) => {
 						let module = JSON.parse(moduleJSON)
 
 						return React.createElement(
-							modules[module.type], 
+							modules[module.type],
 							{
 								key: module.id,
-								meta: module, 
+								meta: module,
 								full: true,
 								currentUserCanEdit,
 								task

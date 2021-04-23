@@ -36,8 +36,7 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		({ field, moduleID, value }) => {
-			// eslint-disable-next-line
-			if (full && field == 'moduleDescription' && moduleID == meta.id) {
+			if (full && field === 'moduleDescription' && moduleID === meta.id) {
 				controller.editTaskModule(task, meta.id, { action: 'replace', value }, dispatch)
 			}
 		},

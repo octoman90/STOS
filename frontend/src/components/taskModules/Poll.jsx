@@ -95,8 +95,7 @@ export default function Poll({ meta, task, full, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		({ field, moduleID, innerIndex, value }) => {
-			// eslint-disable-next-line
-			if (full && field == 'modulePollOption' && moduleID == meta.id) {
+			if (full && field === 'modulePollOption' && moduleID === meta.id) {
 				let newContent = JSON.parse(JSON.stringify(meta.content))
 				newContent.votes[innerIndex][0] = value
 
@@ -119,8 +118,7 @@ export default function Poll({ meta, task, full, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		({ field, moduleID, value }) => {
-			// eslint-disable-next-line
-			if (full && field == 'modulePollTitle' && moduleID == meta.id) {
+			if (full && field === 'modulePollTitle' && moduleID === meta.id) {
 				let newContent = JSON.parse(JSON.stringify(meta.content))
 				newContent.title = value
 

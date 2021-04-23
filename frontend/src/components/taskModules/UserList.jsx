@@ -49,8 +49,7 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		({ field, moduleID, value }) => {
-			// eslint-disable-next-line
-			if (full && field == 'moduleUserList' && moduleID == meta.id) {
+			if (full && field === 'moduleUserList' && moduleID === meta.id) {
 				controller.editTaskModule(task, meta.id, { action: 'push', value }, dispatch)
 			}
 		},
@@ -77,7 +76,7 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 			<div>
 				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) } full={ full }>{ user[1] }</U>)}
 				{ full && currentUserCanEdit &&
-					<U style={{ width: '2em' }} onClick={ plusClickHandler } style={{ cursor: 'pointer' }}>+</U>
+					<U style={{ width: '2em', cursor: 'pointer' }} onClick={ plusClickHandler }>+</U>
 				}
 			</div>
 			{ full && currentUserCanEdit &&

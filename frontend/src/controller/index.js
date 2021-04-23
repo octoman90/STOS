@@ -133,8 +133,7 @@ export default {
 			return Object.values(state).find(task => task.list === listID && task.index === index).id
 		}
 
-		// eslint-disable-next-line
-		if (source.listID == destination.listID) {
+		if (source.listID === destination.listID) {
 			if (source.index < destination.index) {
 				for (let i = source.index + 1; i <= destination.index; ++i) {
 					patch.push({
@@ -441,8 +440,7 @@ export default {
 			content: null
 		}
 
-		// eslint-disable-next-line
-		if (mType == 'poll') {
+		if (mType === 'poll') {
 			m.content = {
 				title: 'Shall we move this feature to the next sprint?',
 				voted: [],
@@ -487,8 +485,7 @@ export default {
 		let index = task.modules.findIndex((json) => json.includes(id))
 		let module = JSON.parse(task.modules[index])
 
-		// eslint-disable-next-line
-		if (newContent.action == 'replace') {
+		if (newContent.action === 'replace') {
 			module.content = newContent.value
 
 			task.modules[index] = JSON.stringify(module)
@@ -501,9 +498,8 @@ export default {
 			taskAPI.updateOne(task)
 				.then(task => dispatch({ type: 'setTask', task }))
 				.catch(console.error)
-		// eslint-disable-next-line
-		} else if (newContent.action == 'push') {
-			if (module.type == 'userList') {} {
+		} else if (newContent.action === 'push') {
+			if (module.type === 'userList') {
 				if (!module.content) {
 					module.content = []
 				}

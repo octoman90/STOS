@@ -11,11 +11,6 @@ const Header = styled.div`
 	font-size: 3em;
 `
 
-const Link = styled.a`
-	color: #fff;
-	text-decoration: underline;
-`
-
 export default function LandingInfo() {
 	return (
 		<Info>

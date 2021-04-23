@@ -61,8 +61,7 @@ function DashboardUserList({ dashboard, currentUserCanEdit }) {
 	useBus(
 		'submitTextEditModal',
 		({ field, value }) => {
-			// eslint-disable-next-line
-			if (field == 'dashboardUsers') {
+			if (field === 'dashboardUsers') {
 				controller.addUserToDashboard(dashboard, value, dispatch)
 			}
 		},
@@ -143,8 +142,7 @@ export default function Dashboard() {
 	useBus(
 		'submitTextEditModal',
 		({ field, dashboardID, value }) => {
-			// eslint-disable-next-line
-			if (field == 'dashboardName' && dashboardID == dashboard.id) {
+			if (field === 'dashboardName' && dashboardID === dashboard.id) {
 				controller.renameDashboard(dashboard, value, dispatch)
 			}
 		},
@@ -160,8 +158,8 @@ export default function Dashboard() {
 
 		if (destination && (destination.index !== source.index || destination.droppableId !== source.droppableId)) {
 			controller.moveTask(
-				tasks, 
-				result.draggableId, 
+				tasks,
+				result.draggableId,
 				{ listID: source.droppableId, index: source.index },
 				{ listID: destination.droppableId, index: destination.index },
 				dispatch
@@ -199,7 +197,7 @@ export default function Dashboard() {
 				{ currentUserCanEdit &&
 					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }}/>
 				}
-				{ currentUserCanEdit && 
+				{ currentUserCanEdit &&
 					<CollaborativeIcon dashboard={ dashboard } />
 				}
 				{ dashboard &&
@@ -209,7 +207,7 @@ export default function Dashboard() {
 			<div id="dashboard-root">
 				<div className="background-layer"></div>
 				<DragDropContext onDragEnd={ dragEndHandler }>
-					{ 
+					{
 						Object.values(lists).sort((a, b) => a.index - b.index).map(list => {
 							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } currentUserCanEdit={ currentUserCanEdit } /> : null
 						})
