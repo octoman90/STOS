@@ -1,48 +1,47 @@
-## Available Scripts
+## STOS Team Organisation System
 
-In the project directory, you can run:
+STOS is a web-based, Kanban-style, list-making application with support of selected Scrum features.
 
-### `yarn start:front`
-
-Runs fronted on React development server.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn start:back`
-
-Builds and runs API backend.<br />
-It can be accessed from [http://localhost:8000](http://localhost:8000).
-
-### `yarn build:front`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-### `yarn build:back`
-
-Compiles the server binary and puts into the `build` folder.
-
-### `yarn build`
-
-Runs both `yarn build:front` and `yarn build:back`.
-
-### Example nginx configuration:
+## Installation
+1. Install MongoDB, and make it available on port `27017`.
+2. Execute this line in the `backend` directory:
+```bash
+go build
+```
+3. Execute these lines in the `frontend` directory:
+```bash
+yarn install
+yarn build
+```
+4. Install Nginx or Apache or something similar, then point it to serve files from the `frontend/build` directory and pass `/api` requests to port `8000`. Here's an example snippet for Nginx:
 ```
 server {
 	listen 80;
-	server_name stos;
+	server_name local;
 
 	root /path/to/www;
 
 	location /api/ {
 		proxy_pass http://127.0.0.1:8000/;
 	}
-		
+
 	location / {
 		index index.html;
 		try_files $uri /index.html;
 	}
 }
 ```
+
+## Running
+1. Run MongoDB and Nginx.
+2. Run this line from the `backend` directory:
+```bash
+./backend
+```
+3. Visit http://localhost:80 and voilà.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[GNU General Public License v3.0](LICENSE)
