@@ -2,6 +2,7 @@ import React, { useEffect } 			from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useDispatch } 					from 'react-redux'
 
+import './App.scss'
 import Landing 		from './views/Landing.jsx'
 import Home 		from './views/Home.jsx'
 import Dashboard 	from './views/Dashboard.jsx'
@@ -9,7 +10,7 @@ import controller	from './controller'
 
 function App() {
 	const dispatch = useDispatch()
-	
+
 	useEffect(() => {
 		controller.checkSession(dispatch)
 	}, [dispatch])

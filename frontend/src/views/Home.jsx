@@ -10,8 +10,6 @@ import controller		from '../controller'
 
 const HomeRoot = styled.div`
 	height: 100%;
-	background: rgb(93, 162, 199);
-	background: linear-gradient(180deg, rgb(93, 162, 199) 0%, rgb(180, 218, 240) 100%);
 
 	display: flex;
 	gap: 1em;

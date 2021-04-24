@@ -3,6 +3,14 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background: rgb(93, 162, 199);
+	background: linear-gradient(180deg, rgb(93, 162, 199) 0%, rgb(180, 218, 240) 100%);
+}
+
+#root {
+	background-image: url(./assets/woods.png);
+	background-position: bottom;
+	background-repeat: repeat-x;
 }
 
 code {
@@ -27,9 +35,6 @@ code {
 		bottom: 0;
 		left: 0;
 		z-index: -1;
-		
-		background: rgb(93, 162, 199);
-		background: linear-gradient(180deg, rgb(93, 162, 199) 0%, rgb(180, 218, 240) 100%);
 	}
 }
 
