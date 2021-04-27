@@ -1,28 +1,28 @@
-import React				from 'react'
-import styled 				from 'styled-components'
+import React                from 'react'
+import styled               from 'styled-components'
 import {
 	useSelector,
 	useDispatch
-} 							from 'react-redux'
-import DeleteIcon 			from '@material-ui/icons/Delete'
-import EditIcon 			from '@material-ui/icons/Edit'
-import PlusIcon 			from '@material-ui/icons/Add'
+}                           from 'react-redux'
+import DeleteIcon           from '@material-ui/icons/Delete'
+import EditIcon             from '@material-ui/icons/Edit'
+import PlusIcon             from '@material-ui/icons/Add'
 import useBus, {
 	dispatch as busDispatch
-} 							from 'use-bus'
+}                           from 'use-bus'
 
-import Description 	from './taskModules/Description.jsx'
-import Poll			from './taskModules/Poll'
-import Timer 		from './taskModules/Timer.jsx'
-import UserList 	from './taskModules/UserList.jsx'
-import ModalHeader 	from './ModalHeader'
-import controller 	from '../controller'
+import Description from './taskModules/Description.jsx'
+import Poll        from './taskModules/Poll'
+import Timer       from './taskModules/Timer.jsx'
+import UserList    from './taskModules/UserList.jsx'
+import ModalHeader from './ModalHeader'
+import controller  from '../controller'
 
 const modules = {
-	description: 	Description,
-	poll: 			Poll,
-	timer: 			Timer,
-	userList: 		UserList
+	description: Description,
+	poll:        Poll,
+	timer:       Timer,
+	userList:    UserList
 }
 
 const Container = styled.div`
@@ -64,7 +64,7 @@ const NewModule = styled.div`
 	color: #777
 `
 
-export default function TaskModal({ taskID, currentUserCanEdit }) {
+export default function TaskModal({ taskID, editable }) {
 	const tasks = useSelector(state => state.tasks)
 	const task = tasks[taskID]
 	const dispatch = useDispatch()
@@ -82,16 +82,6 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 		})
 	}
 
-	useBus(
-		'submitTextEditModal',
-		(params) => {
-			if (params.field === 'taskName' && params.taskID === taskID) {
-				controller.renameTask(task, params.value, dispatch)
-			}
-		},
-		[task, taskID, dispatch],
-	)
-
 	function deleteClickHandler() {
 		busDispatch({ type: 'showTaskModal', taskID: null })
 		controller.deleteTask(tasks, task, dispatch)
@@ -101,22 +91,32 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 		busDispatch({ type: 'showAddModuleModal', taskID })
 	}
 
+	useBus(
+		'submitTextEditModal',
+		(params) => {
+			if (params.field !== 'taskName' || params.taskID !== taskID) return
+
+			controller.renameTask(task, params.value, dispatch)
+		},
+		[task, taskID, dispatch]
+	)
+
 	return (
 		<Container>
 			<BackLayer onClick={ backLayerClickHandler } />
 			<Modal>
 				<div style={{ display: 'flex', margin: '0.5em' }}>
 					<ModalHeader>{ task.title }</ModalHeader>
-					{ currentUserCanEdit &&
-						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ cursor: 'pointer' }} />
-					}
-					{ currentUserCanEdit &&
-						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
+					{ editable &&
+						<>
+							<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ cursor: 'pointer' }} />
+							<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
+						</>
 					}
 				</div>
 				{ task.modules &&
-					task.modules.map((moduleJSON, index) => {
-						let module = JSON.parse(moduleJSON)
+					task.modules.map((moduleJSON) => {
+						const module = JSON.parse(moduleJSON)
 
 						return React.createElement(
 							modules[module.type],
@@ -124,14 +124,14 @@ export default function TaskModal({ taskID, currentUserCanEdit }) {
 								key: module.id,
 								meta: module,
 								full: true,
-								currentUserCanEdit,
+								currentUserCanEdit: editable,
 								task
 							}
 						)
 					})
 				}
 
-				{ currentUserCanEdit &&
+				{ editable &&
 					<NewModule onClick={ newModuleClickHandler } >
 						<PlusIcon style={{ zoom: 2, cursor: 'pointer' }} />
 					</NewModule>

@@ -81,7 +81,7 @@ function RealList({ listID, editable }) {
 							Object.values(tasks)
 								.sort((a, b) => a.index - b.index)
 								.map((task) => {
-									if (list.id !== task.list) return
+									if (list.id !== task.list) return null
 
 									return <Task key={ task.id } taskID={ task.id } index={ task.index } />
 								})

@@ -220,7 +220,7 @@ export default function Dashboard() {
 			</div>
 
 			{ taskModalTaskID &&
-				<TaskModal currentUserCanEdit={ currentUserCanEdit } taskID={ taskModalTaskID } />
+				<TaskModal editable={ currentUserCanEdit } taskID={ taskModalTaskID } />
 			}
 
 			{ Object.keys(textEditModal).length > 0 &&
