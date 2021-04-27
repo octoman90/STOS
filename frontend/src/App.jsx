@@ -1,14 +1,20 @@
-import React, { useEffect } 			from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useDispatch } 					from 'react-redux'
+import React,
+	{ useEffect }      from 'react'
+import {
+	BrowserRouter,
+	Routes,
+	Route
+}                      from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
+import Landing    from './views/Landing.jsx'
+import Home       from './views/Home.jsx'
+import Dashboard  from './views/Dashboard.jsx'
+import controller from './controller'
 
 import './App.scss'
-import Landing 		from './views/Landing.jsx'
-import Home 		from './views/Home.jsx'
-import Dashboard 	from './views/Dashboard.jsx'
-import controller	from './controller'
 
-function App() {
+export default function App() {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -16,16 +22,12 @@ function App() {
 	}, [dispatch])
 
 	return (
-		<div className="App">
-			<BrowserRouter>
-				<Routes>
-					<Route exact path="/"><Landing /></Route>
-					<Route exact path="/home"><Home /></Route>
-					<Route exact path="/dashboard:dashboardId"><Dashboard /></Route>
-				</Routes>
-			</BrowserRouter>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route exact path="/"><Landing /></Route>
+				<Route exact path="/home"><Home /></Route>
+				<Route exact path="/dashboard:dashboardId"><Dashboard /></Route>
+			</Routes>
+		</BrowserRouter>
 	)
 }
-
-export default App
