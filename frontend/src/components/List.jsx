@@ -31,79 +31,89 @@ const ListHeader = styled.div`
 	`}
 `
 
-export default function List({ listID, dashboardID, currentUserCanEdit }) {
+function RealList({ listID, editable }) {
 	const list = useSelector(state => state.lists[listID])
 	const tasks = useSelector(state => state.tasks)
 	const dispatch = useDispatch()
-
-	function createListClickHandler() {
-		controller.createList(dashboardID, dispatch)
-	}
-
-	useEffect(() => {
-		controller.downsyncTasks(listID, dispatch)
-	}, [listID, dispatch])
 
 	function titleEditClickHandler() {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'listName',
-			listID,
+			listID: list.id,
 			caption: 'Enter the list title:'
 		})
 	}
-
-	useBus(
-		'submitTextEditModal',
-		(params) => {
-			if (params.field === 'listName' && params.listID === listID) {
-				controller.renameList(list, params.value, dispatch)
-			}
-		},
-		[list, listID, dispatch],
-	)
 
 	function deleteClickHandler() {
 		controller.deleteList(list, dispatch)
 	}
 
-	if (list) {
-		return (
-			<Container>
-				<ListHeader>
-					{ list.title }
-					{ currentUserCanEdit &&
-						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
-					}
-					{ currentUserCanEdit &&
-						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
-					}
-				</ListHeader>
-				<Droppable droppableId={ listID }>
-					{ provided => (
-						<div ref={ provided.innerRef } { ...provided.droppableProps }>
-							{
-								Object.values(tasks).sort((a, b) => a.index - b.index).map(task => {
-									return listID === task.list ? <Task key={ task.id } taskID={ task.id } index={ task.index } /> : null
-								})
-							}
-							{ provided.placeholder }
-						</div>
-					)}
-				</Droppable>
+	useBus(
+		'submitTextEditModal',
+		(params) => {
+			if (params.field !== 'listName' || params.listID !== list.id) return
 
-				{ currentUserCanEdit &&
-					<Task listID={ listID } />
+			controller.renameList(list, params.value, dispatch)
+		},
+		[list, dispatch]
+	)
+
+	useEffect(() => {
+		controller.downsyncTasks(listID, dispatch)
+	}, [listID, dispatch])
+
+	return (
+		<Container>
+			<ListHeader>
+				{ list.title }
+				{ editable &&
+					<>
+						<EditIcon className="hover-visible" onClick={ titleEditClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
+						<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } style={{ verticalAlign: "bottom", cursor: 'pointer' }} />
+					</>
 				}
-			</Container>
-		)
+			</ListHeader>
+			<Droppable droppableId={ list.id }>
+				{ (provided) =>
+					<div ref={ provided.innerRef } { ...provided.droppableProps }>
+						{
+							Object.values(tasks)
+								.sort((a, b) => a.index - b.index)
+								.map((task) => {
+									if (list.id !== task.list) return
+
+									return <Task key={ task.id } taskID={ task.id } index={ task.index } />
+								})
+						}
+						{ provided.placeholder }
+					</div>
+				}
+			</Droppable>
+
+			{ editable &&
+				<Task listID={ list.id } />
+			}
+		</Container>
+	)
+}
+
+function ListPlaceholder({ dashboardID }) {
+	const dispatch = useDispatch()
+
+	return (
+		<Container onClick={ () => controller.createList(dashboardID, dispatch) }>
+			<ListHeader createListButton>
+				<PlusIcon />
+			</ListHeader>
+		</Container>
+	)
+}
+
+export default function List({ listID, dashboardID, editable }) {
+	if (listID) {
+		return <RealList listID={ listID } editable={ editable } />
 	} else {
-		return (
-			<Container onClick={ createListClickHandler }>
-				<ListHeader createListButton>
-					<PlusIcon />
-				</ListHeader>
-			</Container>
-		)
+		return <ListPlaceholder dashboardID={ dashboardID } />
 	}
 }

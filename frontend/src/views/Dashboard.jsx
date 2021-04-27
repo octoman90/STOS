@@ -209,7 +209,7 @@ export default function Dashboard() {
 				<DragDropContext onDragEnd={ dragEndHandler }>
 					{
 						Object.values(lists).sort((a, b) => a.index - b.index).map(list => {
-							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } currentUserCanEdit={ currentUserCanEdit } /> : null
+							return list.dashboard === dashboardId ? <List key={ list.id } listID={ list.id } dashboardID={ dashboardId } editable={ currentUserCanEdit } /> : null
 						})
 					}
 				</DragDropContext>
