@@ -124,7 +124,7 @@ export default function TaskModal({ taskID, editable }) {
 								key: module.id,
 								meta: module,
 								full: true,
-								currentUserCanEdit: editable,
+								editable,
 								task
 							}
 						)

@@ -1,19 +1,17 @@
 import React, {
 	useReducer,
 	useEffect
-} 					from 'react'
-import styled 		from 'styled-components'
-import DeleteIcon 	from '@material-ui/icons/Delete'
-import EditIcon 	from '@material-ui/icons/Edit'
-import useBus 		from 'use-bus'
-import {
-	useDispatch
-} 					from 'react-redux'
+}                           from 'react'
+import styled               from 'styled-components'
+import DeleteIcon           from '@material-ui/icons/Delete'
+import EditIcon             from '@material-ui/icons/Edit'
+import useBus               from 'use-bus'
+import { useDispatch }      from 'react-redux'
 import {
 	dispatch as busDispatch
-} 					from 'use-bus'
+}                           from 'use-bus'
 
-import controller 	from '../../controller'
+import controller from '../../controller'
 
 const Container = styled.div`
 	padding: 0.5em;
@@ -25,7 +23,21 @@ const Container = styled.div`
 	cursor: default;
 `
 
-export default function Description({ meta, task, full, currentUserCanEdit }) {
+function calculateRemainingTime(to) {
+	let s = +new Date()
+	let f = Date.parse(to)
+	let diff = f - s
+
+	if (diff < 0) return '0'
+
+	let days = Math.floor(diff / 8.64e7)
+	let hours = Math.floor((diff - days * 8.64e7) / 3.6e6)
+	let minutes = Math.floor((diff - days * 8.64e7 - hours * 3.6e6) / 6e4)
+
+	return `${days}D ${hours}H ${minutes}M`
+}
+
+export default function Description({ meta, task, full, editable }) {
 	const dispatch = useDispatch()
 	const [, forceUpdate] = useReducer(x => x + 1, 0)
 
@@ -41,14 +53,16 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 
 	useBus(
 		'submitTextEditModal',
-		({ field, moduleID, value }) => {
-			if (full && field === 'moduleTimer' && moduleID === meta.id) {
-				controller.editTaskModule(task, meta.id, { action: 'replace', value }, dispatch)
-			}
+		(params) => {
+			if (!full) return
+			if (params.field !== 'moduleTimer' || params.moduleID !== meta.id) return
+
+			controller.editTaskModule(task, meta.id, { action: 'replace', value: params.value }, dispatch)
 		},
-		[task, meta, dispatch],
+		[task, meta, dispatch]
 	)
 
+	/* Automatically update time */
 	useEffect(() => {
 		let interval = setInterval(forceUpdate, 5e4)
 
@@ -59,34 +73,17 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 		controller.deleteTaskModule(task, meta.id, dispatch)
 	}
 
-	function calculateRemainingTime(to) {
-		let s = +new Date()
-		let f = Date.parse(to)
-		let diff = f - s
-		if (diff >= 0) {
-			let days = Math.floor(diff / 8.64e7)
-			let hours = Math.floor((diff - days * 8.64e7) / 3.6e6)
-			let minutes = Math.floor((diff - days * 8.64e7 - hours * 3.6e6) / 6e4)
-
-			return `${days}D ${hours}H ${minutes}M`
-		} else {
-			return `0`
-		}
-	}
-
 	return (
 		<Container>
 			{ meta.content
 				? calculateRemainingTime(meta.content)
 				: "Press the pencil icon on the right to set the deadline."
 			}
-			{ full && currentUserCanEdit &&
-				(
-					<div>
-						<EditIcon onClick={ editClickHandler } style={{ cursor: 'pointer' }} />
-						<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
-					</div>
-				)
+			{ full && editable &&
+				<div>
+					<EditIcon onClick={ editClickHandler } style={{ cursor: 'pointer' }} />
+					<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
+				</div>
 			}
 		</Container>
 	)

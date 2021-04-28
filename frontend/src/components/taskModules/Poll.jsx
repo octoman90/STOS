@@ -1,17 +1,17 @@
-import React 		from 'react'
-import styled 		from 'styled-components'
-import DeleteIcon 	from '@material-ui/icons/Delete'
-import EditIcon 	from '@material-ui/icons/Edit'
-import PlusIcon 	from '@material-ui/icons/Add'
+import React                from 'react'
+import styled               from 'styled-components'
+import DeleteIcon           from '@material-ui/icons/Delete'
+import EditIcon             from '@material-ui/icons/Edit'
+import PlusIcon             from '@material-ui/icons/Add'
 import {
 	useSelector,
 	useDispatch
-} 					from 'react-redux'
+}                           from 'react-redux'
 import useBus, {
 	dispatch as busDispatch
-} 					from 'use-bus'
+}                           from 'use-bus'
 
-import controller 	from '../../controller'
+import controller from '../../controller'
 
 const Container = styled.div`
 	display: block;
@@ -31,76 +31,76 @@ const PB = styled.div`
 	cursor: pointer;
 `
 
-function PollBar({ votes, name, visibleVotes, addButton, index, onVoteClick, onRenameClick, onDeleteClick, currentUserCanEdit}) {
-	return (
-		<PB>
-			<div onClick={ () => !visibleVotes ? onVoteClick(visibleVotes, index) : null }>{ name } { visibleVotes ? votes : null }</div>
-			{ currentUserCanEdit &&
-				<EditIcon className="hover-visible" onClick={ () => onRenameClick(index) } />
-			}
-			{ currentUserCanEdit &&
-				<DeleteIcon className="hover-visible" onClick={ () => onDeleteClick(index) } />
-			}
-		</PB>
-	)
-}
-
-export default function Poll({ meta, task, full, currentUserCanEdit }) {
+function PollBar({ task, poll, votes, name, index, editable}) {
+	const cUserID = useSelector(state => state.user.id)
+	const visibleVotes = poll.content.voted.includes(cUserID)
 	const dispatch = useDispatch()
-	const cUser = useSelector(state => state.user)
 
-	function deleteClickHandler() {
-		controller.deleteTaskModule(task, meta.id, dispatch)
-	}
+	function voteClickHandler() {
+		if (visibleVotes) return
 
-	let visibleVotes = meta.content.voted.includes(cUser.id)
-
-	function voteClickHandler(alreadyVoted, index) {
-		if (alreadyVoted) {
-			return
-		}
-
-		let newContent = JSON.parse(JSON.stringify(meta.content))
-		newContent.voted.push(cUser.id)
+		let newContent = { ...poll.content }
+		newContent.voted.push(cUserID)
 		newContent.votes[index][1]++
 
-		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+		controller.editTaskModule(task, poll.id, { action: 'replace', value: newContent }, dispatch)
 	}
 
-	function addOptionClickHandler() {
-		let newContent = JSON.parse(JSON.stringify(meta.content))
-		newContent.votes.push(['Another option', 0])
-
-		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
-	}
-
-	function deleteOptionClickHandler(index) {
-		let newContent = JSON.parse(JSON.stringify(meta.content))
-		newContent.votes.splice(index, 1)
-
-		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
-	}
-
-	function renameOptionClickHandler(index) {
+	function renameClickHandler() {
 		busDispatch({
 			type: 'showTextEditModal',
 			field: 'modulePollOption',
-			moduleID: meta.id,
+			moduleID: poll.id,
 			innerIndex: index,
 			dt: 'text',
 			caption: 'Enter the new option:'
 		})
 	}
 
+	function deleteClickHandler() {
+		let newContent = { ...poll.content }
+		newContent.votes.splice(index, 1)
+
+		controller.editTaskModule(task, poll.id, { action: 'replace', value: newContent }, dispatch)
+	}
+
+	return (
+		<PB>
+			<div onClick={ voteClickHandler }>{ name } { visibleVotes && votes }</div>
+			{ editable &&
+				<>
+					<EditIcon className="hover-visible" onClick={ renameClickHandler } />
+					<DeleteIcon className="hover-visible" onClick={ deleteClickHandler } />
+				</>
+			}
+		</PB>
+	)
+}
+
+export default function Poll({ meta, task, full, editable }) {
+	const dispatch = useDispatch()
+
+	function deleteClickHandler() {
+		controller.deleteTaskModule(task, meta.id, dispatch)
+	}
+
+	function addOptionClickHandler() {
+		let newContent = { ...meta.content }
+		newContent.votes.push(['Another option', 0])
+
+		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
+	}
+
 	useBus(
 		'submitTextEditModal',
-		({ field, moduleID, innerIndex, value }) => {
-			if (full && field === 'modulePollOption' && moduleID === meta.id) {
-				let newContent = JSON.parse(JSON.stringify(meta.content))
-				newContent.votes[innerIndex][0] = value
+		(params) => {
+			if (!full) return
+			if (params.field !== 'modulePollOption' || params.moduleID !== meta.id) return
 
-				controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
-			}
+			const newContent = { ...meta.content }
+			newContent.votes[params.innerIndex][0] = params.value
+
+			controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 		},
 		[task, meta, dispatch],
 	)
@@ -117,42 +117,43 @@ export default function Poll({ meta, task, full, currentUserCanEdit }) {
 
 	useBus(
 		'submitTextEditModal',
-		({ field, moduleID, value }) => {
-			if (full && field === 'modulePollTitle' && moduleID === meta.id) {
-				let newContent = JSON.parse(JSON.stringify(meta.content))
-				newContent.title = value
+		(params) => {
+			if (!full) return
+			if (params.field !== 'modulePollTitle' || params.moduleID !== meta.id) return
 
-				controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
-			}
+			const newContent = { ...meta.content }
+			newContent.title = params.value
+
+			controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
 		},
-		[task, meta, dispatch],
+		[task, meta, dispatch]
 	)
 
 	if (full) {
 		return (
 			<Container>
 				<b style={{ cursor: 'default' }} >{ meta.content.title }</b>
-				{ currentUserCanEdit
+				{ editable
 					? <EditIcon onClick={ renameClickHandler } style={{ cursor: 'pointer' }} />
 					: <div></div>
 				}
 				<BarContainer>
 					{
 						meta.content.votes.map(([name, votes], index) => {
-							return <PollBar key={ index } index={ index } votes={ votes } currentUserCanEdit={ currentUserCanEdit } visibleVotes={ visibleVotes } name={ name } onVoteClick={ voteClickHandler } onRenameClick={ renameOptionClickHandler } onDeleteClick={ deleteOptionClickHandler } />
+							return <PollBar key={ name } task={ task } poll={ meta } index={ index } votes={ votes } editable={ editable } name={ name } />
 						})
 					}
-					{ currentUserCanEdit &&
+					{ editable &&
 						<PlusIcon onClick={ addOptionClickHandler } style={{ cursor: 'pointer' }} />
 					}
 				</BarContainer>
-				{ currentUserCanEdit
+				{ editable
 					? <DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
 					: <div></div>
 				}
 			</Container>
 		)
 	} else {
-		return (null)
+		return null
 	}
 }

@@ -1,16 +1,12 @@
-import React 		from 'react'
-import styled, {
-	css
-} 					from 'styled-components'
-import DeleteIcon 	from '@material-ui/icons/Delete'
-import {
-	useDispatch
-} 					from 'react-redux'
+import React                from 'react'
+import styled, { css }      from 'styled-components'
+import DeleteIcon           from '@material-ui/icons/Delete'
+import { useDispatch }      from 'react-redux'
 import useBus, {
 	dispatch as busDispatch
-} 					from 'use-bus'
+}                           from 'use-bus'
 
-import controller 	from '../../controller'
+import controller from '../../controller'
 
 const Container = styled.div`
 	margin: 0.5em 0;
@@ -33,7 +29,7 @@ const U = styled.div`
 	`}
 `
 
-export default function UserList({ meta, task, full, currentUserCanEdit }) {
+export default function UserList({ meta, task, full, editable }) {
 	const dispatch = useDispatch()
 
 	function plusClickHandler() {
@@ -48,12 +44,13 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 
 	useBus(
 		'submitTextEditModal',
-		({ field, moduleID, value }) => {
-			if (full && field === 'moduleUserList' && moduleID === meta.id) {
-				controller.editTaskModule(task, meta.id, { action: 'push', value }, dispatch)
-			}
+		(params) => {
+			if (!full) return
+			if (params.field !== 'moduleUserList' || params.moduleID !== meta.id) return
+
+			controller.editTaskModule(task, meta.id, { action: 'push', value: params.value }, dispatch)
 		},
-		[task, meta, dispatch],
+		[task, meta, dispatch]
 	)
 
 	function deleteClickHandler() {
@@ -61,11 +58,10 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 	}
 
 	function userClickHandler(index) {
-		if (!full || !currentUserCanEdit) {
-			return
-		}
+		if (!full) return
+		if (!editable) return
 
-		let newContent = JSON.parse(JSON.stringify(meta.content))
+		let newContent = { ...meta.content }
 		newContent.splice(index, 1)
 
 		controller.editTaskModule(task, meta.id, { action: 'replace', value: newContent }, dispatch)
@@ -74,17 +70,17 @@ export default function UserList({ meta, task, full, currentUserCanEdit }) {
 	return (
 		<Container>
 			<div>
-				{ (meta.content || []).map((user, index) => <U key={ index } onClick={ () => userClickHandler(index) } full={ full }>{ user[1] }</U>)}
-				{ full && currentUserCanEdit &&
+				{ meta.content?.map((user, index) => {
+					return <U key={ index } onClick={ () => userClickHandler(index) } full={ full }>{ user[1] }</U>
+				})}
+				{ full && editable &&
 					<U style={{ width: '2em', cursor: 'pointer' }} onClick={ plusClickHandler }>+</U>
 				}
 			</div>
-			{ full && currentUserCanEdit &&
-				(
-					<div>
-						<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
-					</div>
-				)
+			{ full && editable &&
+				<div>
+					<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
+				</div>
 			}
 		</Container>
 	)

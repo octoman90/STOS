@@ -1,6 +1,6 @@
-import React, { useState } 			from 'react'
-import styled 						from 'styled-components'
-import { dispatch as busDispatch } 	from 'use-bus'
+import React, { useState }         from 'react'
+import styled                      from 'styled-components'
+import { dispatch as busDispatch } from 'use-bus'
 
 import ModalHeader from './ModalHeader'
 
@@ -56,13 +56,12 @@ export default function TaskModal({ field, dashboardID, listID, taskID, moduleID
 				{
 					(() => {
 						switch(dt) {
-							case 'text': {
+							case 'text':
 								return <input type="text" onChange={ event => setValue(event.target.value) }></input>
-							} case 'datetime': {
+							case 'datetime':
 								return <input type="datetime-local" onChange={ event => setValue(event.target.value) }></input>
-							} default: {
+							default:
 								return null
-							}
 						}
 					})()
 				}

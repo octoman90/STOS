@@ -1,15 +1,13 @@
-import React 		from 'react'
-import styled 		from 'styled-components'
-import DeleteIcon 	from '@material-ui/icons/Delete'
-import EditIcon 	from '@material-ui/icons/Edit'
-import {
-	useDispatch
-} 					from 'react-redux'
+import React                from 'react'
+import styled               from 'styled-components'
+import DeleteIcon           from '@material-ui/icons/Delete'
+import EditIcon             from '@material-ui/icons/Edit'
+import { useDispatch }      from 'react-redux'
 import useBus, {
 	dispatch as busDispatch
-} 					from 'use-bus'
+} 					        from 'use-bus'
 
-import controller 	from '../../controller'
+import controller from '../../controller'
 
 const Container = styled.div`
 	padding: 0.5em;
@@ -20,7 +18,7 @@ const Container = styled.div`
 	cursor: default;
 `
 
-export default function Description({ meta, task, full, currentUserCanEdit }) {
+export default function Description({ meta, task, full, editable }) {
 	const dispatch = useDispatch()
 
 	function editClickHandler() {
@@ -35,12 +33,13 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 
 	useBus(
 		'submitTextEditModal',
-		({ field, moduleID, value }) => {
-			if (full && field === 'moduleDescription' && moduleID === meta.id) {
-				controller.editTaskModule(task, meta.id, { action: 'replace', value }, dispatch)
-			}
+		(params) => {
+			if (!full) return
+			if (params.field !== 'moduleDescription' || params.moduleID !== meta.id) return
+
+			controller.editTaskModule(task, meta.id, { action: 'replace', value: params.value }, dispatch)
 		},
-		[task, meta, dispatch],
+		[task, meta, dispatch]
 	)
 
 	function deleteClickHandler() {
@@ -50,11 +49,8 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 	if (full) {
 		return (
 			<Container>
-				{ meta.content
-					? meta.content
-					: "Press the pencil icon on the right to set the description."
-				}
-				{ currentUserCanEdit &&
+				{ meta.content ?? "Press the pencil icon on the right to set the description." }
+				{ editable &&
 					<div>
 						<EditIcon onClick={ editClickHandler } style={{ cursor: 'pointer' }} />
 						<DeleteIcon onClick={ deleteClickHandler } style={{ cursor: 'pointer' }} />
@@ -63,6 +59,6 @@ export default function Description({ meta, task, full, currentUserCanEdit }) {
 			</Container>
 		)
 	} else {
-		return (null)
+		return null
 	}
 }
