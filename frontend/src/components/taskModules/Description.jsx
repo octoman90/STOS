@@ -5,7 +5,7 @@ import EditIcon             from '@material-ui/icons/Edit'
 import { useDispatch }      from 'react-redux'
 import useBus, {
 	dispatch as busDispatch
-} 					        from 'use-bus'
+}                           from 'use-bus'
 
 import controller from '../../controller'
 
