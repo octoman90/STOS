@@ -67,7 +67,7 @@ export default function Description({ meta, task, full, editable }) {
 		let interval = setInterval(forceUpdate, 5e4)
 
 		return () => clearInterval(interval)
-	})
+	}, [forceUpdate])
 
 	function deleteClickHandler() {
 		controller.deleteTaskModule(task, meta.id, dispatch)
