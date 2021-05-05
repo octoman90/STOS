@@ -15,7 +15,7 @@
 		"react-scripts": "3.4.3",
 		"redux": "^4.0.5",
 		"selenium-webdriver": "^4.0.0-alpha.8",
-		"styled-components": "^5.2.0",
+		"styled-components": "^5.3.0",
 		"use-bus": "^2.3.1"
 	},
 	"scripts": {
