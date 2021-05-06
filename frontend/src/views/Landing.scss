@@ -1,0 +1,70 @@
+#landing-container {
+	height: 100vh;
+	padding: 0 10vw;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: white;
+	flex-direction: row;
+
+	#landing-info {
+		display: flex;
+		flex-direction: column;
+		user-select: none;
+
+		h1 {
+			font-size: 3em;
+		}
+	}
+
+	form {
+		background: white;
+		color: #555;
+		padding: 1rem;
+		box-shadow: 0 0 0.5rem #0005;
+		display: grid;
+		gap: 1rem;
+
+		input[type="text"],
+		input[type="password"] {
+			border: 1px solid #ccc;
+			padding: 0.5rem;
+			width: 15rem;
+			grid-column: 1/3;
+		}
+
+		#accept-checkbox {
+			vertical-align: bottom;
+		}
+
+		label {
+			font-size: 0.8rem;
+		}
+
+		// Mode change buttons
+		button[type="button"] {
+			border: none;
+			background: none;
+			text-align: center;
+			cursor: pointer;
+			outline: none;
+			font-size: 1rem;
+
+			&.active {
+				opacity: 1;
+				border-bottom: 0.15em solid rgb(93, 162, 199);
+				cursor: default;
+			}
+		}
+
+		// Submit button
+		button[type="submit"] {
+			border: none;
+			background-color: rgb(93, 162, 199);
+			color: #fff;
+			cursor: pointer;
+			height: 2rem;
+			grid-column: 2;
+		}
+	}
+}

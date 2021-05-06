@@ -1,39 +1,14 @@
 import React, {
 	useEffect,
 	useState
-} 							from 'react'
-import { useDispatch } 		from 'react-redux'
-import { useNavigate } 		from 'react-router-dom'
-import useBus 				from 'use-bus'
+}                      from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import useBus          from 'use-bus'
 
-import Container 		from '../components/landing/Container'
-import LandingInfo 		from '../components/landing/LandingInfo'
-import Form 			from '../components/landing/Form'
-import FormModeSelector from '../components/landing/FormModeSelector'
-import TextInput 		from '../components/landing/TextInput'
-import Button 			from '../components/landing/Button'
-import Accept 			from '../components/landing/Accept'
-import controller		from '../controller'
+import controller  from '../controller'
 
-function inputChangeHandler(key, value, setFormData) {
-	let partialState = {
-		[key]: value
-	}
-
-	setFormData(prevState => {
-		return {...prevState, ...partialState}
-	})
-}
-
-function submitHandler(event, formData, formMode, dispatch) {
-	event.preventDefault()
-
-	if (formMode === 0) {
-		controller.signUp(formData, dispatch)
-	} else {
-		controller.logIn(formData, dispatch)
-	}
-}
+import './Landing.scss'
 
 export default function Landing() {
 	const navigate = useNavigate()
@@ -47,35 +22,64 @@ export default function Landing() {
 		accepted: false
 	})
 
+	function inputChangeHandler(event) {
+		const key = event.target.name
+		const value = event.target.type === 'checkbox'
+			? event.target.checked
+			: event.target.value
+
+		let partialState = {
+			[key]: value
+		}
+
+		setFormData(prevState => {
+			return { ...prevState, ...partialState }
+		})
+	}
+
+	function submitHandler(event) {
+		event.preventDefault()
+
+		formMode === 0
+			? controller.signUp(formData, dispatch)
+			: controller.logIn(formData, dispatch)
+	}
+
 	useBus(
 		'loggedIn',
 		() => navigate('/home')
 	)
 
 	useEffect(() => {
-		document.title = "Welcome to STOS"
+		document.title = 'Welcome to STOS'
 	}, [])
 
 	return (
-		<Container>
-			<LandingInfo />
-			<Form onSubmit={ e => submitHandler(e, formData, formMode, dispatch) }>
-				<FormModeSelector id="signUpModeButton" active={ formMode === 0 } onClick={() => setFormMode(0)}>Sign Up</FormModeSelector>
-				<FormModeSelector id="logInModeButton" active={ formMode === 1 } onClick={() => setFormMode(1)}>Log In</FormModeSelector>
-				
-				<TextInput type="text" name="username" onChange={ e => inputChangeHandler("username", e.target.value, setFormData) } placeholder="Username"></TextInput>
-				<TextInput type="password" name="password" onChange={ e => inputChangeHandler("password", e.target.value, setFormData) } placeholder="Password"></TextInput>
-				
+		<main id="landing-container">
+			<div id="landing-info">
+				<h1>STOS</h1>
+				<div>STOS Team Organisation System is a tool</div>
+				<div>for effective team management in Kanban or Scrum style.</div>
+			</div>
+			<form onSubmit={ submitHandler }>
+				<button type="button" className={formMode === 0 ? "active" : ""} onClick={() => setFormMode(0)}>Sign Up</button>
+				<button type="button" className={formMode === 1 ? "active" : ""} onClick={() => setFormMode(1)}>Log In</button>
+
+				<input type="text" name="username" onChange={ inputChangeHandler } placeholder="Username"></input>
+				<input type="password" name="password" onChange={ inputChangeHandler } placeholder="Password"></input>
+
 				{ formMode === 0 &&
-					<TextInput type="password" name="repeatPassword" onChange={ e => inputChangeHandler("repeatPassword", e.target.value, setFormData) } placeholder="Repeat password"></TextInput>
-				}
-				
-				{ formMode === 0 &&
-					<Accept inputChangeHandler={ inputChangeHandler } setFormData={ setFormData } />
+					<>
+						<input type="password" name="repeatPassword" onChange={ inputChangeHandler } placeholder="Repeat password"></input>
+						<div>
+							<input type="checkbox" id="accept-checkbox" name="accepted" onChange={ inputChangeHandler } />
+							<label htmlFor="accept-checkbox">I accept</label>
+						</div>
+					</>
 				}
 
-				<Button id="formSubmitButton">{ formMode === 0 ? 'Sign Up' : 'Log In' }</Button>
-			</Form>
-		</Container>
+				<button type="submit" id="formSubmitButton">{ formMode === 0 ? 'Sign Up' : 'Log In' }</button>
+			</form>
+		</main>
 	)
 }
